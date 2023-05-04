@@ -1,0 +1,69 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12 sm-padding no-padding">
+            <div class="row xsm-padding no-right-padding">
+                <div class="col-lg-12 xsm-padding no-left-padding no-right-padding">
+                    <p-scrollPanel [style]="{width: '100%', height: '678px'}" class="custom-scroll">
+                        <p-table class="custom-table" #reqReopenDT [value]="allRequests" [columns]="reqReopenCols" [paginator]="true" [rows]="13"
+                            [style]="{width:'100%'}" [globalFilterFields]="['RequestNo','I_MainFileRefNo','RequestTitle','NoOfDays']" >
+                            <ng-template pTemplate="caption">
+                                <div class="table-header" style="text-align: left;">
+                                    <span style="width: 30%;" class="p-input-icon-right">
+                                        <input #reqReopenSearch style="width: 100%; height: 30px; font-size: 12px !important;" class="xsm-pm-border sm-font" pInputText
+                                            type="text" (input)="reqReopenDT.filterGlobal(reqReopenSearch.value, 'contains')"
+                                            placeholder="Search" />
+                                    </span>
+                                    <span style="width: 50%;padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                                        Total Records: {{allRequests.length}}
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width: 55px !important;">
+                                        <p><i class="fa fa-exclamation"></i></p>
+                                    </th>
+                                    <th [attr.colspan]="col.spanWidth" *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                        {{col.label}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                    <th [attr.colspan]="1">
+                                        Actions
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                <tr>
+                                    <td class="alarm-notf" style="width: 55px !important;">
+                                        <p style="text-align: center;">{{rowData['Urgency'] == 'RURGENT_U' ? '!' :
+                                            rowData['Urgency'] == 'RURGENT_VU' ? '!!' : ''}}
+                                        </p>
+                                    </td>
+                                    <ng-template ngFor let-col [ngForOf]="columns">
+                                        <td [attr.colspan]="col.spanWidth" style="text-align: center !important;"
+                                            tooltipStyleClass="custom-tooltip"
+                                            pTooltip="{{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : rowData[col.field] }}">
+                                            {{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') :
+                                            rowData[col.field] }}
+                                        </td>
+                                    </ng-template>
+                                    <td [attr.colspan]="1" style="text-align: center;">
+                                        <p-button label="Re-Open" tooltipStyleClass="custom-tooltip" pTooltip="Click to reopen the request"
+                                            tooltipPosition="bottom" class="recall-btn" (click)="actOnRequest('REOPEN',rowData)"></p-button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-scrollPanel>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-confirmDialog #cd [style]="{width: '35vw'}" [baseZIndex]="10000" class="custom-confirmation" key="reopendialog">
+    <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-check" label="Ok" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancel" (click)="cd.reject()"></button>
+    </ng-template>
+</p-confirmDialog>
+<p-toast position="top-right"></p-toast>

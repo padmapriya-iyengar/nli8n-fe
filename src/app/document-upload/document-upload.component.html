@@ -1,0 +1,367 @@
+<div class="container-fluid no-left-padding no-right-padding" style="width: 100% !important; height: 914px;">
+    <div class="row xsm-padding" *ngIf="files.length > 0 && showProgress">
+        <p-progressBar mode="indeterminate" [style]="{'height': '6px'}" class="custom-progress-bar"></p-progressBar>
+    </div>
+    <p-panel #dTab class="no-header-panel">
+        <div class="row">
+            <div class="col-lg-3 xsm-padding no-bottom-padding" *ngIf="reqType == 'File'" style="padding-left: 30px !important;">
+                <div class="row" style="height:900px !important">
+                    <div class="lg-card-height pm-lt-bk no-padding" style="height:32% !important;">
+                        <p-scrollPanel [style]="{width: '99%', height: '268px'}" class="custom-scroll">
+                            <p-tree [value]="docTree" selectionMode="single" (onNodeSelect)="nodeSelect($event)"
+                                (onNodeUnselect)="nodeUnselect($event)" [propagateSelectionUp]="false"
+                                [propagateSelectionDown]="false" class="doc-tree">
+                                <ng-template let-node pTemplate="default">
+                                    <span style="{{node.styleClass}}" title={{node.label}}>{{node.label}} </span>
+                                </ng-template>
+                            </p-tree>
+                        </p-scrollPanel>
+                    </div>
+                    <div class="lg-card-height pm-lt-bk no-padding" style="height:25% !important;">
+                        <p-scrollPanel [style]="{width: '99%', height: '325px'}" class="custom-doc-type-scroll no-padding">
+                            <div class="col-lg-12 xsm-padding no-top-padding no-bottom-padding">
+                                <ng-template ngFor let-docType [ngForOf]="docTypeCountList" let-i="index">
+                                    <div class="row" class="highlight-notf-row" *ngIf="docType.value != '0'">
+                                        <div class="col-lg-12 xsm-margin">
+                                            <div class="row notf-row" (click)="filterDocsByType(docType.label)"
+                                                style="cursor: pointer;border: 0px;">
+                                                <div class="col-lg-10" style="padding-top: 2%;">
+                                                    <p class="md-font form-field-header">{{docType.label}}</p>
+                                                </div>
+                                                <div class="col-lg-2" style="padding-top: 2%;">
+                                                    <p-badge [value]="docType.value"></p-badge>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </div>
+                        </p-scrollPanel>
+                    </div>
+                </div>
+            </div>
+            <div class="xsm-padding no-bottom-padding no-top-padding" 
+                [ngClass]="reqType == 'File' ? 'col-lg-9 no-left-padding' : 'col-lg-12'">
+                <div class="xsm-padding no-bottom-padding lg-card-height pm-lt-bk">
+                    <div class="row no-padding" [ngStyle]="{'height': readOnly!='Y' ? '705px' : '605px' }">
+                        <p-table class="custom-table" #docsDT [value]="files" [columns]="fileCols" [rows]="noOfRows"
+                            [paginator]="true" [style]="{width:'100%'}" (onRowSelect)="onRowSelected($event)"
+                            (onRowUnselect)="onRowUnSelected($event)"
+                            [globalFilterFields]="['FileName','FileDescription','FileVersion','FileClass']" [(selection)]="file"
+                            dataKey="FileName">
+                            <ng-template pTemplate="caption">
+                                <div class="table-header" style="text-align: left;">
+                                    <span style="width: 30%;" class="p-input-icon-right">
+                                        <input #docSearch style="width: 100%; height: 30px; font-size: 12px !important;"
+                                            class="xsm-pm-border sm-font" pInputText type="text"
+                                            (input)="docsDT.filterGlobal(docSearch.value, 'contains')" placeholder="Search" />
+                                    </span>
+                                    <span class="table-records">
+                                        Total Records: {{files.length}}
+                                    </span>
+                                    <span class="custom-warn-text" *ngIf="reqType == 'File'" style="width: 10%; padding-left: 10%; text-decoration: underline !important; 
+                                                            cursor: pointer !important; font-size: 14px !important; "
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                        pTooltip="Click to get all files" (click)="getTotalFiles()">
+                                        Show all files
+                                    </span>
+                                    <span [ngStyle]="{'width': reqType == 'File' ? '27%' : '48%'}"
+                                        class="xsm-margin-bottom p-input-icon-right pointer">
+                                        <i *ngIf="isLOUser" tooltipStyleClass="custom-tooltip"
+                                            tooltipPosition="left" pTooltip="Click to create a circulation for file"
+                                            (click)="createCirculation()" class="fa fa-circle-o-notch"></i>
+                                    </span>
+                                    <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                        <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" 
+                                            pTooltip="Click to refresh data"
+                                            class="fa fa-refresh" (click)="refreshDocuments()"></i>
+                                    </span>
+                                    <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                        <i tooltipStyleClass="custom-tooltip" tooltipPosition="left"
+                                            pTooltip="Click to download file" class="fa fa-download"
+                                            (click)="downloadDocument()"></i>
+                                    </span>
+                                    <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                        <i *ngIf="readOnly=='N' && showDelete" tooltipStyleClass="custom-tooltip" tooltipPosition="left"
+                                            pTooltip="Click to delete file" class="fa fa-trash" (click)="deleteDocument()"></i>
+                                    </span>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th style="width: 50px !important;"></th>
+                                    <th [attr.colspan]="col.spanWidth" style="text-align: center !important;"
+                                        *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                        {{col.label}}
+                                        <p-sortIcon [field]="col.field"></p-sortIcon>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                <tr class="pointer">
+                                    <td style="width: 50px !important;">
+                                        <p-tableRadioButton *ngIf="rowData['DocType']!='FOLDER'" class="custom-radio-btn"
+                                            [value]="rowData" [index]="i"></p-tableRadioButton>
+                                    </td>
+                                    <ng-template ngFor let-col [ngForOf]="columns">
+                                        <td [attr.colspan]="col.spanWidth"
+                                            *ngIf="col.field != 'FileVersion' && col.field != 'FileDescription' && col.field != 'FileName' && col.field != 'FileTypeDescription'"
+                                            style="text-align: center;">
+                                            {{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') :
+                                            rowData[col.field] }}
+                                        </td>
+                                        <td [attr.colspan]="col.spanWidth" *ngIf="col.field == 'FileTypeDescription'"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="{{rowData[col.field]}}">
+                                            {{rowData[col.field]}}
+                                        </td>
+                                        <td [attr.colspan]="col.spanWidth"
+                                            *ngIf="col.field == 'FileName' && rowData['DocType']!='FOLDER' && readOnly!='Y'"
+                                            class="custom-warn-text"
+                                            style="text-decoration: underline !important; cursor: pointer !important;"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to edit metadata" (click)="openMetadataEdit(rowData)">
+                                            <i class="{{rowData['StyleClass']}}"
+                                                style="padding-right: 10px; color: #706f6d;"></i>{{
+                                            rowData[col.field] }}
+                                        </td>
+                                        <td [attr.colspan]="col.spanWidth"
+                                            *ngIf="col.field == 'FileName' && rowData['DocType']!='FOLDER' && readOnly=='Y'"
+                                            class="custom-warn-text">
+                                            <i class="{{rowData['StyleClass']}}"
+                                                style="padding-right: 10px; color: #706f6d;"></i>{{
+                                            rowData[col.field] }}
+                                        </td>
+                                        <td [attr.colspan]="col.spanWidth"
+                                            *ngIf="col.field == 'FileName' && rowData['DocType']=='FOLDER'"
+                                            class="custom-warn-text" (click)="getDocuments(rowData[col.field])" style="text-decoration: underline !important; 
+                                                            cursor: pointer !important;" tooltipStyleClass="custom-tooltip"
+                                            tooltipPosition="top" pTooltip="Click to get files in the request">
+                                            <i class="{{rowData['StyleClass']}}"
+                                                style="padding-right: 10px; color: #e6e600"></i>{{
+                                            rowData[col.field] }}
+                                        </td>
+                                        <td [attr.colspan]="col.spanWidth" *ngIf="col.field == 'FileVersion'"
+                                            class="custom-warn-text"
+                                            style="text-decoration: underline !important; cursor: pointer !important; text-align: center;"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to view file versions" (click)="openDocumentVersions(rowData)">
+                                            {{ rowData[col.field] }}
+                                        </td>
+                                        <td [attr.colspan]="col.spanWidth" *ngIf="col.field == 'FileDescription'">
+                                            <div>
+                                                <div style="overflow: hidden;line-height: 1em;height:3em;text-align:justify;white-space:pre-wrap"
+                                                    id="{{i}}" #docDesc>
+                                                    {{rowData[col.field]}}
+                                                </div>
+                                                <a href="#" [pRowToggler]="rowData" *ngIf="checkOverflow(docDesc)">
+                                                    <i (click)="textFinalData($event,rowData,docsDT,docDesc)"
+                                                        style="color:blue;text-decoration: underline;font-weight: bold;">{{expanded?"..less":"...more"}}</i>
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </ng-template>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage">
+                                <tr *ngIf="reqType == 'Request'">
+                                    <td colspan="11" class="custom-info-text"
+                                        style="text-align: center !important; font-size: 14px !important;">No documents
+                                        available in
+                                        request!!</td>
+                                </tr>
+                                <tr *ngIf="reqType == 'File'">
+                                    <td colspan="9" class="custom-info-text"
+                                        style="text-align: center !important; font-size: 14px !important;">No
+                                        documents available in folder!!</td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="row xsm-padding" *ngIf="readOnly!='Y'">
+                        <div class="xsm-padding no-left-padding">
+                            <ngx-dropzone (change)="onSelect($event)" style="height: 120px; margin-top: 60px;" [maxFileSize]="30000000">
+                                <ngx-dropzone-label *ngIf="reqType == 'File'" style="font-size: 13px !important;">Drag & Drop or
+                                    Click to add documents here. <br>
+                                </ngx-dropzone-label>
+                                <ngx-dropzone-label *ngIf="reqType == 'Request'" style="font-size: 13px !important;">Drag & Drop
+                                    or
+                                    Click to add documents here.</ngx-dropzone-label>
+                            </ngx-dropzone>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-panel>
+</div>
+<ng-template #docDetailsModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">Document Details</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '429px'}" class="custom-scroll xsm-padding">
+                <document-details [fileDetails]="allFiles" [existingFileDetails]="files" (detSubmit)="onDetailsSubmit($event)"
+                    [detailsSubmit]="updateDocDetails" [division]="fileDivision" [serviceType]="reqType"></document-details>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Save & Close" tooltipStyleClass="custom-tooltip"
+                pTooltip="Click to update document details" styleClass="p-button-sm" class="custom-tertiary-btn"
+                (click)="updateDocumentDetails()"></p-button>
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel request"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #docVersionsModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">Document Versions</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '530px'}" class="custom-scroll sm-padding">
+                <document-versions [docDetails]="versionData" [reqType]="reqType" [fileID]="fileID" [requestNo]="requestNo"
+                [division]="fileDivision"></document-versions>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to close"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #docMetadataModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">Edit Metadata</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '545px'}" class="custom-scroll sm-padding no-top-padding">
+                <div class="row xsm-padding">
+                    <div class="col-lg-12 sm-padding">
+                        <div class="row">
+                            <div class="col-lg-12 sm-padding no-padding">
+                                <div class="sm-padding form-field-header form-divider no-top-padding no-bottom-padding">
+                                    {{metadata.FileName}}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 sm-padding no-padding">
+                                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding">
+                                        Security Classification
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-dropdown [filter]="true" filterBy="label" [disabled]="true" appendTo="body" [options]="secClassification" class="custom-dropdown"
+                                            placeholder="Choose security classification" [(ngModel)]="metadata.SecurityClassification"
+                                            name="secClssfctn" #secClssfctn="ngModel" [required]="false">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 sm-padding no-padding">
+                                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':true, 'read-only':false}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Document Type
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-dropdown [filter]="true" filterBy="label" [disabled]="false" appendTo="body" [options]="documentTypes" class="custom-dropdown"
+                                            placeholder="Choose document type" [(ngModel)]="metadata.FileType" name="dType" #dType="ngModel"
+                                            tooltipStyleClass="custom-tooltip" pTooltip="Click to choose document type" [required]="true">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 sm-padding no-padding">
+                                <div class="col-lg-12 sm-padding no-padding">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Document Date
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-calendar appendTo="body" [(ngModel)]="metadata.FileDate" [showIcon]="true" inputId="icon"
+                                            [maxDate]="todaysDate" dateFormat="dd/mm/yy" name="dDate" #dDate="ngModel"
+                                            tooltipStyleClass="custom-tooltip" [disabled]="false" 
+                                            pTooltip="Click to enter document date" [showTime]="true" [showSeconds]="false"
+                                            class="customized-calendar">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 sm-padding no-padding">
+                                <div class="col-lg-12 sm-padding no-padding">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Description
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <textarea pInputTextarea style="height: 80px !important;" [(ngModel)]="metadata.FileDescription" [rows]="5"
+                                            [cols]="30" name="docDesc" #docDesc="ngModel" tooltipStyleClass="custom-tooltip"
+                                            pTooltip="Click to enter document description" [disabled]="false" class="custom-textarea"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 sm-padding no-padding">
+                                <div class="col-lg-12 sm-padding no-padding">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Remarks
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <textarea style="height: 80px !important;" [(ngModel)]="metadata.Remarks" [rows]="5" [cols]="30"
+                                            pInputTextarea name="docRem" #docRem="ngModel" tooltipStyleClass="custom-tooltip"
+                                            pTooltip="Click to enter document remarks" [disabled]="false" class="custom-textarea"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to update metadata" styleClass="p-button-sm"
+                class="custom-tertiary-btn" (click)="updateMetadata()"></p-button>
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to close"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+        </div>
+    </div>
+</ng-template>
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog #cd [style]="{width: '35vw'}" [baseZIndex]="10000" class="custom-confirmation" key="circulationDialog">
+    <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-check" label="Ok" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancel" (click)="cd.reject()"></button>
+    </ng-template>
+</p-confirmDialog>
+<p-blockUI [target]="dTab" [blocked]="isDocBlocked"></p-blockUI>

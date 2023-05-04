@@ -1,0 +1,37 @@
+export class ADVISORY_FILE {
+    I_Division!: string;
+    I_Header1!: string;
+    I_Header2!: string;
+    I_Year!: string;
+    FileTitle!: string;
+    FileType!: string;
+    SecurityClassification!: string;
+    Sensitivity!: string;
+    LocalForeign!: string;
+    AgencyType!: string;
+    AgencyName!: string;
+    ExtAgencyRefNo!: string;
+    FileOwner!: string;
+    CountryForeignOrg!: string;
+    ForeignAgencyType!: string;
+    ForeignAgencyName!: string;
+    I_RequestNo!: string;
+    Remarks!: string;
+    FileCreatedBy!: string;
+    FileCreatedDate!: Date;
+    AgencyNameDesc!: string;
+    AgencyTypeDesc !: string;
+    CountryForeignOrgDesc!: string;
+    FileStatusDesc!: string;
+    LocalForeignDesc!: string;
+    MLACaseStatusDesc!: string;
+    MLAComplexityDesc!: string;
+    MLAFATFPurposeDesc!: string;
+    MLARequestedUnderDesc!: string;
+    MLASubTypeDesc!: string;
+    RecordsDispositionActionDesc!: string;
+    SecurityClassificationDesc!: string;
+    ForeignAgencyNameDesc!: string;
+    FileForeignAgencyTypeDesc!: string;
+    LocalOrForeign!: string;
+}

@@ -1,0 +1,85 @@
+<div class="container-fluid" style="padding-left: 6px !important;">
+  <div class="row" style="height: 55px;">
+    <div class="col-lg-8 sm-padding lg-font" style="height: 55px;">
+      <span *ngIf="!hideUserActions" class="custom-wht-text pointer" (click)="goToURL('dashboard')"
+        tooltipStyleClass="custom-tooltip" pTooltip="Click to go to dashboard" style="font-weight: bold;">Demo</span>
+    </div>
+    <div class="col-lg-4 sm-padding" style="text-align: right;height: 55px; padding-right: 20px;">
+      <div class="row">
+        <div class="col-lg-9 sm-padding no-padding">
+          <div class="col-lg-12">
+            <div class="sm-padding no-top-padding no-right-padding">
+              <span class="p-input-icon-right" *ngIf="isSearchClicked" style="width: 100% !important;">
+                <input type="text" pInputText [(ngModel)]="searchText" name="sText" style="font-size: 13px !important;" #sText="ngModel"
+                  placeholder="Enter search text" class="input-field" (keydown.enter)="goToAdvSearch()"/>
+                <i class="pi pi-check" style="cursor: pointer !important; color: #000 !important;" (click)="goToAdvSearch()"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div *ngIf="!hideUserActions" class="col-lg-3 sm-padding no-padding">
+          <button class="custom-dash-search-btn" pButton pRipple type="button" icon="pi pi-search" tooltipStyleClass="custom-tooltip"
+            pTooltip="Click to open search" tooltipPosition="bottom" (click)="openSearchText()"></button>
+          <p-splitButton *ngIf="showBoss" class="custom-boss-split-btn" [model]="bossList"
+            tooltipStyleClass="custom-tooltip" pTooltip="Click to choose boss" tooltipPosition="bottom"></p-splitButton>
+          <p-splitButton class="custom-user-split-btn xxsm-padding-left" [model]="userActions" tooltipStyleClass="custom-tooltip"
+            pTooltip="{{currentUserName}}" tooltipPosition="bottom"></p-splitButton>
+        </div>
+      </div>
+    </div>
+  </div>
+  <router-outlet></router-outlet>
+</div>
+<ng-template #userProfileModal>
+  <div class="app-card">
+    <div class="modal-action-bar right-align">
+      <div class="row">
+        <div class="col-lg-10 modal-header">
+          <p class="custom-modal-heading">User Profile</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-content">
+      <p-scrollPanel [style]="{width: '100%'}" [ngStyle]="{'height': isOOOEnabled ? '460px' : '325px' }" class="custom-scroll">
+        <user-profile [userInfo]="userInfo" [modalSubmit]="isReqSubmitted"
+          (oooEnable)="onOOOEnable($event)" (reqSubmit)="onRequestSubmit($event)"></user-profile>
+      </p-scrollPanel>
+      <div class="form-field-header no-top-padding sm-padding no-bottom-padding">
+        Profile last updated on {{userInfo.LastUpdatedOn}} at {{userInfo.LastUpdatedTime}}
+      </div>
+    </div>
+    <div class="modal-footer">
+      <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to update user profile" styleClass="p-button-sm"
+        class="custom-tertiary-btn" (click)="updateUserProfile()"></p-button>
+      <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel" styleClass="p-button-sm"
+        class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+    </div>
+  </div>
+</ng-template>
+<ng-template #logoutModal>
+  <div class="app-card">
+    <div class="modal-action-bar right-align">
+      <div class="row">
+        <div class="col-lg-10 modal-header">
+          <p class="custom-modal-heading">Signout</p>
+        </div>
+      </div>
+    </div>
+    <div class="modal-content" style="border: 0px solid transparent !important; box-shadow: 0px 0px 0px 0px !important">
+      <div class="xsm-margin">
+        <p style="font-weight: bold;">Are you sure, you want to signout?</p>
+      </div>
+      <div class="row xsm-margin">
+        <div class="col-lg-8"></div>
+        <div class="col-lg-2">
+          <p-button label="Yes" tooltipStyleClass="custom-tooltip" pTooltip="Click to confirm signout" styleClass="p-button-sm"
+            class="custom-tertiary-btn" icon="pi pi-check" (click)="logMeOut()"></p-button>
+        </div>
+        <div class="col-lg-2">
+          <p-button label="No" tooltipStyleClass="custom-tooltip" pTooltip="Click to go back to application"
+            styleClass="p-button-sm" icon="pi pi-times" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

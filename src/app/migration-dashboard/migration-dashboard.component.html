@@ -1,0 +1,96 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 no-left-padding no-right-padding" *ngIf="servicesPresent">
+            <div class="xsm-padding xsm-pm-border lg-card-height pm-lt-bk">
+                <p-scrollPanel [style]="{width: '100%', height: '891px'}" class="custom-scroll">
+                    <p-accordion class="custom-accordion">
+                        <ng-template ngFor let-accServ [ngForOf]="accordionServiceList">
+                            <p-accordionTab header={{accServ.ServiceName}} selected={{accServ.SERVICE_SELECTED}}
+                                tooltipStyleClass="custom-tooltip" pTooltip="{{accServ.Tooltip}}">
+                                <ng-template ngFor let-childServ [ngForOf]="accServ.ChildServices">
+                                    <div class="row">
+                                        <div class="col-lg-12 xsm-margin">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p-button label="{{childServ.ServiceName}}"
+                                                        class="{{childServ.StyleClass}}"
+                                                        (click)="loadService(childServ)"
+                                                        tooltipStyleClass="custom-tooltip"
+                                                        pTooltip="{{childServ.Tooltip}}">
+                                                        <i class="fa fa-chevron-right"></i>
+                                                    </p-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-accordionTab>
+                        </ng-template>
+                    </p-accordion>
+                    <ng-template ngFor let-btnServ [ngForOf]="buttonServiceList">
+                        <div class="row">
+                            <div class="col-lg-12 xsm-margin">
+                                <div class="row">
+                                    <div class="col-lg-12 no-left-padding">
+                                        <p-button label="{{btnServ.ServiceName}}" class="{{btnServ.StyleClass}}"
+                                            (click)="loadService(btnServ)"
+                                            tooltipStyleClass="custom-tooltip" pTooltip="{{btnServ.Tooltip}}">
+                                            <i class="fa fa-chevron-right xsm-padding-left sm-padding-right"></i>
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-scrollPanel>
+            </div>
+        </div>
+        <div class="sm-padding no-padding" [ngClass]="servicesPresent  ? 'col-lg-9' : 'col-lg-12'">
+            <div class="row xsm-padding no-bottom-padding no-top-padding" *ngIf="breadcrumbMenu.length > 0" 
+                style="background: #FFF; margin-left: 1px !important; margin-right: -5.5px  !important; margin-top: 1px !important; margin-bottom: 0.5px !important;">
+                <div class="col-lg-12 xsm-padding no-bottom-padding no-top-padding">
+                    <p-breadcrumb [model]="breadcrumbMenu" class="custom-breadcrumb" (onItemClick)="onMenuClick($event)">
+                    </p-breadcrumb>
+                </div>
+            </div>
+            <div class="row" style="padding-left: 12px !important; height: 691px !important;" [ngStyle]="{'height': breadcrumbMenu.length > 0 ? '858px' : '903px' }">
+                <div class="xsm-padding xsm-pm-border lg-card-height pm-lt-bk" style="width: 99.5%;">
+                    <migration-data-upload *ngIf="servIdentifier=='DATA_UPLOAD'"></migration-data-upload>
+                    <ingestion-report *ngIf="servIdentifier=='INGESTION_REPORT'" [clearMenu]="clearMenu"></ingestion-report>
+                    <file-report *ngIf="servIdentifier=='FILE_REPORT'" [fileDetails]="fileDetails" [source]="fileSource"></file-report>
+                    <mig-consolidated-report *ngIf="servIdentifier=='CONSOLIDATED_REPORT'"></mig-consolidated-report>
+                    <migration-report *ngIf="servIdentifier=='MIGRATION_REPORT'" [clearMenu]="clearMenu"></migration-report>
+                    <record-data *ngIf="servIdentifier=='ROW_REPORT'" [fileDetails]="fileDetails" [rowDetails]="rowDetails"></record-data>
+                    <validation-report *ngIf="servIdentifier=='VALIDATION_REPORT'" [clearMenu]="clearMenu"></validation-report>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog [style]="{width: '35vw'}" [baseZIndex]="10000" class="custom-confirmation"></p-confirmDialog>
+<ng-template #serviceModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">{{serviceTitle}}</p>
+                </div>
+                <div *ngIf="false" class="col-lg-2 modal-header">
+                    <button type="button" class="btn-close close" aria-label="Close" (click)="hideModal()"></button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '530px'}" class="custom-scroll sm-padding">
+                
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Create & View" tooltipStyleClass="custom-tooltip" pTooltip="Click to create and open"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="createServiceRequest()"></p-button>
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel request"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideRequestModal()"></p-button>
+        </div>
+    </div>
+</ng-template>

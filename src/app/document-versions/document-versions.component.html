@@ -1,0 +1,79 @@
+<div class="container-fluid no-left-padding no-right-padding">
+    <div class="row xsm-padding">
+        <div class="col-lg-12 xsm-padding no-padding">
+            <div class="xsm-padding form-field-header form-divider no-top-padding">
+                {{docDetails.FileName}}
+            </div>
+        </div>
+    </div>
+    <div class="row xsm-padding">
+        <div class="col-lg-12 xsm-padding">
+            <p-table class="custom-table" #docVersionsDT [value]="fileVersions" [columns]="fileVersionCols"
+                [style]="{width:'100%'}"
+                [globalFilterFields]="['DOCUMENT_DESCRIPTION','FILE_TYPE_NAME','SECURITY_CLASSIFICATION_NAME','DOCUMENT_VERSION','DOCUMENT_CLASS']">
+                <ng-template pTemplate="caption">
+                    <div class="table-header" style="text-align: left;">
+                        <span style="width: 30%;" class="p-input-icon-right">
+                            <!-- <i class="pi pi-search"></i> -->
+                            <input #docVersionSearch style="width: 100%; height: 30px;font-size: 12px !important;" class="xsm-pm-border sm-font" pInputText
+                                type="text" (input)="docVersionsDT.filterGlobal(docVersionSearch.value, 'contains')"
+                                placeholder="Search" />
+                        </span>
+                        <span style="width: 50%;padding-left: 40px;font-size: 14px !important;font-weight: bold !important;">
+                            Total Records: {{fileVersions.length}}
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th [attr.colspan]="col.spanWidth" *ngFor="let col of columns" [pSortableColumn]="col.field">
+                            {{col.label}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                    <tr class="pointer">
+                        <ng-template ngFor let-col [ngForOf]="columns">
+                            <td [attr.colspan]="col.spanWidth" *ngIf="col.field != 'DOCUMENT_VERSION' && col.field != 'DOCUMENT_DESCRIPTION' && col.field != 'FILE_TYPE_NAME'"
+                            style="text-align: center !important;">
+                                {{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') :
+                                rowData[col.field] }}
+                            </td>
+                            <td [attr.colspan]="col.spanWidth" *ngIf="col.field == 'DOCUMENT_VERSION'" class="custom-warn-text"
+                                style="text-decoration: underline !important; text-align: center !important; cursor: pointer !important;" 
+                                tooltipStyleClass="custom-tooltip"
+                                tooltipPosition="top" pTooltip="Click to download selected file version" (click)="downloadDocument(rowData)">
+                                {{ rowData[col.field] }}
+                            </td>
+                            <td [attr.colspan]="col.spanWidth" *ngIf="col.field == 'DOCUMENT_DESCRIPTION'">
+                                <div>
+                                    <div style="overflow: hidden;line-height: 1em;height:3em;text-align:justify;white-space:pre-wrap" id="{{i}}"
+                                        #docDesc>
+                                        {{rowData[col.field]}}
+                                    </div>
+                                    <a href="#" [pRowToggler]="rowData" *ngIf="checkOverflow(docDesc)">
+                                        <i (click)="textFinalData($event,rowData,docVersionsDT,docDesc)"
+                                            style="color:blue;text-decoration: underline;font-weight: bold;">{{expanded?"..less":"...more"}}</i>
+                                    </a>
+                                </div>
+                            </td>
+                            <td [attr.colspan]="col.spanWidth" *ngIf="col.field == 'FILE_TYPE_NAME'">
+                                <div>
+                                    <div style="overflow: hidden;line-height: 1em;height:3em;text-align:justify;white-space:pre-wrap" id="{{i}}"
+                                        #docDesc>
+                                        {{rowData[col.field]}}
+                                    </div>
+                                    <a href="#" [pRowToggler]="rowData" *ngIf="checkOverflow(docDesc)">
+                                        <i (click)="textFinalData($event,rowData,docVersionsDT,docDesc)"
+                                            style="color:blue;text-decoration: underline;font-weight: bold;">{{expanded?"..less":"...more"}}</i>
+                                    </a>
+                                </div>
+                            </td>
+                        </ng-template>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,27 @@
+<div class="container-fluid">
+    <ng-template ngFor let-notf [ngForOf]="notifications" let-i="index">
+        <div class="row xsm-margin {{notf.StyleClass}}" *ngIf="notf.ShowNotf">
+            <div class="col-lg-1 circle">
+                <p style="padding-top: 8px">{{notf.NotfHeader}}</p>
+            </div>
+            <div class="col-lg-11 no-left-padding no-top-padding">
+                <p class="sm-height" style="font-size: 13px !important;">File {{notf.FileReferenceNo}}; {{notf.Message}}</p>
+                <p class="sm-height" style="font-size: 13px !important;">{{notf.CreatedDate}} at {{notf.CreatedTime}}
+                    <i *ngIf="notf.ShowDelete" class="fa fa-trash pull-right xsm-padding pointer"
+                        (click)="actOnNotf('DELETE',notf)" style="font-size: 18px !important;" title="Click to delete notification"></i>
+                    <i *ngIf="notf.ShowRead" class="fa fa-check pull-right xsm-padding pointer"
+                        (click)="actOnNotf('READ',notf)" style="font-size: 18px !important;" title="Click to mark the notification as read"></i>
+                    <i class="fa fa-eye pull-right xsm-padding pointer" (click)="openNotification(notf)"
+                        title="Click to open the request" style="font-size: 18px !important;"></i>
+                </p>
+            </div>
+        </div>
+    </ng-template>
+    <div class="row" *ngIf="allNotifications.length == 0">
+        <div class="col-lg-12 sm-padding no-padding">
+            <div class="sm-padding form-field-header form-divider custom-info-text">
+                No new notifications!!
+            </div>
+        </div>
+    </div>
+</div>

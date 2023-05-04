@@ -1,0 +1,223 @@
+<div class="container-fluid no-left-padding no-right-padding">
+    <div class="row xsm-padding no-top-padding">
+        <div class="col-lg-12 sm-padding no-top-padding no-bottom-padding">
+            <div class="xsm-padding lg-card-height pm-lt-bk">
+                <p-panel [toggleable]="false" class="custom-panel" (onAfterToggle)="onToggle($event)">
+                    <ng-template pTemplate="header">
+                        <div class="col-lg-11 xsm-padding no-left-padding no-right-padding">
+                            <div class="row custom-blk-text sm-height sm-font">
+                                <div class="col-lg-12">
+                                    <p>{{tableHeading}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <div class="col-lg-12 xsm-padding no-left-padding no-right-padding">
+                        <div class="row xsm-padding">
+                            <div class="col-lg-3">
+                                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Entity Name
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-dropdown appendTo="body" [options]="entityNames" [(ngModel)]="dataEntityName"
+                                            name="entityName" #entityName="ngModel" class="custom-search-dropdown" [disabled] = "true">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 no-left-padding">
+                                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        File Name
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <input type="text" pInputText [(ngModel)]="fileName" name="fName" #fName="ngModel" [disabled] = "true"
+                                        style="font-size: 13px !important;"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 no-left-padding">
+                                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Uploaded By
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-dropdown appendTo="body" [options]="usersList" [(ngModel)]="uploadedBy" name="uplBy" #uplBy="ngModel"
+                                            class="custom-search-dropdown" [disabled]="true">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 no-left-padding">
+                                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        File Status
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <input type="text" pInputText [(ngModel)]="fileStatus" name="fStatus" #fStatus="ngModel" [disabled]="true" 
+                                        style="font-size: 13px !important;"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row xsm-padding" style="padding-left: 15px !important;">
+                            <div class="col-lg-12 xsm-padding">
+                                <p-tag id="totalTag" class="custom-report-tag" value="Total: {{fileCount.total}}" 
+                                    (click)="filterReport('TOTAL','totalTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get all records"></p-tag>
+                                <p-tag id="upsTag" class="custom-report-tag" value="Upload Success: {{fileCount.uploadSuccess}}"
+                                    (click)="filterReport('UPLOAD_SUCCESS','upsTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get upload successful records"></p-tag>
+                                <p-tag *ngIf="false" id="upfTag" class="custom-report-tag" value="Upload Failure: {{fileCount.uploadFailure}}"
+                                    (click)="filterReport('UPLOAD_FAILURE','upfTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get upload failure records"></p-tag>
+                                <p-tag id="vsTag" class="custom-report-tag" value="Validate Success: {{fileCount.validateSuccess}}"
+                                    (click)="filterReport('VALIDATE_SUCCESS','vsTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get validation successful records"></p-tag>
+                                <p-tag id="vfTag" class="custom-report-tag" value="Validate Failure: {{fileCount.validateFailure}}"
+                                    (click)="filterReport('VALIDATE_FAILURE','vfTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get validation failure records"></p-tag>
+                                <p-tag id="msTag" class="custom-report-tag" value="Migration Success: {{fileCount.migrateSuccess}}"
+                                    (click)="filterReport('MIGRATE_SUCCESS','msTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get migration successful records"></p-tag>
+                                <p-tag id="mfTag" class="custom-report-tag" value="Migration Failure: {{fileCount.migrateFailure}}"
+                                    (click)="filterReport('MIGRATE_FAILURE','mfTag')" tooltipStyleClass="custom-tooltip" 
+                                    tooltipPosition="bottom" pTooltip="Click to get migration failure records"></p-tag>
+                            </div>
+                        </div>
+                    </div>
+                </p-panel>
+            </div>
+        </div>
+    </div>
+    <div class="row xsm-padding no-top-padding">
+        <div class="col-lg-12 sm-padding no-top-padding">
+            <div class="xsm-padding lg-card-height pm-lt-bk">
+                <p-progressSpinner class="file-report-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
+                <p-scrollPanel *ngIf="!showSpinner" id="reportPanel" [style]="{width: '100%', height: '422px'}" class="file-report-scroll">
+                    <p-table class="custom-table" #migrationData [value]="filteredRecords" [columns]="dataRecordCols" [paginator]="false"
+                        [rows]="tableRowCount" [responsive]="true" [style]="{width:'100%'}" (onRowSelect)="onRowSelected($event)"
+                        (onRowUnselect)="onRowUnselected($event)"
+                        [globalFilterFields]="['DataRow','DMIngestionStatus','DMIngestionMessage','DMValidationStatus',
+                        'DMValidationMessage','DMMigrationStatus','DMMigrationMessage','DMValidationType','DMStatus']">
+                        <ng-template pTemplate="caption">
+                            <div class="table-header" style="text-align: left;">
+                                <span style="width: 30%;" class="p-input-icon-right">
+                                    <i class="pi pi-search"></i>
+                                    <input #textInput style="width: 100%; height: 30px; font-size: 12px !important;"
+                                        class="xsm-pm-border sm-font" pInputText type="text"
+                                        (input)="migrationData.filterGlobal(textInput.value, 'contains')" placeholder="Search" />
+                                </span>
+                                <span style="width: 50%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                                    Total Records: {{filteredRecordCount}}
+                                </span>
+                                <span [ngStyle]="{'width': showTotalRecords || showUploadFailureRecords || showValidateFailureRecords 
+                                    || showMigrateSuccessRecords || showMigrateFailureRecords ? '53%' : '51%'}" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="refreshData(0,'TOTAL')"
+                                        pTooltip="Click to refresh data" class="fa fa-refresh"></i>
+                                </span>
+                                <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="deleteEntry()"
+                                        pTooltip="Click to delete" class="fa fa-trash"></i>
+                                </span>
+                                <span *ngIf="showUploadSuccessRecords" style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="validateEntry()"
+                                        pTooltip="Click to validate" class="fa fa-check-circle"></i>
+                                </span>
+                                <span *ngIf="showValidateSuccessRecords" style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="migrateEntry()"
+                                        pTooltip="Click to migrate" class="fa fa-arrow-circle-up"></i>
+                                </span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th style="width: 50px !important;"></th>
+                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                    {{col.label}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                            <tr class="pointer">
+                                <td style="width: 50px !important;">
+                                    <p-tableRadioButton class="custom-radio-btn" [value]="rowData" [index]="i">
+                                    </p-tableRadioButton>
+                                </td>
+                                <ng-template ngFor let-col [ngForOf]="columns">
+                                    <td *ngIf="col.field != 'DataRow'" style='text-align:center;' tooltipStyleClass="custom-tooltip"
+                                        tooltipPosition="left"
+                                        pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                        {{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') :
+                                        rowData[col.field] }}
+                                    </td>
+                                    <td *ngIf="col.field == 'DataRow' && rowData['DMStatus']!='Ingestion Failed' && rowData['DMStatus']!='Migrated'" class="custom-warn-text"
+                                        style="text-decoration: underline !important; cursor: pointer !important; text-align: center;"
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="right"
+                                        pTooltip="{{rowData[col.field]}} - Click to open row data"
+                                        (click)="viewRowData(rowData)">
+                                        {{rowData[col.field]}}
+                                    </td>
+                                    <td *ngIf="col.field == 'DataRow' && (rowData['DMStatus']=='Ingestion Failed' || rowData['DMStatus']=='Migrated') " 
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="right" style="text-align: center;"
+                                        pTooltip="{{rowData[col.field]}}">
+                                        {{rowData[col.field]}}
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="row xsm-padding">
+                            <div class="col-lg-5 sm-padding no-padding">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding"></div>
+                            </div>
+                            <div class="col-lg-1 sm-padding no-padding" style="width: 45px !important;">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                    <p-button type="button" class="pagination-buttons" icon="pi pi-angle-double-left" 
+                                    [disabled]="isBackDisabled" (click)="onPagination('DOUBLE_BACKWARD')"></p-button>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 sm-padding no-padding" style="width: 45px !important;">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                    <p-button type="button" class="pagination-buttons" icon="pi pi-chevron-left" 
+                                    [disabled]="isBackDisabled" (click)="onPagination('BACKWARD')"></p-button>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 sm-padding no-padding" style="width: 50px !important;">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                    <p-button type="button" class="pagination-buttons" label="{{currentPageNumber}}" [disabled]="true"></p-button>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 sm-padding no-padding" style="width: 45px !important;">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                    <p-button type="button" class="pagination-buttons" icon="pi pi-chevron-right" 
+                                    [disabled]="isFrontDisabled" (click)="onPagination('FORWARD')"></p-button>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 sm-padding no-padding">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                    <p-button type="button" class="pagination-buttons" icon="pi pi-angle-double-right" 
+                                    [disabled]="isFrontDisabled" (click)="onPagination('DOUBLE_FORWARD')"></p-button>
+                                </div>
+                            </div>
+                            <div class="col-lg-4 sm-padding no-padding">
+                                <div class="sm-padding form-field-header no-bottom-padding no-top-padding"></div>
+                            </div>
+                        </div>
+                    </div>
+                </p-scrollPanel>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,185 @@
+<div class="container-fluid no-left-padding no-right-padding">
+    <p-sidebar [(visible)]="displayFilters" class="custom-right-sidebar" position="right">
+        <div class="row no-left-padding no-right-padding no-top-padding">
+            <div class="col-lg-12 xsm-padding" style="padding-left: 2px !important;">
+                <p-panel class="custom-search-panel">
+                    <ng-template pTemplate="header">
+                        <div class="col-lg-2 xsm-padding no-left-padding no-right-padding form-field-header">
+                            Search Details
+                        </div>
+                    </ng-template>
+                    <div class="row xsm-padding">
+                        <div class="col-lg-5 xsm-padding xsm-margin">
+                            <p-dropdown appendTo="body" [options]="entityNames" placeholder="Entity Name"
+                                [(ngModel)]="filterEntityName" name="entityName" #entityName="ngModel"
+                                tooltipStyleClass="custom-tooltip" class="custom-search-dropdown"
+                                pTooltip="Click to choose entity">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-lg-6 xsm-padding xsm-margin">
+                            <p-button label="Search" tooltipStyleClass="custom-tooltip" tooltipPosition="right"
+                                pTooltip="Click to get search results" styleClass="p-button-sm" class="custom-sr-btn"
+                                (click)="getFilteredSearch()"></p-button>
+                        </div>
+                    </div>
+                    <div class="row xsm-padding">
+                        <div class="col-lg-5 xsm-padding xsm-margin">
+                            <input type="text" pInputText [(ngModel)]="filterFileName" name="fName" #fName="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to enter file name" tooltipPosition="bottom"
+                                placeholder="File Name" style="font-size: 13px !important;" />
+                        </div>
+                        <div class="col-lg-5 xsm-padding xsm-margin">
+                            <p-dropdown appendTo="body" [options]="usersList" placeholder="Uploaded By" [(ngModel)]="filterUploadedBy"
+                                name="uploadedBy" #uploadedBy="ngModel" tooltipStyleClass="custom-tooltip" class="custom-search-dropdown"
+                                pTooltip="Click to choose uploaded by">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                    <div class="row xsm-padding">
+                        <div class="col-lg-5 xsm-padding xsm-margin">
+                            <p-calendar [(ngModel)]="filterFromDate" [showIcon]="true" inputId="icon" [maxDate]="todaysDate"
+                                dateFormat="dd/mm/yy" name="ftFromDate" #ftFromDate="ngModel" class="custom-calendar"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to enter from date"
+                                placeholder="From Date"></p-calendar>
+                        </div>
+                        <div class="col-lg-5 xsm-padding xsm-margin">
+                            <p-calendar [(ngModel)]="filterToDate" [showIcon]="true" inputId="icon" [maxDate]="todaysDate"
+                                dateFormat="dd/mm/yy" name="ftToDate" #ftToDate="ngModel" class="custom-calendar"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to enter to date" placeholder="To Date">
+                            </p-calendar>
+                        </div>
+                    </div>
+                </p-panel>
+            </div>
+        </div>
+    </p-sidebar>
+    <div class="row sm-padding">
+        <div class="col-lg-12 sm-padding no-left-padding no-right-padding no-top-padding">
+            <div class="xsm-padding lg-card-height pm-lt-bk">
+                <p-progressSpinner class="dashboard-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
+                <p-scrollPanel *ngIf="!showSpinner" [style]="{width: '100%', height: '625px'}" class="custom-scroll">
+                    <p-table class="custom-table" #ingestionData [value]="igtData" [columns]="igtDataCols"
+                        [paginator]="true" [rows]="14" [responsive]="true" [style]="{width:'100%'}"
+                        (onRowSelect)="onRowSelected($event)" (onRowUnselect)="onRowUnselected($event)"
+                        [globalFilterFields]="['ENTITY_DESCRIPTION','FILE_NAME','UPLOADED_BY','FILE_STATUS','TOTAL_COUNT',
+                        'UPLOAD_SUCCESS_COUNT','UPLOAD_ERROR_COUNT','UPLOAD_DUPLICATE_COUNT']">
+                        <ng-template pTemplate="caption">
+                            <div class="table-header" style="text-align: left;">
+                                <span style="width: 30%;" class="p-input-icon-right">
+                                    <i class="pi pi-search"></i>
+                                    <input #textInput style="width: 100%; height: 30px; font-size: 12px !important;"
+                                        class="xsm-pm-border sm-font" pInputText type="text"
+                                        (input)="ingestionData.filterGlobal(textInput.value, 'contains')"
+                                        placeholder="Search" />
+                                </span>
+                                <span
+                                    style="width: 50%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                                    Total Records: {{igtData.length}}
+                                </span>
+                                <span style="width: 46%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="refreshData()"
+                                        pTooltip="Click to refresh data" class="fa fa-refresh" style="padding-right: 20px !important;"></i>
+                                </span>
+                                <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="deleteEntry()" pTooltip="Click to delete"
+                                        class="fa fa-trash" style="padding-right: 15px !important;"></i>
+                                </span>
+                                <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="validateEntry()" pTooltip="Click to validate"
+                                        class="fa fa-check-circle" style="padding-right: 10px !important;"></i>
+                                </span>
+                                <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="openSearch()" pTooltip="Click to open search"
+                                        class="fa fa-search-plus" style="padding-right: 5px !important;"></i>
+                                </span>
+                                <span style="width: 2%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                                    <i class="fa fa-cogs" tooltipStyleClass="custom-tooltip" pTooltip="Click to choose columns"
+                                        (click)="openModal(columnFilterModal,'md-modal')" tooltipPosition="left"></i>
+                                </span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th style="width: 50px !important;"></th>
+                                <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                    {{col.label}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                            <tr class="pointer">
+                                <td style="width: 50px !important;">
+                                    <p-tableRadioButton class="custom-radio-btn" [value]="rowData" [index]="i"></p-tableRadioButton>
+                                </td>
+                                <ng-template ngFor let-col [ngForOf]="columns">
+                                    <td *ngIf="col.field != 'FILE_NAME' && col.field != 'ENTITY_DESCRIPTION'" style='text-align:center;'
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="left"
+                                        pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                        {{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') :
+                                        rowData[col.field] }}
+                                    </td>
+                                    <td *ngIf="col.field == 'ENTITY_DESCRIPTION'"
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="left"
+                                        pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                        <p-tag class="custom-tag-user" value={{rowData[col.field]}}></p-tag>
+                                    </td>
+                                    <td *ngIf="col.field == 'FILE_NAME'" class="custom-warn-text"
+                                        style="text-decoration: underline !important; cursor: pointer !important;"
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="right"
+                                        pTooltip="{{rowData[col.field]}} - Click to open total file report" (click)="viewFileReport(rowData)">
+                                        {{rowData[col.field]}}
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-scrollPanel>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #columnFilterModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">Column Chooser</p>
+                </div>
+                <div class="col-lg-2 modal-header">
+                    <button type="button" class="btn-close close" aria-label="Close" (click)="hideModal()"></button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '250px'}" class="custom-scroll sm-padding">
+                <div class="row sm-padding">
+                    <ng-template ngFor let-oColumn [ngForOf]="otherColumns" let-i="index">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-1">
+                                    <div class="p-field-radiobutton">
+                                        <p-checkbox id="allColumn_{{i}}" class="custom-checkbox" [binary]="true"
+                                            (onChange)="onOtherColumnSelect($event, oColumn)" name="allColumnName_{{i}}"
+                                            #allColumn="ngModel" [(ngModel)]="oColumn.isSelected"></p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10" style="padding-top: 3px;">
+                                    <div class="no-padding form-field-header">
+                                        {{oColumn.label}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to add columns"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="addNewColumns()"></p-button>
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,357 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-3 no-left-padding no-right-padding" *ngIf="!isBossSelected && servicesPresent">
+            <div class="xsm-padding xsm-pm-border lg-card-height pm-lt-bk">
+                <p-scrollPanel [style]="{width: '100%', height: '675px'}" class="custom-scroll">
+                    <p-accordion class="custom-accordion">
+                        <ng-template ngFor let-accServ [ngForOf]="accordionServiceList">
+                            <p-accordionTab header={{accServ.ServiceName}} selected={{accServ.SERVICE_SELECTED}}
+                                tooltipStyleClass="custom-tooltip" pTooltip="{{accServ.Tooltip}}">
+                                <ng-template ngFor let-childServ [ngForOf]="accServ.ChildServices">
+                                    <div class="row">
+                                        <div class="col-lg-12 xsm-margin">
+                                            <div class="row">
+                                                <div class="col-lg-12">
+                                                    <p-button label="{{childServ.ServiceName}}" class="custom-req-btn shadow"
+                                                        (click)="openServiceModal(serviceModal,childServ,'xl-modal')"
+                                                        tooltipStyleClass="custom-tooltip" pTooltip="{{childServ.Tooltip}}">
+                                                        <i class="fa fa-plus-circle"></i>
+                                                    </p-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </p-accordionTab>
+                        </ng-template>
+                    </p-accordion>
+                    <ng-template ngFor let-btnServ [ngForOf]="buttonServiceList">
+                        <div class="row">
+                            <div class="col-lg-12 xsm-margin">
+                                <div class="row">
+                                    <div class="col-lg-12 no-left-padding">
+                                        <p-button label="{{btnServ.ServiceName}}" class="custom-serv-btn"
+                                            (click)="openServiceModal(serviceModal,btnServ,'xl-modal')"
+                                            tooltipStyleClass="custom-tooltip" pTooltip="{{btnServ.Tooltip}}">
+                                            <i class="fa fa-plus-circle xsm-padding-left sm-padding-right"></i>
+                                        </p-button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-scrollPanel>
+            </div>
+        </div>
+        <div class="sm-padding no-padding" [ngClass]="!isBossSelected && servicesPresent  ? 'col-lg-9' : 'col-lg-12'">
+            <div class="row" style="padding-left: 12px !important;">
+                <div class="sm-padding xsm-pm-border lg-card-height pm-lt-bk no-top-padding no-bottom-padding"
+                    style="width: 99.5%;">
+                    <div class="lg-pm-header" style="margin-left: 0px !important;">
+                        <div class="row xsm-padding">
+                            <div class="col-lg-6">
+                                <p class="sm-height xsm-padding custom-wht-text no-top-padding" style="font-weight: bold; font-size: 14px !important;">Dashboard</p>
+                            </div>
+                            <div class="col-lg-6" *ngIf="isBossSelected">
+                                <p-chip label="{{bossName}}" [removable]="true" styleClass="custom-chip"
+                                    class="customized-chip pull-right" (onRemove)="removeBoss()"></p-chip>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row xsm-padding">
+                        <div class="col-lg-2" *ngIf="!isBossSelected">
+                            <p-card class="custom-card">
+                                <ng-template pTemplate="subtitle">
+                                    <p style="font-weight: bold;">All</p>
+                                </ng-template>
+                                <div class="row sm-margin">
+                                    <div class="col-lg-3">
+                                        <p class="custom-tertiary-text lg-font pointer" (click)="filterTask('ALL')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get all requests">{{dashboardCountObj.allCount}}</p>
+                                    </div>
+                                    <div class="col-lg-9" style="padding-top: 10px;">
+                                        <p class="custom-error-text sm-font pointer" (click)="filterTask('ALL_OVERDUE')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get all overdue requests">Overdue({{dashboardCountObj.allOverdueCount}})
+                                        </p>
+                                    </div>
+                                </div>
+                            </p-card>
+                        </div>
+                         <div class="col-lg-2" *ngIf="!isBossSelected">
+                            <p-card class="custom-card">
+                                <ng-template pTemplate="subtitle">
+                                    <p style="font-weight: bold;"><i style="padding-right: 10px;" class="fa fa-user"></i>Action Required
+                                    </p>
+                                </ng-template>
+                                <div class="row sm-margin">
+                                    <div class="col-lg-3">
+                                        <p class="custom-tertiary-text lg-font pointer" (click)="filterTask('MY_TASKS')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get pending requests">{{dashboardCountObj.pendingCount}}</p>
+                                    </div>
+                                    <div class="col-lg-9" style="padding-top: 10px;">
+                                        <p class="custom-error-text sm-font pointer" (click)="filterTask('MY_TASKS_OVERDUE')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get all shared overdue requests">
+                                            Overdue({{dashboardCountObj.pendingOverdueCount}})</p>
+                                    </div>
+                                </div>
+                            </p-card>
+                        </div>
+                        <div class="col-lg-2" *ngIf="isBossSelected">
+                            <p-card class="custom-card">
+                                <ng-template pTemplate="subtitle">
+                                    <p style="font-weight: bold;"><i style="padding-right: 10px;" class="fa fa-user"></i>Action Required
+                                    </p>
+                                </ng-template>
+                                <div class="row sm-margin">
+                                    <div class="col-lg-3">
+                                        <p class="custom-tertiary-text lg-font pointer" (click)="getDelegatedTaskDataCount()"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get pending requests">{{dashboardCountObj.pendingCount}}</p>
+                                    </div>
+                                    <div class="col-lg-9" style="padding-top: 10px;">
+                                        <p class="custom-error-text sm-font pointer" (click)="getDelegatedTasks('PersonalTasks')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get all shared overdue requests">
+                                            Overdue({{dashboardCountObj.pendingOverdueCount}})</p>
+                                    </div>
+                                </div>
+                            </p-card>
+                        </div>
+                        <div class="col-lg-2" *ngIf="!isBossSelected">
+                            <p-card class="custom-card">
+                                <ng-template pTemplate="subtitle">
+                                    <p style="font-weight: bold;"><i style="padding-right: 10px;" class="fa fa-users"></i>Shared Tasks
+                                    </p>
+                                </ng-template>
+                                <div class="row sm-margin">
+                                    <div class="col-lg-3">
+                                        <p class="custom-tertiary-text lg-font pointer" (click)="filterTask('SHARED_TASKS')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get shared tasks">{{dashboardCountObj.sharedCount}}</p>
+                                    </div>
+                                    <div class="col-lg-9" style="padding-top: 10px;">
+                                        <p class="custom-error-text sm-font pointer" (click)="filterTask('SHARED_TASKS_OVERDUE')"
+                                            tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                            pTooltip="Click to get all shared overdue requests">
+                                            Overdue({{dashboardCountObj.sharedOverdueCount}})</p>
+                                    </div>
+                                </div>
+                            </p-card>
+                        </div>
+                        <div class="col-lg-2" *ngIf="!isBossSelected">
+                            <p-card class="custom-card">
+                                <ng-template pTemplate="subtitle">
+                                    <p style="font-weight: bold;"><i style="padding-right: 10px;" class="fa fa-pencil"></i>Drafts</p>
+                                </ng-template>
+                                <div class="row sm-margin">
+                                    <p class="custom-tertiary-text lg-font pointer" (click)="filterTask('DRAFT_TASKS')"
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="top" pTooltip="Click to get draft tasks">
+                                        {{dashboardCountObj.draftCount}}</p>
+                                </div>
+                            </p-card>
+                        </div>
+                        <div class="col-lg-2" *ngIf="!isBossSelected">
+                            <p-card class="custom-card">
+                                <ng-template pTemplate="subtitle">
+                                    <p style="font-weight: bold;"><i style="padding-right: 10px;" class="fa fa-bell"></i>Notifications
+                                    </p>
+                                </ng-template>
+                                <div class="row sm-margin">
+                                    <p class="custom-tertiary-text lg-font pointer" (click)="openNotfModal(notfModal,'lg-modal')"
+                                        tooltipStyleClass="custom-tooltip" tooltipPosition="top"
+                                        pTooltip="Click to get all notifications">{{dashboardCountObj.notfCount}}</p>
+                                </div>
+                            </p-card>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding-left: 12px !important; height: 770px !important;">
+                <div class="xsm-padding xsm-pm-border lg-card-height pm-lt-bk" style="width: 99.5%;">
+                    <p-progressSpinner class="dashboard-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
+                    <p-table *ngIf="!showSpinner" class="custom-dashboard-table" #tasksDT [value]="filteredTasks" 
+                        [(selection)]="selectedTask" [columns]="dashboardTaskCols" [filterDelay]="5" 
+                        [scrollable]="true" scrollHeight="675px" scrollDirection="both" (onRowSelect)="onTaskSelected($event)"
+                            (onRowUnselect)="onTaskUnselected($event)" sortField="DELIVERY_DATE" [sortOrder]="-1"
+                            [globalFilterFields]="['FILE_REF_NO','REQUEST_ID','TASK_TITLE','TASK_ACTION','TASK_STATUS','TASK_FROM']">
+                        <ng-template pTemplate="caption">
+                            <div class="table-header" style="text-align: left;">
+                                <span style="width: 30%;" class="p-input-icon-right">
+                                    <input #myTasksSearch style="width: 100%; height: 30px; font-size: 12px !important;"
+                                        class="xsm-pm-border sm-font" pInputText type="text"
+                                        (input)="tasksDT.filterGlobal(myTasksSearch.value, 'contains')" placeholder="Search" />
+                                </span>
+                                <span style="width: 30%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                                    Total Records: {{filteredTasks.length}}
+                                </span>
+                                <span [ngStyle]="{'width': !isBossSelected && servicesPresent ? '58%' : '62%' }"
+                                    style="padding-bottom: 10px !important; cursor: pointer;" class="p-input-icon-right">
+                                    <i class="fa fa-refresh" style="right: 3rem;" tooltipStyleClass="custom-tooltip" pTooltip="Click to refresh"
+                                        (click)="refreshTasks()" tooltipPosition="left"></i>
+                                </span>
+                                <span *ngIf="false" style="width: 2%;" style="padding-bottom: 10px !important; cursor: pointer;" class="p-input-icon-right">
+                                    <i class="fa fa-cogs" style="right: 1rem;" tooltipStyleClass="custom-tooltip"
+                                        pTooltip="Click to choose columns" (click)="openOtherColumnModal(tasksColumnFilterModal,'md-modal')"
+                                        tooltipPosition="left"></i>
+                                </span>
+                            </div>
+                        </ng-template>
+                        <ng-template pTemplate="header" let-columns>
+                            <tr style="width:{{totalTableHeaderWidth}}px">
+                                <th style="width: 25px !important;">
+                                    <p><i class="fa fa-exclamation"></i></p>
+                                </th>
+                                <th style="width: 25px !important;">
+                                </th>
+                                <th style="width: 25px !important;">
+                                </th>
+                                <th style="width:{{col.spanWidthPx}}px" *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                    {{col.label}}
+                                    <p-sortIcon [field]="col.field"></p-sortIcon>
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                            <tr class="pointer" [ngStyle]="{'color': rowData['SLA_BREACH']=='Y' ? '#f00a0a' : null }" style="width:{{totalTableHeaderWidth}}px">
+                                <td class="alarm-notf" style="width: 25px !important;">
+                                    <p style="width: 25px !important; font-size: 14px; font-weight: bolder; padding-top: 15px !important;">
+                                        {{rowData['URGENCYMARK']}}
+                                    </p>
+                                </td>
+                                <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
+                                    <p><i *ngIf="rowData['LOCKED'] == 'Y'" class="fa fa-lock"></i></p>
+                                </td>
+                                <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
+                                    <p><i class="{{rowData.icon}}"></i></p>
+                                </td>
+                                <ng-template ngFor let-col [ngForOf]="columns">
+                                    <td (click)="onTaskSelect(rowData)" style="width:{{col.spanWidthPx}}px" tooltipStyleClass="custom-tooltip"
+                                        tooltipPosition="top"
+                                        pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                        {{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ?
+                                        (rowData[col.field] | date:'dd/MM/yyyy') :
+                                        rowData[col.field] }}
+                                    </td>
+                                </ng-template>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr style="width:{{totalTableHeaderWidth}}px">
+                                <td class="custom-info-text" style="text-align: center !important; font-size: 14px !important;">No tasks available!!</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #serviceModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">{{serviceTitle}}</p>
+                </div>
+                <div *ngIf="false" class="col-lg-2 modal-header">
+                    <button type="button" class="btn-close close" aria-label="Close" (click)="hideModal()"></button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '530px'}" class="custom-scroll sm-padding">
+                <advisory-file *ngIf="reqIdentifier=='ADV_FILE'" [modalSubmit]="isReqSubmitted"
+                    (reqSubmit)="onRequestSubmit($event)"></advisory-file>
+                <advisory-request *ngIf="reqIdentifier=='ADV_REQ'" [modalSubmit]="isReqSubmitted"
+                    (reqSubmit)="onRequestSubmit($event)"></advisory-request>
+                <mla-file *ngIf="reqIdentifier=='MLA_FILE'" [modalSubmit]="isReqSubmitted"
+                    (reqSubmit)="onRequestSubmit($event)"></mla-file>
+                <mla-request *ngIf="reqIdentifier=='MLA_REQ'" [modalSubmit]="isReqSubmitted"
+                    (reqSubmit)="onRequestSubmit($event)"></mla-request>
+                <recall-reassign *ngIf="reqIdentifier=='RECALL_REASSIGN'" (reqSubmit)="onRecallReassignSubmit($event)"></recall-reassign>
+                <request-reopen *ngIf="reqIdentifier=='REOPEN_REQ'" (reqSubmit)="onReopenSubmit($event)"></request-reopen>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button *ngIf="reqIdentifier!='RECALL_REASSIGN' && reqIdentifier!='REOPEN_REQ' && reqIdentifier!='MFC'" label="Create & View" tooltipStyleClass="custom-tooltip" pTooltip="Click to create and open"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="createServiceRequest()"></p-button>
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel request"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideRequestModal()"></p-button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #notfModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">Notifications</p>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content" style="border: none !important; box-shadow: none !important;">
+            <p-scrollPanel [style]="{width: '100%', height: '350px'}" class="custom-scroll">
+                <notification [allNotifications]="allNotifications"></notification>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to close" styleClass="p-button-sm"
+                class="custom-tertiary-btn" (click)="hideNotfModal()"></p-button>
+        </div>
+    </div>
+</ng-template>
+<ng-template #tasksColumnFilterModal>
+    <div class="app-card">
+        <div class="modal-action-bar right-align">
+            <div class="row">
+                <div class="col-lg-10 modal-header">
+                    <p class="custom-modal-heading">Column Chooser</p>
+                </div>
+                <div class="col-lg-2 modal-header">
+                    <button type="button" class="btn-close close" aria-label="Close" (click)="hideModal()"></button>
+                </div>
+            </div>
+        </div>
+        <div class="modal-content">
+            <p-scrollPanel [style]="{width: '100%', height: '250px'}" class="custom-scroll sm-padding">
+                <div class="row sm-padding">
+                    <ng-template ngFor let-aColumn [ngForOf]="allColumns" let-i="index">
+                        <div class="col-lg-6" *ngIf="aColumn.display">
+                            <div class="row">
+                                <div class="col-lg-1">
+                                    <div class="p-field-radiobutton">
+                                        <p-checkbox id="allColumn_{{i}}" class="custom-checkbox" [binary]="true"
+                                            (onChange)="onOtherColumnSelect($event, aColumn)" name="allColumnName_{{i}}"
+                                            #allColumn="ngModel" [(ngModel)]="aColumn.isSelected"></p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-10" style="padding-top: 3px;">
+                                    <div class="no-padding form-field-header">
+                                        {{aColumn.label}}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </div>
+            </p-scrollPanel>
+        </div>
+        <div class="modal-footer">
+            <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to add columns"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="addNewColumns()"></p-button>
+            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel"
+                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
+        </div>
+    </div>
+</ng-template>
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog #cd [style]="{width: '35vw'}" [baseZIndex]="10000" class="custom-confirmation">
+    <ng-template pTemplate="footer">
+        <button type="button" pButton icon="pi pi-check" label="Ok" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="Cancel" (click)="cd.reject()"></button>
+    </ng-template>
+</p-confirmDialog>

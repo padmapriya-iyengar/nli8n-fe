@@ -1,0 +1,174 @@
+<div class="container-fluid no-left-padding no-right-padding">
+    <div class="row xsm-padding lg-card-height pm-lt-bk">
+        <div class="col-lg-6 no-left-padding">
+            <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':true, 'read-only':false}">
+                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                    Entity Name
+                </div>
+            </div>
+            <div class="col-lg-12 xsm-padding">
+                <div class="xsm-padding">
+                    <p-dropdown appendTo="body" [options]="entityNames" placeholder="Entity Name"
+                        [(ngModel)]="dataEntityName" name="entityName" #entityName="ngModel"
+                        tooltipStyleClass="custom-tooltip" class="custom-search-dropdown" pTooltip="Click to choose entity">
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="row" style="padding-top: 30px !important">
+                <div class="col-lg-2 sm-padding no-padding">
+                </div>
+                <div class="col-lg-1 xsm-padding" style="padding-top: 0px !important;">
+                    <div class="p-field-checkbox">
+                        <p-radioButton class="custom-radio-btn" value="Yes" name="uRecords" #uRecords="ngModel" inputId="updRec"
+                            [(ngModel)]="updateRecords" tooltipStyleClass="custom-tooltip" pTooltip="Click to update records"
+                            tooltipPosition="bottom">
+                        </p-radioButton>
+                    </div>
+                </div>
+                <div class="col-lg-3 xsm-padding">
+                    <div class="sm-padding form-field-header no-padding">
+                        Update Records
+                    </div>
+                </div>
+                <div class="col-lg-1 xsm-padding" style="padding-top: 0px !important;">
+                    <div class="p-field-checkbox">
+                        <p-radioButton class="custom-radio-btn" value="No" name="uRecords" #uRecords="ngModel" inputId="updRec"
+                            [(ngModel)]="updateRecords" tooltipStyleClass="custom-tooltip" pTooltip="Click to ignore duplicates"
+                            tooltipPosition="bottom">
+                        </p-radioButton>
+                    </div>
+                </div>
+                <div class="col-lg-3 xsm-padding">
+                    <div class="sm-padding form-field-header no-padding">
+                        Ignore Duplicates
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 no-left-padding" style="padding-left: 11px !important;">
+            <div class="row">
+                <div class="col-lg-4 xsm-padding" [ngClass]="{'required':true, 'read-only':false}">
+                    <div class="xsm-padding form-field-header">
+                        Upload Type
+                    </div>
+                </div>
+                <div class="col-lg-1 xsm-padding" style="padding-top: 8px;">
+                    <div class="p-field-radiobutton">
+                        <p-radioButton class="custom-radio-btn" value="SharedLocation" name="updType" #updType="ngModel"
+                            inputId="updType" [(ngModel)]="uploadType" tooltipStyleClass="custom-tooltip"
+                            pTooltip="Click to fetch files from shared location" tooltipPosition="bottom"
+                            (onClick)="onUploadTypeChange()">
+                        </p-radioButton>
+                    </div>
+                </div>
+                <div class="col-lg-3 xsm-padding" style="padding-top: 8px;">
+                    <div class="sm-padding form-field-header no-padding">
+                        Shared Location
+                    </div>
+                </div>
+                <div class="col-lg-1 xsm-padding" style="padding-top: 8px;">
+                    <div class="p-field-radiobutton">
+                        <p-radioButton class="custom-radio-btn" value="FileUpload" name="updType" #updType="ngModel"
+                            inputId="updType" [(ngModel)]="uploadType" tooltipStyleClass="custom-tooltip"
+                            pTooltip="Click to upload file" tooltipPosition="bottom" (onClick)="onUploadTypeChange()">
+                        </p-radioButton>
+                    </div>
+                </div>
+                <div class="col-lg-3 xsm-padding" style="padding-top: 8px;">
+                    <div class="sm-padding form-field-header no-padding">
+                        File Upload
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-divider></p-divider>
+    <div class="row" *ngIf="uplType == 'SharedLocation'">
+        <div class="col-lg-12">
+            <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':true, 'read-only':false}">
+                <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                    Migration Base Location
+                </div>
+            </div>
+            <div class="col-lg-12 xsm-padding">
+                <span class="p-input-icon-right" style="width: 100% !important;">
+                    <input disabled type="text" pInputText [(ngModel)]="sharedLocation" name="sLocation" #sLocation="ngModel"
+                        tooltipStyleClass="custom-tooltip" pTooltip="Click to enter shared location path" 
+                        tooltipPosition="bottom" style="font-size: 13px !important; font-weight: bold; color: #3D0FF6 !important;"/>
+                    <i class="fa fa-eye" style="cursor: pointer !important;" (click)="getDocumentsFromSharedPath()"
+                        tooltipStyleClass="custom-tooltip" pTooltip="Click to retrieve files from base location"
+                        tooltipPosition="left"></i>
+                </span>
+            </div>
+        </div>
+    </div>
+    <div class="row sm-padding no-bottom-padding">
+        <div class="col-lg-12 sm-padding no-padding">
+            <p-table class="custom-table" #documentsData [value]="dataFiles" [columns]="docDataCols" [paginator]="true" [rows]="5"
+                [responsive]="true" [style]="{width:'100%'}" [globalFilterFields]="['FileName']"
+                (onRowSelect)="onDocumentSelected($event)" (onRowUnselect)="onDocumentUnselected($event)">
+                <ng-template pTemplate="caption">
+                    <div class="table-header" style="text-align: left;">
+                        <span style="width: 30%;" class="p-input-icon-right">
+                            <i class="pi pi-search"></i>
+                            <input #textInput style="width: 100%; height: 30px; font-size: 12px !important;"
+                                class="xsm-pm-border sm-font" pInputText type="text"
+                                (input)="documentsData.filterGlobal(textInput.value, 'contains')" placeholder="Search" />
+                        </span>
+                        <span style="width: 50%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                            Total Records: {{dataFiles.length}}
+                        </span>
+                        <span *ngIf="uplType == 'FileUpload'" style="width: 54%;" class="xsm-margin-bottom p-input-icon-right pointer">
+                            <i tooltipStyleClass="custom-tooltip" tooltipPosition="left" (click)="deleteDocument()"
+                                pTooltip="Click to delete file" class="fa fa-trash"></i>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="width: 50px !important;"></th>
+                        <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+                            {{col.label}}
+                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                    <tr class="pointer">
+                        <td style="width: 50px !important;">
+                            <p-tableCheckbox class="custom-checkbox" [value]="rowData"></p-tableCheckbox>
+                        </td>
+                        <ng-template ngFor let-col [ngForOf]="columns">
+                            <td style='text-align:center;' tooltipStyleClass="custom-tooltip" tooltipPosition="left"
+                                pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                {{ col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}
+                            </td>
+                        </ng-template>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="row xsm-padding" *ngIf="uplType == 'FileUpload'">
+        <div class="xsm-padding">
+            <ngx-dropzone (change)="onSelect($event)" style="height: 120px;" accept="application/xml,text/xml">
+                <ngx-dropzone-label style="font-size: 13px !important;">Drag & Drop <br>
+                    or <br>
+                    Click to add files here.</ngx-dropzone-label>
+            </ngx-dropzone>
+        </div>
+    </div>
+    <div class="row xsm-padding">
+        <div class="col-lg-10 xsm-padding"></div>
+        <div class="col-lg-2 xsm-padding">
+            <p-button label="{{updBtnName}}" tooltipStyleClass="custom-tooltip" tooltipPosition="left" pTooltip="Click to {{updBtnName}} data"
+                styleClass="p-button-sm" class="custom-btn" (click)="uploadData()"></p-button>
+        </div>
+        <div *ngIf="false" class="col-lg-2 xsm-padding" style="width: 16% !important;">
+            <p-button label="{{updValBtnName}}" tooltipStyleClass="custom-tooltip" tooltipPosition="left"
+                pTooltip="Click to {{updValBtnName}} data" styleClass="p-button-sm" class="custom-btn"></p-button>
+        </div>
+    </div>
+</div>

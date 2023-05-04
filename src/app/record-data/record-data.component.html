@@ -1,0 +1,109 @@
+<div class="container-fluid no-left-padding no-right-padding">
+    <div class="row xsm-padding no-top-padding">
+        <div class="col-lg-12 sm-padding no-top-padding no-bottom-padding">
+            <div class="xsm-padding lg-card-height pm-lt-bk">
+                <p-panel [toggleable]="true" class="custom-panel" (onAfterToggle)="onToggle($event)">
+                    <ng-template pTemplate="header">
+                        <div class="col-lg-11 xsm-padding no-left-padding">
+                            <div class="row custom-blk-text sm-height sm-font">
+                                <div class="col-lg-12">
+                                    <p>{{panelHeader}}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <div class="col-lg-12 xsm-padding no-left-padding">
+                        <div class="row xsm-padding">
+                            <div class="col-lg-3">
+                                <div class="col-lg-12 sm-padding no-padding"
+                                    [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Entity Name
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-dropdown appendTo="body" [options]="entityNames" [(ngModel)]="dataEntityName"
+                                            name="entityName" #entityName="ngModel" class="custom-search-dropdown"
+                                            [disabled]="true">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 no-left-padding">
+                                <div class="col-lg-12 sm-padding no-padding"
+                                    [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        File Name
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <input type="text" pInputText [(ngModel)]="fileName" name="fName"
+                                            #fName="ngModel" [disabled]="true" style="font-size: 13px !important;" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 no-left-padding">
+                                <div class="col-lg-12 sm-padding no-padding"
+                                    [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        Uploaded By
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <p-dropdown appendTo="body" [options]="usersList" [(ngModel)]="uploadedBy"
+                                            name="uplBy" #uplBy="ngModel" class="custom-search-dropdown"
+                                            [disabled]="true">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 no-left-padding">
+                                <div class="col-lg-12 sm-padding no-padding"
+                                    [ngClass]="{'required':false, 'read-only':true}">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        File Status
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <input type="text" pInputText [(ngModel)]="fileStatus" name="fStatus"
+                                            #fStatus="ngModel" [disabled]="true" style="font-size: 13px !important;" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template pTemplate="icons">
+                        <button pButton class="p-panel-header-icon p-link" pTooltip="Click to save" tooltipStyleClass="custom-tooltip"
+                            tooltipPosition="bottom" (click)="onSave()">
+                            <span class="pi pi-save"></span>
+                        </button>
+                    </ng-template>
+                </p-panel>
+                <p-scrollPanel id="rowPanel" [style]="{width: '100%'}" class="row-report-scroll">
+                    <div class="row xsm-padding">
+                        <ng-template ngFor let-field [ngForOf]="fieldInfo" let-i="index">
+                            <div class="col-lg-4 sm-padding no-bottom-padding no-top-padding">
+                                <div class="col-lg-12 sm-padding no-padding">
+                                    <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                        {{field.fieldDesc}}
+                                    </div>
+                                </div>
+                                <div class="col-lg-12 xsm-padding">
+                                    <div class="xsm-padding">
+                                        <input type="text" pInputText [(ngModel)]="field.fieldValue" name="fName{{i}}" #fName{{i}}="ngModel"
+                                            tooltipStyleClass="custom-tooltip" pTooltip="Click to enter/update {{field.fieldDesc}}"
+                                            style="font-size: 13px !important;" tooltipPosition="bottom"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </div>
+                </p-scrollPanel>
+            </div>
+        </div>
+    </div>
+</div>

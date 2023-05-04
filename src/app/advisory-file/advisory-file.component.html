@@ -1,0 +1,307 @@
+<div class="container-fluid" style="background-color: #FFF;">
+    <p-progressSpinner class="request-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
+     <form #advfileForm="ngForm" *ngIf="!showSpinner">
+        <div class="row">
+           <div class="sm-padding col-lg-12 no-padding">
+              <div class="sm-padding form-field-header form-divider no-top-padding">
+                 File Details
+              </div>
+           </div>
+        </div>
+        <div class="row no-padding">
+          <div class="row">
+             <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                <div class="sm-padding form-field-header no-bottom-padding">
+                   AGC File Ref. No.
+                </div>
+             </div>
+             <div class="col-lg-1 no-right-padding" style="padding-top: 6px !important; width: 55px !important;font-size: 13px !important;">
+                <div class="xsm-padding">
+                   AG /
+                </div>
+             </div>
+             <div class="col-lg-2 xsm-padding">
+                <div class="row">
+                   <div class="col-lg-10 xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fileDivisions" class="custom-dropdown"
+                         placeholder="Division" [(ngModel)]="advisoryFile.I_Division" name="fileDiv" #fileDiv="ngModel"
+                         tooltipStyleClass="custom-tooltip" pTooltip="Click to choose division" [required]="!readOnly"
+                         (onChange)="onFileDivisionChange($event)" tooltipPosition="bottom"
+                         [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileDiv.invalid }"></p-dropdown>
+                   </div>
+                   <div class="col-lg-1 xsm-padding">
+                      /
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-2 xsm-padding">
+                <div class="row">
+                   <div class="col-lg-10 xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="header1" class="custom-dropdown"
+                         placeholder="Choose Header1" [(ngModel)]="advisoryFile.I_Header1" name="fileHeader1"
+                         #fileHeader1="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to choose Header1"
+                         [required]="!readOnly" placeholder="Header1" (onChange)="onFileHeader1Change($event)"
+                         [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileHeader1.invalid }" tooltipPosition="bottom"></p-dropdown>
+          
+                   </div>
+                   <div class="col-lg-1 xsm-padding">
+                      /
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-2 xsm-padding">
+                <div class="row">
+                   <div class="col-lg-10 xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="header2" class="custom-dropdown"
+                         placeholder="Choose Header2" [(ngModel)]="advisoryFile.I_Header2" name="fileHeader2"
+                         #fileHeader2="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to choose Header2"
+                         [required]="!readOnly" placeholder="Header2" (onChange)="onFileHeader2Change($event)"
+                         [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileHeader2.invalid }" tooltipPosition="bottom"></p-dropdown>
+          
+                   </div>
+                   <div class="col-lg-1 xsm-padding">
+                      /
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-2 xsm-padding">
+                <div class="row">
+                   <div class="col-lg-10 xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="year" class="custom-dropdown"
+                         placeholder="Year" [(ngModel)]="advisoryFile.I_Year" name="fileYear" #fileYear="ngModel"
+                         tooltipStyleClass="custom-tooltip" pTooltip="Click to choose Year" [required]="!readOnly"
+                         [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileYear.invalid }" tooltipPosition="bottom"></p-dropdown>
+          
+                   </div>
+                   <div class="col-lg-1 xsm-padding">
+                      /
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-1 no-left-padding" style="padding-top: 5px !important; width: 100px !important;font-size: 13px !important;">
+                <div class="xsm-padding">
+                   [Serial No]
+                </div>
+             </div>
+          </div>
+          <div class="row">
+             <div class="col-lg-12 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      File Title
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <textarea style="height: 75px !important;" [disabled]="readOnly" [(ngModel)]="advisoryFile.FileTitle"
+                         [rows]="5" [cols]="30" pInputTextarea name="fTitle" #fTitle="ngModel" tooltipStyleClass="custom-tooltip"
+                         pTooltip="Click to enter file title" [required]="!readOnly" tooltipPosition="bottom"
+                         [ngClass]="{ 'is-invalid':formSubmitted && fTitle.invalid }" class="custom-textarea"></textarea>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="row">
+             <div class="col-lg-4 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Security Classification
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="secClassification" class="custom-dropdown"
+                         placeholder="Choose a security classification" [(ngModel)]="advisoryFile.SecurityClassification"
+                         name="secClsf" #secClsf="ngModel" tooltipStyleClass="custom-tooltip" [required]="!readOnly"
+                         pTooltip="Click to choose security classification" tooltipPosition="bottom"
+                         [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && secClsf.invalid }"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Sensitive / High Profile
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="row xsm-padding" style="height: 35px;">
+                      <div class="col-lg-1">
+                         <div class="p-field-radiobutton">
+                            <p-radioButton class="custom-radio-btn" value="Yes" name="prfType" #prfType="ngModel"
+                               inputId="prfType" [(ngModel)]="advisoryFile.Sensitivity" tooltipStyleClass="custom-tooltip"
+                               pTooltip="Click to choose yes" [disabled]="readOnly" [required]="!readOnly" tooltipPosition="bottom"
+                               [ngClass]="{ 'p-radiobutton-is-invalid':formSubmitted && prfType.invalid }"></p-radioButton>
+                         </div>
+                      </div>
+                      <div class="col-lg-5" style="padding-top: 3px;">
+                         <div class="sm-padding form-field-header no-padding">
+                            Yes
+                         </div>
+                      </div>
+                      <div class="col-lg-1">
+                         <div class="p-field-radiobutton">
+                            <p-radioButton class="custom-radio-btn" value="No" name="prfType" #prfType="ngModel" inputId="prfType"
+                               [(ngModel)]="advisoryFile.Sensitivity" tooltipStyleClass="custom-tooltip" tooltipPosition="bottom"
+                               pTooltip="Click to choose no" [disabled]="readOnly" [required]="!readOnly"
+                               [ngClass]="{ 'p-radiobutton-is-invalid':formSubmitted && prfType.invalid }"></p-radioButton>
+                         </div>
+                      </div>
+                      <div class="col-lg-5" style="padding-top: 3px;">
+                         <div class="sm-padding form-field-header no-padding">
+                            No
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Local / Foreign
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" [required]="!readOnly" appendTo="body" [options]="fileOrigin"
+                         class="custom-dropdown" placeholder="Choose Local/Foreign" [(ngModel)]="advisoryFile.LocalForeign"
+                         name="fileOrg" #fileOrg="ngModel" tooltipStyleClass="custom-tooltip" tooltipPosition="bottom"
+                         (onChange)="onLocalForeignChange($event)" pTooltip="Click to choose Local/Foreign"
+                         [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileOrg.invalid }"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="row">
+             <div class="col-lg-4 sm-padding no-padding" *ngIf="showLocalAgencyDetails">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Agency Type
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" [required]="!readOnly" appendTo="body" [options]="localAgencyTypes"
+                         class="custom-dropdown" placeholder="Choose an agency type" [(ngModel)]="advisoryFile.AgencyType"
+                         name="agencyType" #agencyType="ngModel" tooltipStyleClass="custom-tooltip" tooltipPosition="bottom"
+                         (onChange)="onLocalAgencyTypeChange($event)" pTooltip="Click to enter agency type"
+                         [ngClass]="{'p-dropdown-is-invalid':formSubmitted && agencyType.invalid}"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding" *ngIf="showLocalAgencyDetails">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Agency Name
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" [required]="!readOnly" appendTo="body" [options]="localAgencyNames"
+                         class="custom-dropdown" placeholder="Choose an agency name" [(ngModel)]="advisoryFile.AgencyName"
+                         name="agencyName" #agencyName="ngModel" tooltipStyleClass="custom-tooltip"
+                         pTooltip="Click to enter agency name" tooltipPosition="bottom"
+                         [ngClass]="{'p-dropdown-is-invalid':formSubmitted && agencyName.invalid}"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding" *ngIf="showForeignAgencyDetails">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Country / Foreign Org.
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" [required]="!readOnly" appendTo="body" [options]="foreignCountries"
+                         class="custom-dropdown" placeholder="Choose a country/foreign origin"
+                         [(ngModel)]="advisoryFile.CountryForeignOrg" name="fCountry" #fCountry="ngModel"
+                         tooltipStyleClass="custom-tooltip" pTooltip="Click to enter country/foreign origin"
+                         (onChange)="onForeignAgencyCountryChange($event)" tooltipPosition="bottom"
+                         [ngClass]="{'p-dropdown-is-invalid':formSubmitted && fCountry.invalid}"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding" *ngIf="showForeignAgencyDetails">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Foreign Agency Type
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" [required]="!readOnly" appendTo="body" [options]="foreignAgencyTypes"
+                         class="custom-dropdown" placeholder="Choose an agency type" [(ngModel)]="advisoryFile.ForeignAgencyType"
+                         name="fAgencyType" #fAgencyType="ngModel" tooltipStyleClass="custom-tooltip" tooltipPosition="bottom"
+                         pTooltip="Click to enter agency type" (onChange)="onForeignAgencyTypeChange($event)"
+                         [ngClass]="{'p-dropdown-is-invalid':formSubmitted && fAgencyType.invalid}"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding" *ngIf="showForeignAgencyDetails">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Foreign Agency Name
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" [required]="!readOnly" appendTo="body" [options]="foreignAgencyNames"
+                         class="custom-dropdown" placeholder="Choose an agency name" [(ngModel)]="advisoryFile.ForeignAgencyName"
+                         name="fAgencyName" #fAgencyName="ngModel" tooltipStyleClass="custom-tooltip"
+                         pTooltip="Click to enter agency name" tooltipPosition="bottom"
+                         [ngClass]="{'p-dropdown-is-invalid':formSubmitted && fAgencyName.invalid}"></p-dropdown>
+                   </div>
+                </div>
+             </div>
+          </div>
+          <div class="row">
+             <div class="col-lg-8 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      File External Agency Ref. Number
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="advisoryFile.ExtAgencyRefNo"
+                         name="fileExtAgencyRefNo" #fileExtAgencyRefNo="ngModel" tooltipStyleClass="custom-tooltip"
+                         pTooltip="Click to enter requesting agency reference number" tooltipPosition="bottom"
+                         [ngClass]="{ 'is-invalid':formSubmitted && fileExtAgencyRefNo.invalid }" />
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-4 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      File Owner
+                   </div>
+                   <div class="col-lg-12 xsm-padding">
+                      <div class="xsm-padding">
+                         <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fileOwners" class="custom-dropdown"
+                            placeholder="Choose a file Owner" [(ngModel)]="advisoryFile.FileOwner" name="fileOwner"
+                            #fileOwner="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to enter File Owner"
+                            [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileOwner.invalid }" tooltipPosition="bottom"></p-dropdown>
+                      </div>
+                   </div>
+                </div>
+             </div>
+             <div class="col-lg-12 sm-padding no-padding">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':readOnly}">
+                   <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                      Remarks
+                   </div>
+                </div>
+                <div class="col-lg-12 xsm-padding">
+                   <div class="xsm-padding">
+                      <textarea style="height: 75px !important;" [(ngModel)]="advisoryFile.Remarks" [rows]="5" [cols]="30" pInputTextarea
+                         name="fRemarks" #fRemarks="ngModel" tooltipStyleClass="custom-tooltip" tooltipPosition="bottom"
+                         pTooltip="Click to enter remarks" class="custom-textarea"></textarea>
+                   </div>
+                </div>
+             </div>
+          </div>
+        </div>
+     </form>
+  </div>
+  <p-toast position="top-right"></p-toast>

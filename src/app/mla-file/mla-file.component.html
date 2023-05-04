@@ -1,0 +1,637 @@
+<div class="container-fluid" style="background-color: #FFF;">
+    <p-progressSpinner class="request-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
+    <form #mlaFileForm="ngForm" *ngIf="!showSpinner">
+        <div class="row">
+            <div class="sm-padding col-lg-12 no-padding">
+                <div class="sm-padding form-field-header form-divider no-top-padding">
+                    File Details
+                </div>
+            </div>
+        </div>
+        <div class="row no-padding">
+            <div class="row">
+                <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                    <div class="sm-padding form-field-header no-bottom-padding">
+                        AGC File Ref. No.
+                    </div>
+                </div>
+                <div class="col-lg-1 no-right-padding"
+                    style="padding-top: 6px !important; width: 55px !important;font-size: 13px !important;">
+                    <div class="xsm-padding">
+                        AG /
+                    </div>
+                </div>
+                <div class="col-lg-2 xsm-padding">
+                    <div class="row">
+                        <div class="col-lg-10 xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fileDivisions"
+                                class="custom-dropdown" [(ngModel)]="mlaFile.I_Division" name="fileDivision"
+                                #fileDivision="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to choose division" placeholder="Division" [required]="!readOnly"
+                                (onChange)="onFileDivisionChange($event)" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileDivision.invalid }">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-lg-1 xsm-padding">
+                            /
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 xsm-padding">
+                    <div class="row">
+                        <div class="col-lg-10 xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="header1"
+                                class="custom-dropdown" [(ngModel)]="mlaFile.I_Header1" name="fileHeader1"
+                                #fileHeader1="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to choose header 1" [required]="!readOnly" placeholder="Header 1"
+                                (onChange)="onFileHeader1Change($event)" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileHeader1.invalid }">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-lg-1 xsm-padding">
+                            /
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 xsm-padding">
+                    <div class="row">
+                        <div class="col-lg-10 xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="header2"
+                                class="custom-dropdown" [(ngModel)]="mlaFile.I_Header2" name="fileHeader2"
+                                #fileHeader2="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to choose header 2" [required]="!readOnly" placeholder="Header 2"
+                                (onChange)="onFileHeader2Change($event)" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileHeader2.invalid }">
+                            </p-dropdown>
+                        </div>
+                        <div class="col-lg-1 xsm-padding">
+                            /
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-2 xsm-padding">
+                    <div class="row">
+                        <div class="col-lg-10 xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="year" class="custom-dropdown"
+                                [(ngModel)]="mlaFile.I_Year" name="fileYear" #fileYear="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose year"
+                                [required]="!readOnly" placeholder="Year" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fileYear.invalid }"></p-dropdown>
+                        </div>
+                        <div class="col-lg-1 xsm-padding">
+                            /
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-1 no-left-padding"
+                    style="padding-top: 5px !important; width: 100px !important;font-size: 13px !important;">
+                    <div class="xsm-padding">
+                        [Serial No]
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Received Date
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-calendar [disabled]="readOnly" [(ngModel)]="mlaFile.MLAReceivedDate" [showIcon]="true"
+                                inputId="icon" [maxDate]="todaysDate" dateFormat="dd/mm/yy" name="cDate"
+                                #cDate="ngModel" tooltipStyleClass="custom-tooltip" tooltipPosition="bottom"
+                                pTooltip="Click to enter received date" [required]="!readOnly"
+                                [ngClass]="{ 'p-calendar-is-invalid':formSubmitted && cDate.invalid }"
+                                class="customized-calendar"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Case Type
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="true" appendTo="body" [options]="caseTypes" class="custom-dropdown"
+                                placeholder="Choose case type" [(ngModel)]="mlaFile.MLACaseType" name="cType"
+                                #cType="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to choose case type"
+                                (onChange)="onCaseTypeChange($event)" tooltipPosition="bottom">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Case Opened Date
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-calendar [disabled]="readOnly" [(ngModel)]="mlaFile.MLAFileOpenDate" [showIcon]="true"
+                                inputId="icon" [maxDate]="todaysDate" dateFormat="dd/mm/yy" name="oDate"
+                                #oDate="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter opened date" [required]="!readOnly"
+                                [ngClass]="{ 'p-calendar-is-invalid':formSubmitted && oDate.invalid }"
+                                class="customized-calendar" tooltipPosition="bottom"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            File Title
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <textarea style="height: 75px !important;" [disabled]="readOnly"
+                                [(ngModel)]="mlaFile.FileTitle" [rows]="5" [cols]="30" pInputTextarea name="fType"
+                                #fType="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to enter file title"
+                                [required]="!readOnly" [ngClass]="{ 'is-invalid':formSubmitted && fType.invalid }"
+                                class="custom-textarea" tooltipPosition="bottom"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Date of Outgoing Request Sent
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-calendar class="custom-request-calendar" [disabled]="readOnly"
+                                [(ngModel)]="mlaFile.MLAOutgoingSentDate" [showIcon]="true" inputId="icon"
+                                [maxDate]="todaysDate" dateFormat="dd/mm/yy" name="odDate" #odDate="ngModel"
+                                tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter date of outgoing request sent" [required]="!readOnly"
+                                [ngClass]="{ 'p-calendar-is-invalid':formSubmitted && odDate.invalid }" tooltipPosition="bottom"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Case Sub Type
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="true" appendTo="body" [options]="caseSubTypes"
+                                class="custom-dropdown" placeholder="Choose case sub type"
+                                [(ngModel)]="mlaFile.MLASubType" name="csType" #csType="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose case sub type" tooltipPosition="bottom">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':true}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Case Status
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="true" appendTo="body" [options]="caseStatus" class="custom-dropdown"
+                                placeholder="Choose case status" [(ngModel)]="mlaFile.FileStatus" name="cStatus"
+                                #cStatus="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to choose case status" tooltipPosition="bottom">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Sensitive / High Profile
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="row xsm-padding" style="height: 35px;">
+                            <div class="col-lg-1">
+                                <div class="p-field-radiobutton">
+                                    <p-radioButton class="custom-radio-btn" value="Yes" name="prfType"
+                                        #prfType="ngModel" inputId="prfType" [(ngModel)]="mlaFile.Sensitivity"
+                                        tooltipStyleClass="custom-tooltip" pTooltip="Click to choose yes"
+                                        [disabled]="readOnly" [required]="!readOnly" tooltipPosition="bottom"
+                                        [ngClass]="{ 'p-radiobutton-is-invalid':formSubmitted && prfType.invalid }">
+                                    </p-radioButton>
+                                </div>
+                            </div>
+                            <div class="col-lg-5" style="padding-top: 3px;">
+                                <div class="sm-padding form-field-header no-padding">
+                                    Yes
+                                </div>
+                            </div>
+                            <div class="col-lg-1">
+                                <div class="p-field-radiobutton">
+                                    <p-radioButton class="custom-radio-btn" value="No" name="prfType" #prfType="ngModel"
+                                        inputId="prfType" [(ngModel)]="mlaFile.Sensitivity"
+                                        tooltipStyleClass="custom-tooltip" pTooltip="Click to choose no"
+                                        [disabled]="readOnly" [required]="!readOnly" tooltipPosition="bottom"
+                                        [ngClass]="{ 'p-radiobutton-is-invalid':formSubmitted && prfType.invalid }">
+                                    </p-radioButton>
+                                </div>
+                            </div>
+                            <div class="col-lg-5" style="padding-top: 3px;">
+                                <div class="sm-padding form-field-header no-padding">
+                                    No
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Security Classification
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="secClassification"
+                                class="custom-dropdown" placeholder="Choose security classification" tooltipPosition="bottom"
+                                [(ngModel)]="mlaFile.SecurityClassification" name="secClsf" #secClsf="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose security classification"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && secClsf.invalid }"
+                                [required]="!readOnly">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Local / Foreign
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fileOrigin"
+                                class="custom-dropdown" placeholder="Choose Local/Foreign"
+                                [(ngModel)]="mlaFile.LocalForeign" name="rOrigin" #rOrigin="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose Local/Foreign"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && rOrigin.invalid }"
+                                (onChange)="onRequestOriginChange($event)">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="showForeignAgencyDetails">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Country / Foreign Org.
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="cfList" class="custom-dropdown"
+                                placeholder="Choose country or foreign origin" [(ngModel)]="mlaFile.CountryForeignOrg"
+                                name="cfOrigin" #cfOrigin="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to choose country or foreign origin" tooltipPosition="bottom"
+                                (onChange)="onForeignAgencyCountryChange($event)" [required]="!readOnly"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && cfOrigin.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Foreign Agency Type
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fAgencyTypes"
+                                class="custom-dropdown" placeholder="Choose foreign agency type"
+                                [(ngModel)]="mlaFile.ForeignAgencyType" name="fOriginType" #fOriginType="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose foreign agency type"
+                                [required]="readOnly" (onChange)="onForeignAgencyTypeChange($event)"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fOriginType.invalid }"
+                                tooltipPosition="bottom">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Foreign Agency Name
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fAgencyNames"
+                                class="custom-dropdown" placeholder="Choose foreign agency name"
+                                [(ngModel)]="mlaFile.ForeignAgencyName" name="fOriginName" #fOriginName="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose foreign agency name"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fOriginName.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row" *ngIf="showLocalAgencyDetails">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Agency Type
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="lAgencyTypes"
+                                class="custom-dropdown" placeholder="Choose agency type"
+                                [(ngModel)]="mlaFile.AgencyType" name="lAType" #lAType="ngModel"
+                                tooltipStyleClass="custom-tooltip" (onChange)="onLocalAgencyTypeChange($event)"
+                                pTooltip="Click to choose agency type" [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && lAType.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Agency Name
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="lAgencyNames"
+                                class="custom-dropdown" placeholder="Choose agency name"
+                                [(ngModel)]="mlaFile.AgencyName" name="lAName" #lAName="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose agency name"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && lAName.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding"></div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Agency Ref No.
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="mlaFile.ExtAgencyRefNo"
+                                name="agencyRefNo" #agencyRefNo="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter agency ref no" tooltipPosition="bottom"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Complexity
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fileCmplxts"
+                                class="custom-dropdown" placeholder="Choose a complexity"
+                                [(ngModel)]="mlaFile.MLAComplexity" name="cmplx" #cmplx="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose complexity"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && cmplx.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Request Made Under
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="reqUnder"
+                                class="custom-dropdown" placeholder="Choose request made under"
+                                [(ngModel)]="mlaFile.MLARequestedUnder" name="rUnder" #rUnder="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose request made under"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && rUnder.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            FATF Purpose
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="fatfPurposes"
+                                class="custom-dropdown" placeholder="Choose FATF purpose"
+                                [(ngModel)]="mlaFile.MLAFATFPurpose" name="fPurpose" #fPurpose="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to choose FATF purpose"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && fPurpose.invalid }">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding"
+                        [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Perfected Date
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <p-calendar class="custom-request-calendar" [disabled]="readOnly"
+                                [(ngModel)]="mlaFile.MLARequestPerfectedDate" [showIcon]="true" inputId="icon"
+                                [maxDate]="todaysDate" dateFormat="dd/mm/yy" name="pDate" #pDate="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to enter perfected date"
+                                [required]="!readOnly" tooltipPosition="bottom"
+                                [ngClass]="{ 'p-calendar-is-invalid':formSubmitted && pDate.invalid }">
+                            </p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-12 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':false, 'read-only':readOnly}">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Remarks
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <textarea style="height: 75px !important;" [(ngModel)]="mlaFile.Remarks" [rows]="5"
+                                [cols]="30" pInputTextarea name="fRemarks" #fRemarks="ngModel"
+                                tooltipStyleClass="custom-tooltip" pTooltip="Click to enter remarks"
+                                class="custom-textarea" tooltipPosition="bottom"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-8 sm-padding no-padding">
+                    <div class="col-lg-12 sm-padding no-padding">
+                        <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                            Special Classification
+                        </div>
+                    </div>
+                    <div class="col-lg-12 xsm-padding">
+                        <div class="xsm-padding">
+                            <div class="row xsm-padding" style="height: 35px;">
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="sIRaised"
+                                            #sIRaised="ngModel" [(ngModel)]="mlaFile.MLANovelLegalSensitiveIssue"
+                                            [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Novel Legal Sensitive Issues Raised
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="pExposure"
+                                            #pExposure="ngModel" [(ngModel)]="mlaFile.MLAPoliticalExposedPerson"
+                                            [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Political Exposed Persons
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row xsm-padding" style="height: 35px;">
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="dCriminality"
+                                            #dCriminality="ngModel" [(ngModel)]="mlaFile.MLADualCriminality"
+                                            [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Dual Criminality
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="svgnt"
+                                            #svgnt="ngModel" [(ngModel)]="mlaFile.MLASovereignty" [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Sovereignty
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row xsm-padding" style="height: 35px;">
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="cOffence"
+                                            #cOffence="ngModel" [(ngModel)]="mlaFile.MLAOffencePunishableByCaning"
+                                            [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Offence Punishable by Caning
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="sGovtOff"
+                                            #sGovtOff="ngModel" [(ngModel)]="mlaFile.MLASeniorGovtOfficial"
+                                            [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Senior Government Officials
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row xsm-padding" style="height: 35px;">
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="dPenalty"
+                                            #dPenalty="ngModel" [(ngModel)]="mlaFile.MLADeathPenalty" [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Death Penalty
+                                    </div>
+                                </div>
+                                <div class="col-lg-1">
+                                    <div class="p-field-checkbox">
+                                        <p-checkbox class="custom-checkbox" [disabled]="readOnly" name="cntnts"
+                                            #cntnts="ngModel" [(ngModel)]="mlaFile.MLAContentious" [binary]="true">
+                                        </p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="col-lg-5" style="padding-top: 3px;">
+                                    <div class="sm-padding form-field-header no-padding">
+                                        Contentious
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<p-toast position="top-right"></p-toast>

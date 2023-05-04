@@ -1,0 +1,131 @@
+<div class="container-fluid">
+    <form #upForm="ngForm">
+        <div class="row xsm-margin">
+            <div class="col-lg-1 circle">
+                <p style="padding-top: 8px">{{userHeader}}</p>
+            </div>
+            <div class="col-lg-10 xsm-padding">
+                <div class="row">
+                    <div class="form-field-header no-top-padding" style="font-size: x-large !important; height: 40px !important;">
+                        {{formattedUserName}}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4" style="font-size: 12px !important;">
+                        {{userProfile.Email}}
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <div class="p-field-radiobutton">
+                                    <p-checkbox class="sm-custom-checkbox" name="emailNotf" #emailNotf="ngModel" [(ngModel)]="userProfile.ReceiveEmailNotifications"
+                                        [binary]="true"></p-checkbox>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="sm-padding no-padding" style="font-size: 12px !important;">
+                                    Receive email notifications for circulations
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4" style="font-size: 12px !important;">
+                        {{userProfile.DepartmentName}}
+                    </div>
+                    <div class="col-lg-8">
+                        <div class="row">
+                            <div class="col-lg-1">
+                                <div class="p-field-radiobutton">
+                                    <p-checkbox class="sm-custom-checkbox" name="ooo" #ooo="ngModel"
+                                        [(ngModel)]="userProfile.OutOfOffice" [binary]="true" (onChange)="actOnOOO($event)"></p-checkbox>
+                                </div>
+                            </div>
+                            <div class="col-lg-10">
+                                <div class="sm-padding no-padding" style="font-size: 12px !important;">
+                                    Enable Out of Office
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row xsm-margin">
+            <div class="col-lg-4 xsm-padding">
+                <div class="row xsm-padding">
+                    <div class="form-field-header no-top-padding">
+                        Roles in system
+                    </div>
+                </div>
+                <p-scrollPanel [style]="{height: '150px'}" class="custom-scroll">
+                    <div class="col-lg-12">
+                        <div class="row xsm-padding no-bottom-padding" style="margin-left: 0px !important;">
+                            <ng-template ngFor let-role [ngForOf]="userRoles" let-i="index">
+                                <div class="row">
+                                    <div class="col-lg-12">
+                                        <div class="row" style="border: 0px;">
+                                            <div class="col-lg-1">
+                                                <i style="padding-right: 10px;" class="fa fa-user"></i>
+                                            </div>
+                                            <div class="col-lg-9">
+                                                <p style="font-size: 12px;">{{role.label}}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </p-scrollPanel>
+            </div>
+            <div class="col-lg-8 xsm-padding" *ngIf="isOOOEnabled">
+                <div class="row xsm-padding">
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':isOOOEnabled}">
+                            <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                Date From
+                            </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                            <p-calendar class="custom-calendar" [(ngModel)]="userProfile.DateFrom" [showIcon]="true" inputId="icon"
+                                dateFormat="dd/mm/yy" name="fDate" #fDate="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter from date" [required]="isOOOEnabled"
+                                [ngClass]="{ 'p-calendar-is-invalid':formSubmitted && fDate.invalid }"></p-calendar>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':isOOOEnabled}">
+                            <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                Date Until
+                            </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                            <p-calendar class="custom-calendar" [(ngModel)]="userProfile.DateUntil" [showIcon]="true" inputId="icon"
+                                dateFormat="dd/mm/yy" [minDate]="userProfile.DateFrom" name="tDate" #tDate="ngModel" tooltipStyleClass="custom-tooltip" [required]="isOOOEnabled"
+                                pTooltip="Click to enter to date" [ngClass]="{ 'p-calendar-is-invalid':formSubmitted && tDate.invalid }">
+                            </p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="row xsm-padding">
+                    <div class="col-lg-12 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':isOOOEnabled}">
+                            <div class="sm-padding form-field-header no-bottom-padding no-top-padding">
+                                Message
+                            </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                            <textarea style="height: 200px !important;" [(ngModel)]="userProfile.OutOfOfficeMessage" [rows]="5" [cols]="30" 
+                                pInputTextarea name="oooMsg" #oooMsg="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to enter out of office message"
+                                [ngClass]="{ 'p-inputtextarea-is-invalid':formSubmitted && oooMsg.invalid }" [required]="isOOOEnabled"
+                                name="oooMessage" class="custom-textarea"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<p-toast position="top-right"></p-toast>

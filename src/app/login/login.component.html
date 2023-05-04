@@ -1,0 +1,33 @@
+<div class="container-fluid" style="padding-left: 6px !important; height: 914px !important">
+    <div class="row" style="height: 130px;">
+      <div class="col-lg-12 sm-padding login-lg-header">
+        <span class="custom-wht-text pointer"
+          tooltipStyleClass="custom-tooltip">Demo</span>
+      </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 xsm-padding">
+            <div class="xsm-padding login-input" style="text-align:center !important;">
+               <input type="text" pInputText placeholder="Username" [(ngModel)]="userName"
+               name="userName" #uName="ngModel"/>
+            </div>
+         </div>
+         <div class="col-lg-12 xsm-padding">
+            <div class="xsm-padding login-input" style="text-align:center !important;">
+               <input type="text" pInputText placeholder="Password" [(ngModel)]="password"
+               name="password" #pwd="ngModel"/>
+            </div>
+         </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-12 xsm-padding">
+            <div class="xsm-padding login-input" style="text-align:center !important;">
+                <p-button label="Sign in" tooltipStyleClass="custom-tooltip" pTooltip="Click to sign in"
+                styleClass="p-button-sm" class="custom-tertiary-login-btn" (click)="loadDashboard()"></p-button>
+            </div>
+         </div>
+    </div>
+  </div>
+  <p-toast position="top-right"></p-toast>
+
+
