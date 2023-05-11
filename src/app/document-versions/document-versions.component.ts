@@ -37,10 +37,12 @@ export class DocumentVersionsComponent implements OnInit {
     ]
   }
   getAllSecurityClassifications() {
+    //Service Integration
     let response = {"CodeTables":[{"CodeTables-id":{"Id":"389463","ItemId":"002248573547A1ECA03AED61BD366817.389463"},"DisplayOrder":"2","IsMigrated":"true","I_TB_ParentID":null,"AlternateKey":"C","I_TB_ParentCode":null,"Code":"SCLASS_C","Name":"Confidential","Category":"SECURITY_CLASSIFICATION","Status":"A","CodeId":"3149","Title":{"Value":"CODE-000030364"}},{"CodeTables-id":{"Id":"389464","ItemId":"002248573547A1ECA03AED61BD366817.389464"},"DisplayOrder":"3","IsMigrated":"true","I_TB_ParentID":null,"AlternateKey":"R","I_TB_ParentCode":null,"Code":"SCLASS_R","Name":"Restricted","Category":"SECURITY_CLASSIFICATION","Status":"A","CodeId":"3150","Title":{"Value":"CODE-000030365"}},{"CodeTables-id":{"Id":"389462","ItemId":"002248573547A1ECA03AED61BD366817.389462"},"DisplayOrder":"1","IsMigrated":"true","I_TB_ParentID":null,"AlternateKey":"S","I_TB_ParentCode":null,"Code":"SCLASS_S","Name":"Secret","Category":"SECURITY_CLASSIFICATION","Status":"A","CodeId":"3148","Title":{"Value":"CODE-000030363"}}]}
     this.getMasterDataSuccessHandler(response,'SECURITY_CLASSIFICATION')
   }
   getAllDocTypes() {
+    //Service Integration
     let response = {"CodeTables":[{"CodeTables-id":{"Id":"389463","ItemId":"002248573547A1ECA03AED61BD366817.389463"},"DisplayOrder":"2","IsMigrated":"true","I_TB_ParentID":null,"AlternateKey":"C","I_TB_ParentCode":null,"Code":"SCLASS_C","Name":"Confidential","Category":"SECURITY_CLASSIFICATION","Status":"A","CodeId":"3149","Title":{"Value":"CODE-000030364"}},{"CodeTables-id":{"Id":"389464","ItemId":"002248573547A1ECA03AED61BD366817.389464"},"DisplayOrder":"3","IsMigrated":"true","I_TB_ParentID":null,"AlternateKey":"R","I_TB_ParentCode":null,"Code":"SCLASS_R","Name":"Restricted","Category":"SECURITY_CLASSIFICATION","Status":"A","CodeId":"3150","Title":{"Value":"CODE-000030365"}},{"CodeTables-id":{"Id":"389462","ItemId":"002248573547A1ECA03AED61BD366817.389462"},"DisplayOrder":"1","IsMigrated":"true","I_TB_ParentID":null,"AlternateKey":"S","I_TB_ParentCode":null,"Code":"SCLASS_S","Name":"Secret","Category":"SECURITY_CLASSIFICATION","Status":"A","CodeId":"3148","Title":{"Value":"CODE-000030363"}}]}
     this.getMasterDataSuccessHandler(response,'DOCUMENT_TYPES')
   }
@@ -78,6 +80,7 @@ export class DocumentVersionsComponent implements OnInit {
   }
   getFileVersions(){
     if(this.reqType == 'File'){
+      //Service Integration
       let response = {"tuple":{"old":{"AWP_DOCUMENT_VERSIONS":{"ID":"447","FILE_NAME":"CIRCULATION.xml","SERVICE_TYPE":"ADVISORY","DOCUMENT_URL":"AGC/IW/AG/LEGIS/LEG/2022/000000002/CIRCULATION.xml","CS_DOCUMENT_ID":"245707","REQUEST_ID":"","FILE_ID":"AG/LEGIS/LEG/B/2022/000000002","REMARKS":"ASDASD","DOCUMENT_DESCRIPTION":"ASD","DOCUMENT_DATE":"2022-08-01T11:34:43.0","DOCUMENT_VERSION":"1","SECURITY_CLASSIFICATION":"SCLASS_S","FILE_TYPE":"10","DOCUMENT_CLASS":"","CREATED_BY":"iadro1","CREATED_ON":"2022-08-18T06:04:50.190000000","LAST_MODIFIED_BY":null,"LAST_MODIFIED_ON":null,"AWP_DOC_ID":"368","MIME_TYPE":"text/xml","DOCUMENT_FORMAT":null,"OUTGOING":"","FILE_TYPE_DESC":"Egazette","SEC_CLASS_DESC":"Secret","LEGIS_TAGS":null,"TOPIC_TAGS":null,"KM_NOTES":null,"FILE_TYPE_NAME":"Test File Type","SECURITY_CLASSIFICATION_NAME":"Security Classification Name"}}}}
       if(response.tuple){
         let sIndex = _.findIndex(this.secClassification, function (sc:any) { return sc.value == response.tuple.old.AWP_DOCUMENT_VERSIONS.SECURITY_CLASSIFICATION })

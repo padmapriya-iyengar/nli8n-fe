@@ -87,6 +87,7 @@ export class AppComponent  implements OnInit{
     this.router.navigate([routeName]);
   }
   getUserInfo(){
+    //Service Implementation
     let response = {
       "UserProfile":{"ContactNumber":{"@nil":"true"},"DisplayName":"Priya","OutOfOfficeMessage":{"@nil":"true"},"Name":"priya","DateFrom":{"@nil":"true"},"DepartmentName":"IAD","ReceiveEmailNotifications":"false","OutOfOffice":"false","LastUpdatedBy":"priya","LastUpdatedOn":"2022-11-02T08:48:58Z","UserID":"priya","DateUntil":{"@nil":"true"},"Email":{"@nil":"true"},"UserProfile-id":{"Id":"213000","ItemId":"002248573547A1ECA6E5D79B37C2E81A.213000"}},"FunctionalGroup":[{"FunctionalGroup-id":{"Id":"49155","ItemId":"002248573547A1ECA0C26352C534A817.49155"},"GroupName":"IAD","GroupCreatedInOTDS":"Yes","IsDivision":"true","IsChild":"No","GroupDescription":"International Affairs Division","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"IAD"}},{"FunctionalGroup-id":{"Id":"180226","ItemId":"002248573547A1ECA0C26352C534A817.180226"},"GroupName":"Migration Data Admin","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Migration Data Admin","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"Migration Data Admin"}},{"FunctionalGroup-id":{"Id":"163843","ItemId":"002248573547A1ECA0C26352C534A817.163843"},"GroupName":"SECURITY ADMIN","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Security Administrator","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"SECURITY ADMIN"}},{"FunctionalGroup-id":{"Id":"1","ItemId":"002248573547A1ECA0C26352C534A817.1"},"GroupName":"AGC","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"No","GroupDescription":"Attorney General Chambers","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"AGC"}},{"FunctionalGroup-id":{"Id":"49156","ItemId":"002248573547A1ECA0C26352C534A817.49156"},"GroupName":"REGISTRY (IAD)","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"Yes","GroupDescription":"Registry team of IAD","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"REGISTRY (IAD)"}}]
     }
@@ -123,6 +124,7 @@ export class AppComponent  implements OnInit{
     this.openModal(this.userProfile, 'md-modal');
   }
   getBossInfo(){
+    //Service Implementation
     let response = {
       "PersonalAssistant":{"BossDN":"","I_PAExists":"false","PAName":"Priya_PA","BossName":"IAD_LO_3","I_PAName":"priya_pa","I_BossName":"iadlo3","PersonalAssistant-id":{"Id":"245764","ItemId":"002248573547A1ECAFB4939FF615681E.245764"},"PA":{"Person-id":{"Id":"163856389","ItemId":"F8B156B4FF8F11E6E6562305FE2BDF32.163856389"}},"Boss":{"Person-id":{"Id":"163905543","ItemId":"F8B156B4FF8F11E6E6562305FE2BDF32.163905543"}}}
     }

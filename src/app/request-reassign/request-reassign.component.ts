@@ -44,6 +44,7 @@ export class RequestReassignComponent implements OnInit, OnChanges {
     }
   }
   loadOfficers(){
+    //Service Implementation
     this.officerNames.push({ label: 'Priya', value: 'priya' });
     this.officerNames.push({ label: 'Demo User 1', value: 'DemoUser1' });
     this.officerNames.push({ label: 'Demo User 2', value: 'DemoUser2' });
