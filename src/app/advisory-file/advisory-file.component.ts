@@ -5,6 +5,7 @@ import { ADVISORY_FILE } from 'src/app/entities/advisory-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
+import { AppService } from '../commons/app.service';
 
 @Component({
   selector: 'advisory-file',
@@ -13,7 +14,8 @@ import { DatePipe } from '@angular/common';
 })
 export class AdvisoryFileComponent implements OnInit, OnChanges{
   constructor(private utilService: UtilityService, 
-    private route: ActivatedRoute, private datePipe: DatePipe) { }
+    private route: ActivatedRoute, private datePipe: DatePipe,
+    private appService: AppService) { }
 
   fileDetails: any[] = [];
   advisoryFile!: ADVISORY_FILE;
@@ -67,14 +69,25 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   }
   getFileOrigins() {
     this.fileOrigin = [];
-    //Service Integrations
-    this.fileOrigin = [
-      { label: 'Local', value: 'ADDR_L' },
-      { label: 'Foreign', value: 'ADDR_F' },
-    ];
-    this.advisoryFile.LocalForeign = 'ADDR_L';
-    this.advisoryFile.LocalOrForeign = 'ADDR_L';
-    this.getLocalAgencyTypes();
+    this.appService.getMasterDataByType('FILE_ORIGIN').subscribe((response) => {
+      let resp = Object.assign(response)
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            this.fileOrigin.push({ label: item.value, value: item.code })
+          })
+        } else{
+          this.fileOrigin.push({ label: resp.value, value: resp.code })
+        }
+        this.advisoryFile.LocalForeign = 'ADDR_L';
+        this.advisoryFile.LocalOrForeign = 'ADDR_L';
+        this.getLocalAgencyTypes();
+      }
+    },
+    (error) => {
+      console.error('Request failed with error')
+      this.showSpinner = false;
+    })
   }
   getSecurityClassifications(){
     this.secClassification = [];

@@ -8,6 +8,7 @@ import { NOTIFICATION_DETAILS } from '../entities/notification-details';
 import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
+import { AppService } from '../commons/app.service';
 
 @Component({
   selector: 'dashboard',
@@ -16,7 +17,8 @@ import { ConfirmationService } from 'primeng/api';
 })
 export class DashboardComponent implements OnInit{
   constructor(private utilService: UtilityService, private modalService: BsModalService, 
-    private datePipe: DatePipe, private confirmationService: ConfirmationService) { }
+    private datePipe: DatePipe, private confirmationService: ConfirmationService,
+    private appService: AppService) { }
   dashboardCountObj: any = {};
   selectedTask: any;
   dashboardTaskCols: any[] = [];
@@ -285,77 +287,75 @@ export class DashboardComponent implements OnInit{
   }
   getAllNotifications(){
     this.allNotifications = [];
-    //Service Integration
-    let response = {
-      "tuple":{"old":{"getNotificationMessageDetails":{"getNotificationMessageDetails":{"Notifications":{"Notification":[{"FileReferenceNo":"AG/IAD/AIR/1/2022/000000042","Status":"A","CreatedDate":"2022-11-14T12:32:25Z","UserGroup":"REGISTRY (IAD)","MessageReadStatus":"NotRead","Actor":"","MessageType":"Group","MessageCode":"REQUEST_ASSIGNED_TO_RO","Message":"Request ADV000000129 is assigned to Registry Officer.","ModifiedDate":"2022-11-14T12:32:25Z","Responder":"priya","RequestNo":"ADV000000129","NotificationItemId":"002248573547A1ECA6176D344191E81A.1753110","Source_ItemId":"002248573547A1EC9F382DC3A9CD6817.3194888","LayoutID":"002248573547A1ECA970AD0E1EFC681B","RequestState":"Return to Registry","TaskEntity_InstanceID":""},{"FileReferenceNo":"AG/IAD/MLA-T/HK/2022/000000019","Status":"A","CreatedDate":"2022-11-10T03:23:26Z","UserGroup":"REGISTRY (IAD)","MessageReadStatus":"NotRead","Actor":"","MessageType":"Group","MessageCode":"REQUEST_ASSIGNED_TO_RO","Message":"Request MLA000000013 is assigned to Registry Officer.","ModifiedDate":"2022-11-10T03:23:26Z","Responder":"priya","RequestNo":"MLA000000013","NotificationItemId":"002248573547A1ECA6176D344191E81A.1753098","Source_ItemId":"002248573547A1EC9F382DC3A9CD6817.3194882","LayoutID":"002248573547A1ECA970AD0E1F05A81B","RequestState":"Assign within Division","TaskEntity_InstanceID":""},{"FileReferenceNo":"AG/IAD/AIR/FIRS/2022/000000007","Status":"A","CreatedDate":"2022-09-16T07:21:46Z","UserGroup":"","MessageReadStatus":"NotRead","Actor":"","MessageType":"User","MessageCode":"CIRCULATION_ASSIGN_TO_OFFICER","Message":"Circulation CIR000000052 is assigned to Officer.","ModifiedDate":"","Responder":"priya","RequestNo":"","NotificationItemId":"002248573547A1ECA6176D344191E81A.1720324","Source_ItemId":"002248573547A1ECA0C96326EA372817.1245186","LayoutID":"002248573547A1ECAA4C762DEDD4681B","RequestState":"Inprogress","TaskEntity_InstanceID":""},{"FileReferenceNo":"AG/IAD/MLA-T/HK/2022/000000001","Status":"A","CreatedDate":"2022-08-23T06:20:17Z","UserGroup":"REGISTRY (IAD)","MessageReadStatus":"NotRead","Actor":"","MessageType":"Group","MessageCode":"REQUEST_ASSIGNED_TO_RO","Message":"Request MLA000000001 is assigned to Registry Officer.","ModifiedDate":"2022-08-23T06:20:17Z","Responder":"priya","RequestNo":"MLA000000001","NotificationItemId":"002248573547A1ECA6176D344191E81A.1703978","Source_ItemId":"002248573547A1EC9F382DC3A9CD6817.2703363","LayoutID":"002248573547A1ECA970AD0E1F05A81B","RequestState":"Return to Registry","TaskEntity_InstanceID":""},{"FileReferenceNo":"AG/IAD/AIR/1/2022/000000003","Status":"A","CreatedDate":"2022-08-23T06:18:23Z","UserGroup":"REGISTRY (IAD)","MessageReadStatus":"NotRead","Actor":"","MessageType":"Group","MessageCode":"REQUEST_ASSIGNED_TO_RO","Message":"Request ADV000000004 is assigned to Registry Officer.","ModifiedDate":"2022-08-23T06:18:23Z","Responder":"priya","RequestNo":"ADV000000004","NotificationItemId":"002248573547A1ECA6176D344191E81A.1703970","Source_ItemId":"002248573547A1EC9F382DC3A9CD6817.2719746","LayoutID":"002248573547A1ECA970AD0E1EFC681B","RequestState":"Return to Registry","TaskEntity_InstanceID":""}]}}}}}
-    }
-    
-    let resps = response.tuple.old.getNotificationMessageDetails.getNotificationMessageDetails.Notifications;
-    let resp:any = {};
-    if(resps){
-      if (!resps.Notification.length){
-        resp = resps.Notification;
-        if (resp.Status == 'A'){
-          this.allNotifications.push({
-            ItemId: resp.NotificationItemId,
-            FileReferenceNo: resp.FileReferenceNo,
-            RequestNo: resp.RequestNo,
-            Actor: resp.Actor,
-            MessageCode: resp.MessageCode,
-            MessageType: resp.MessageType,
-            Responder: resp.Responder,
-            Message: resp.Message,
-            Status: resp.Status,
-            CreatedDate: this.datePipe.transform(resp.CreatedDate.split('T')[0], 'MMM d, y'),
-            ModifiedDate: resp.ModifiedDate,
-            MessageReadStatus: resp.MessageReadStatus,
-            UserGroup: resp.UserGroup,
-            CreatedTime: resp.CreatedDate.split('T')[1].substring(0, 5),
-            ShowRead: resp.MessageReadStatus == 'NotRead' ? true : false,
-            ShowDelete: resp.Status == 'A' ? true : false,
-            ShowNotf: resp.Status == 'A' ? true : false,
-            NotfHeader: _.capitalize(resp.Actor ? resp.Actor.substring(0, 1) : resp.Responder.substring(0, 1)),
-            StyleClass: resp.MessageReadStatus == 'Read' ? 'notf-row' : 'read-notf-row',
-            LayoutID: resp.LayoutID,
-            RequestState: resp.RequestState,
-            SourceItemId: resp.Source_ItemId,
-            TaskEntityInstanceID: resp.TaskEntity_InstanceID
+    this.appService.getUserNotifications('priya').subscribe((response) => {
+      let resp = Object.assign(response)
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            if (item.status == 'A'){
+              this.allNotifications.push({
+                ItemId: item.id,
+                FileReferenceNo: item.file_reference_no,
+                RequestNo: item.request_no,
+                Actor: item.actor,
+                MessageCode: item.message_code,
+                MessageType: item.message_type,
+                Responder: item.responder,
+                Message: item.message,
+                Status: item.status,
+                CreatedDate: this.datePipe.transform(item.created_date.split('T')[0], 'MMM d, y'),
+                ModifiedDate: item.modified_date,
+                MessageReadStatus: item.message_read_status,
+                UserGroup: item.user_group,
+                CreatedTime: item.created_date.split('T')[1].substring(0, 5),
+                ShowRead: item.message_read_status == 'NotRead' ? true : false,
+                ShowDelete: item.status == 'A' ? true : false,
+                ShowNotf: item.status == 'A' ? true : false,
+                NotfHeader: _.capitalize(item.actor ? item.actor.substring(0, 1) : item.responder.substring(0, 1)),
+                StyleClass: item.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
+                RequestState: item.request_state,
+                SourceItemId: item.source_item_id,
+                LayoutID: '',
+                TaskEntityInstanceID: ''
+              })
+            }
           })
-        }
-      } else if (resps.Notification.length > 0){
-        resp = resps.Notification
-        resp.forEach((ntf:any) => {
-          if (ntf.Status == 'A'){
+        } else{
+          if (resp.status == 'A'){
             this.allNotifications.push({
-              ItemId: ntf.NotificationItemId,
-              FileReferenceNo: ntf.FileReferenceNo,
-              RequestNo: ntf.RequestNo,
-              Actor: ntf.Actor,
-              MessageCode: ntf.MessageCode,
-              MessageType: ntf.MessageType,
-              Responder: ntf.Responder,
-              Message: ntf.Message,
-              Status: ntf.Status,
-              CreatedDate: this.datePipe.transform(ntf.CreatedDate.split('T')[0], 'MMM d, y'),
-              ModifiedDate: ntf.ModifiedDate,
-              MessageReadStatus: ntf.MessageReadStatus,
-              UserGroup: ntf.UserGroup,
-              CreatedTime: ntf.CreatedDate.split('T')[1].substring(0, 5),
-              ShowRead: ntf.MessageReadStatus == 'NotRead' ? true : false,
-              ShowDelete: ntf.Status == 'A' ? true : false,
-              ShowNotf: ntf.Status == 'A' ? true : false,
-              NotfHeader: _.capitalize(ntf.Actor ? ntf.Actor.substring(0, 1) : ntf.Responder.substring(0, 1)),
-              StyleClass: ntf.MessageReadStatus == 'Read' ? 'notf-row' : 'read-notf-row',
-              LayoutID: ntf.LayoutID,
-              RequestState: ntf.RequestState,
-              SourceItemId: ntf.Source_ItemId,
-              TaskEntityInstanceID: ntf.TaskEntity_InstanceID
+              ItemId: resp.id,
+              FileReferenceNo: resp.file_reference_no,
+              RequestNo: resp.request_no,
+              Actor: resp.actor,
+              MessageCode: resp.message_code,
+              MessageType: resp.message_type,
+              Responder: resp.responder,
+              Message: resp.message,
+              Status: resp.status,
+              CreatedDate: this.datePipe.transform(resp.created_date.split('T')[0], 'MMM d, y'),
+              ModifiedDate: resp.modified_date,
+              MessageReadStatus: resp.message_read_status,
+              UserGroup: resp.user_group,
+              CreatedTime: resp.created_date.split('T')[1].substring(0, 5),
+              ShowRead: resp.message_read_status == 'NotRead' ? true : false,
+              ShowDelete: resp.status == 'A' ? true : false,
+              ShowNotf: resp.status == 'A' ? true : false,
+              NotfHeader: _.capitalize(resp.actor ? resp.actor.substring(0, 1) : resp.responder.substring(0, 1)),
+              StyleClass: resp.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
+              RequestState: resp.request_state,
+              SourceItemId: resp.source_item_id,
+              LayoutID: '',
+              TaskEntityInstanceID: ''
             })
           }
-        })
+        }
+        this.dashboardCountObj.notfCount = this.allNotifications.length;
       }
-    }
-    this.dashboardCountObj.notfCount = this.allNotifications.length;
+    },
+    (error) => {
+      console.error('Request failed with error')
+      this.showSpinner = false;
+    })
   }
   openServiceModal(template: TemplateRef<any>, serviceObj: any, cssClass: string) {
     this.serviceTitle = serviceObj.ServiceDescription

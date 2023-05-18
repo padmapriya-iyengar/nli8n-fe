@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -35,6 +36,7 @@ import { MigConsolidatedReportComponent } from './mig-consolidated-report/mig-co
 import { MigrationReportComponent } from './migration-report/migration-report.component';
 import { RecordDataComponent } from './record-data/record-data.component';
 import { ValidationReportComponent } from './validation-report/validation-report.component';
+import { AppService } from './commons/app.service';
 
 @NgModule({
   declarations: [
@@ -68,10 +70,11 @@ import { ValidationReportComponent } from './validation-report/validation-report
     PrimeNGModule,
     FormsModule,
     BrowserAnimationsModule,
-    NgxDropzoneModule
+    NgxDropzoneModule,
+    HttpClientModule
   ],
   providers: [UtilityService, DatePipe, BsModalService, SIWMigrationService,
-    { provide: LocationStrategy, useClass: HashLocationStrategy }, ConfirmationService, MessageService],
+    { provide: LocationStrategy, useClass: HashLocationStrategy }, ConfirmationService, MessageService, AppService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
