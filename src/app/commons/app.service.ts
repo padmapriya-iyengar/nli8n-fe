@@ -18,9 +18,15 @@ export class AppService {
         return this.http.get(this.apiURL.get_master_data+'?source=code&identifier='+code);
     }
     getUserNotifications(username:string){
-        return this.http.get(this.apiURL.get_user_notifications+'?username='+username);
+        return this.http.get(this.apiURL.user_notifications+'?username='+username);
     }
     updateUserNotifications(id:string,action:string){
-        return this.http.post(this.apiURL.update_user_notifications+'?id='+id,{action: action});
+        return this.http.post(this.apiURL.user_notifications+'?id='+id,{action: action});
+    }
+    getUserDivisions(username:string){
+        return this.http.get(this.apiURL.user_divisions+'?username='+username);
+    }
+    getUsers(){
+        return this.http.get(this.apiURL.users);
     }
 }

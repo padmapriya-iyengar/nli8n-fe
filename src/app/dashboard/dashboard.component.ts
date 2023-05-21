@@ -287,7 +287,7 @@ export class DashboardComponent implements OnInit{
   }
   getAllNotifications(){
     this.allNotifications = [];
-    this.appService.getUserNotifications('priya').subscribe((response) => {
+    this.appService.getUserNotifications(UtilityService.CURRENT_USER_NAME).subscribe((response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){

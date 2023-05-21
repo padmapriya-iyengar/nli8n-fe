@@ -117,4 +117,8 @@ export class UtilityService{
     setFileReportSource(fileSource: any){
         this.fileSource.next({FILE_SOURCE: fileSource});
     }
+    addDays(date:any,days:any,object:any,attribute:string){
+        date.setDate(date.getDate() + days);
+        object[attribute]=date;
+    }
 }
