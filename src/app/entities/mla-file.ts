@@ -3,6 +3,7 @@ export class MLA_FILE {
     I_Header1!: string;
     I_Header2!: string;
     I_Year!: string;
+    I_SerialNo!: Number;
     MLAReceivedDate!: Date;
     FileType!: string;
     MLAFileOpenDate!: Date;
@@ -53,4 +54,5 @@ export class MLA_FILE {
     ForeignAgencyNameDesc!: string;
     FileForeignAgencyTypeDesc!: string;
     LocalOrForeign!: string;
+    ReferenceNo!: string;
 }

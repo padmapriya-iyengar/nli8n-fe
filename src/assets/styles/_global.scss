@@ -412,6 +412,9 @@ table{
 input{
     padding-left: 10px;
 }
+.xxl-modal {
+    max-width:1600px !important;
+}
 .xl-modal {
     max-width:1200px !important;
 }
@@ -436,6 +439,7 @@ input{
   border-radius: 0px !important;
   width: 98% !important;
   margin: 10px !important;
+  height: 86% !important;
 }
 .modal-footer {
   color: $primary-color;
@@ -444,6 +448,8 @@ input{
 }
 .app-card {
   overflow-x: hidden;
+  overflow-y: hidden;
+  height: 850px;
 }
 .close{
     padding-top: 20px !important;
@@ -2126,5 +2132,16 @@ p-paginator{
         span{
             color: $black-color !important;
         }
+    }
+}
+.service-tab{
+    li{
+        font-family: $font-family !important;
+    }
+    .p-tabview .p-tabview-nav li .p-tabview-nav-link{
+        color: $primary-color !important;
+    }
+    li.p-highlight .p-tabview-nav-link{
+        border-color: $primary-color !important;
     }
 }

@@ -53,11 +53,13 @@ export class MlaFileComponent implements OnInit, OnChanges {
   urlParams: string = '';
   requestNumber!: string | null;
   showSpinner: boolean = false;
+  reqIDAvailable: boolean = false;
 
   ngOnInit(): void {
     this.showSpinner = true;
     this.formSubmitted = false;
     this.mlaFile = new MLA_FILE();
+    this.setSerialNo();
     this.getAGItemID()
     this.getFileOrigins();
     this.getCaseStatus();
@@ -71,6 +73,20 @@ export class MlaFileComponent implements OnInit, OnChanges {
     if (changes['modalSubmit'].currentValue) {
       this.onSubmit()
     }
+  }
+  setSerialNo(){
+    this.showSpinner = true;
+    this.appService.getSequence('MLA File').subscribe((response) => {
+      let resp = Object.assign(response)
+      let prefix = resp[0].prefix?resp[0].prefix:''
+      let count = Number(resp[0].seq_count)+1
+      let suffix = resp[0].suffix?resp[0].suffix:''
+      this.mlaFile.I_SerialNo = prefix + count + suffix;
+    },
+    (error) => {
+      console.error("Request failed with error")
+      this.showSpinner = false;
+    })
   }
   onRequestOriginChange(data: any){
     if (data.value == 'ADDR_F'){
@@ -551,6 +567,12 @@ export class MlaFileComponent implements OnInit, OnChanges {
   onFileHeader2Change(data: any) {
     this.getFileYear();
   }
+  onFileYearChange(data: any){
+    if(data.value){
+      this.mlaFile.ReferenceNo = "AG/"+this.mlaFile.I_Division+"/"+this.mlaFile.I_Header1+"/"+this.mlaFile.I_Header2+"/"+this.mlaFile.I_Year+"/"+this.mlaFile.I_SerialNo;
+      this.reqIDAvailable = true;
+    }
+  }
   onCaseTypeChange(data: any){
     if (data.value === 'MLA'){
       this.getRequestedUnder('REQUEST_UNDER_MLA');
@@ -574,6 +596,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
       mla_file.FileCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
     }
     //@ToDo
-    //Service Integration
+    //Service Integration and seq id count update
   }
 }

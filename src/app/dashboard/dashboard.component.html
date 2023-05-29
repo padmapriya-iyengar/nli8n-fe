@@ -13,7 +13,7 @@
                                             <div class="row">
                                                 <div class="col-lg-12">
                                                     <p-button label="{{childServ.ServiceName}}" class="custom-req-btn shadow"
-                                                        (click)="openServiceModal(serviceModal,childServ,'xl-modal')"
+                                                        (click)="openServiceModal(serviceModal,childServ,'xxl-modal')"
                                                         tooltipStyleClass="custom-tooltip" pTooltip="{{childServ.Tooltip}}">
                                                         <i class="fa fa-plus-circle"></i>
                                                     </p-button>
@@ -31,7 +31,7 @@
                                 <div class="row">
                                     <div class="col-lg-12 no-left-padding">
                                         <p-button label="{{btnServ.ServiceName}}" class="custom-serv-btn"
-                                            (click)="openServiceModal(serviceModal,btnServ,'xl-modal')"
+                                            (click)="openServiceModal(serviceModal,btnServ,'xxl-modal')"
                                             tooltipStyleClass="custom-tooltip" pTooltip="{{btnServ.Tooltip}}">
                                             <i class="fa fa-plus-circle xsm-padding-left sm-padding-right"></i>
                                         </p-button>
@@ -263,7 +263,7 @@
             </div>
         </div>
         <div class="modal-content">
-            <p-scrollPanel [style]="{width: '100%', height: '530px'}" class="custom-scroll sm-padding">
+            <p-scrollPanel [style]="{width: '100%', height: '725px'}" class="custom-scroll">
                 <advisory-file *ngIf="reqIdentifier=='ADV_FILE'" [modalSubmit]="isReqSubmitted"
                     (reqSubmit)="onRequestSubmit($event)"></advisory-file>
                 <advisory-request *ngIf="reqIdentifier=='ADV_REQ'" [modalSubmit]="isReqSubmitted"

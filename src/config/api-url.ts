@@ -5,4 +5,5 @@ export const api = {
     users: 'http://localhost:3010/agc/users',
     user_profile: 'http://localhost:3010/agc/user-profile',
     user_details: 'http://localhost:3010/agc/user-details',
+    sequence: 'http://localhost:3010/agc/sequence'
 }

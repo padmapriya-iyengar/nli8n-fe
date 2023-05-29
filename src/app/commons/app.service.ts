@@ -35,4 +35,10 @@ export class AppService {
     getUserInfo(username:string){
         return this.http.get(this.apiURL.user_details+'?username='+username);
     }
+    getSequence(type:string){
+        return this.http.get(this.apiURL.sequence+'?type='+type);
+    }
+    generateSequence(type:string){
+        return this.http.post(this.apiURL.sequence+'?type='+type,{});
+    }
 }

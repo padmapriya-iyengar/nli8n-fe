@@ -38,4 +38,5 @@ export class ADVISORY_REQUEST{
     InternalRequestingDivisionDesc!: string;
     OfficerEmailDesc!: string;
     OfficerNameDesc!: string;
+    RequestNo!: string;
 }

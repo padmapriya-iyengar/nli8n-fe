@@ -38,4 +38,5 @@ export class MLA_REQUEST {
     InternalRequestingDivisionDesc!: string;
     OfficerEmailDesc!: string;
     OfficerNameDesc!: string;
+    RequestNo!: string;
 }

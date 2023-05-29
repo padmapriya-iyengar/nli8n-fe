@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit{
   password: string="";
 
   ngOnInit(): void {
-    
+    this.utilService.setUserActions(true);
   }
 
   loadDashboard(){

@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, Input } from '@angular/core';
 import { REQUEST_DOCS } from '../entities/document-details';
 import { ConfirmationService, TreeNode } from 'primeng/api';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
@@ -25,7 +25,6 @@ export class DocumentUploadComponent  implements OnInit {
   file!: REQUEST_DOCS;
   reqItemID!: string;
   reqType!: string;
-  readOnly!: string;
   modalRef!: BsModalRef;
   @ViewChild('docDetailsModal') details!: TemplateRef<any>;
   @ViewChild('docVersionsModal') docVersions!: TemplateRef<any>;
@@ -64,10 +63,14 @@ export class DocumentUploadComponent  implements OnInit {
   showDelete: boolean = false;
   currentUserName: string = "";
 
+  @Input() requestID: string = "";
+  @Input() requestType: string = "";
+  @Input() readOnly: string = "";
+
   ngOnInit(): void {
-    this.reqType = 'File';
-    this.reqItemID = '002248573547A1EC9E9CF72B1B84A817.2473999';
-    this.readOnly = 'N'
+    this.reqType = this.requestType;
+    this.reqItemID = this.requestID;
+    this.readOnly = this.readOnly;
     this.getLoggedInUserDetails();
     if(this.reqType == 'File'){
       this.fileCols = [
@@ -86,12 +89,7 @@ export class DocumentUploadComponent  implements OnInit {
     this.checkIfUserIsLO();
   }
   getLoggedInUserDetails() {
-    //Service Integration
-    let response = {"tuple":{"old":{"getLoggedInUserDetails":{"getLoggedInUserDetails":{"USER_DETAILS":{"USER_DN":"","USER_NAME":"priya"}}}}}}
-    let resp = response.tuple.old.getLoggedInUserDetails.getLoggedInUserDetails.USER_DETAILS;
-    if (resp) {
-      this.currentUserName = resp.USER_NAME;
-    }
+    this.currentUserName = UtilityService.CURRENT_USER_NAME;
   }
   getItemDetails(type: string, itemID: string) {
     //Service Integration

@@ -3,6 +3,7 @@ export class ADVISORY_FILE {
     I_Header1!: string;
     I_Header2!: string;
     I_Year!: string;
+    I_SerialNo!: Number;
     FileTitle!: string;
     FileType!: string;
     SecurityClassification!: string;
@@ -34,4 +35,5 @@ export class ADVISORY_FILE {
     ForeignAgencyNameDesc!: string;
     FileForeignAgencyTypeDesc!: string;
     LocalOrForeign!: string;
+    ReferenceNo!: string;
 }

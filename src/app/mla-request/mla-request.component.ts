@@ -35,6 +35,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   foreignAgencyCountryCodeIDMap: Map<string, string> = new Map<string, string>();
   fileOrigin: any[] = [];
   showSpinner: boolean = false;
+  reqIDAvailable: boolean = false;
 
   constructor(private utilService: UtilityService, private datePipe: DatePipe,
     private appService: AppService) { }
@@ -47,6 +48,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.formSubmitted = false;
     this.mlaRequest = new MLA_REQUEST();
+    this.setSerialNo();
     this.getSecurityClassifications();
     this.getRequestStatus();
     this.getRequestComplexity();
@@ -61,6 +63,21 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     if (changes['modalSubmit'].currentValue) {
       this.onSubmit()
     }
+  }
+  setSerialNo(){
+    this.showSpinner = true;
+    this.appService.getSequence('MLA Request').subscribe((response) => {
+      let resp = Object.assign(response)
+      let prefix = resp[0].prefix?resp[0].prefix:''
+      let count = Number(resp[0].seq_count)+1
+      let suffix = resp[0].suffix?resp[0].suffix:''
+      this.mlaRequest.RequestNo = prefix + count + suffix;
+      this.reqIDAvailable = true;
+    },
+    (error) => {
+      console.error("Request failed with error")
+      this.showSpinner = false;
+    })
   }
   getSecurityClassifications() {
     this.secClassification = [];
@@ -433,6 +450,6 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     }
     //@ToDo
     //Check error in adddays
-    //Service Integration
+    //Service Integration and seq id count update
   }
 }

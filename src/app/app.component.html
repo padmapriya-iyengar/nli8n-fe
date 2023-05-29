@@ -1,5 +1,5 @@
 <div class="container-fluid" style="padding-left: 6px !important;">
-  <div class="row" style="height: 55px;">
+  <div *ngIf="!hideUserActions" class="row" style="height: 55px;">
     <div class="col-lg-8 sm-padding lg-font" style="height: 55px;">
       <span class="custom-wht-text pointer" (click)="goToURL('dashboard')"
         tooltipStyleClass="custom-tooltip" pTooltip="Click to go to dashboard" style="font-weight: bold;">Demo</span>

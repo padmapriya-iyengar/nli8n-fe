@@ -51,11 +51,13 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   foreignAgencyCountryCodeIDMap: Map<string, string> = new Map<string, string>();
   requestNumber!: string | null;
   showSpinner: boolean = false;
+  reqIDAvailable: boolean = false;
 
   ngOnInit(): void {
     this.showSpinner = true;
     this.formSubmitted = false;
     this.advisoryFile = new ADVISORY_FILE();
+    this.setSerialNo();
     this.getFileOrigins();
     this.getSecurityClassifications();
     this.getAGItemID()
@@ -66,6 +68,20 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
       if (changes['modalSubmit'].currentValue){
         this.onSubmit()
       }
+  }
+  setSerialNo(){
+    this.showSpinner = true;
+    this.appService.getSequence('Advisory File').subscribe((response) => {
+      let resp = Object.assign(response)
+      let prefix = resp[0].prefix?resp[0].prefix:''
+      let count = Number(resp[0].seq_count)+1
+      let suffix = resp[0].suffix?resp[0].suffix:''
+      this.advisoryFile.I_SerialNo = prefix + count + suffix;
+    },
+    (error) => {
+      console.error("Request failed with error")
+      this.showSpinner = false;
+    })
   }
   getFileOrigins() {
     this.fileOrigin = [];
@@ -406,6 +422,12 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   onFileHeader2Change(data: any) {
     this.getFileYear();
   }
+  onFileYearChange(data: any){
+    if(data.value){
+      this.advisoryFile.ReferenceNo = "AG/"+this.advisoryFile.I_Division+"/"+this.advisoryFile.I_Header1+"/"+this.advisoryFile.I_Header2+"/"+this.advisoryFile.I_Year+"/"+this.advisoryFile.I_SerialNo;
+      this.reqIDAvailable = true;
+    }
+  }
   onSubmit() {
     this.formSubmitted = true;
     if (this.advfileForm && !this.advfileForm.valid) {
@@ -418,6 +440,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
       reqDetails.FileCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss"); 
     }
     //@ToDo
-    //Service Integration
+    //Service Integration and seq id count update
   }
 }
