@@ -220,7 +220,7 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
     this.foreignAgencyTypes = [];
     this.foreignAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('AGENCY_TYPE_FOREIGN').subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe((response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){

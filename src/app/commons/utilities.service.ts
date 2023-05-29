@@ -16,6 +16,7 @@ export class UtilityService{
     public static CURRENT_USER_ITEM_ID: string = "";
     public static CURRENT_USER_INBOX_PREF: any;
     public static IS_USER_PROFILE_TRIGGERED: boolean = false;
+    public static CURRENT_USER_INFO: any = {};
     public cUserName: EventEmitter<any> = new EventEmitter();
     public bossInfo: EventEmitter<any> = new EventEmitter();
     public userActions: EventEmitter<any> = new EventEmitter();

@@ -108,29 +108,12 @@ export class DashboardComponent implements OnInit{
     ]
   }
   loadTaskColumns(){
-    if(!UtilityService.IS_USER_PROFILE_TRIGGERED){
-      //Service Integration
-      let response = {
-        "UserProfile":{"ContactNumber":{"@nil":"true"},"DisplayName":"Priya","OutOfOfficeMessage":{"@nil":"true"},"Name":"priya","DateFrom":{"@nil":"true"},"DepartmentName":"IAD","ReceiveEmailNotifications":"false","OutOfOffice":"false","LastUpdatedBy":"priya","LastUpdatedOn":"2022-11-02T08:48:58Z","UserID":"priya","DateUntil":{"@nil":"true"},"Email":{"@nil":"true"},"UserProfile-id":{"Id":"213000","ItemId":"002248573547A1ECA6E5D79B37C2E81A.213000"}},"FunctionalGroup":[{"FunctionalGroup-id":{"Id":"49155","ItemId":"002248573547A1ECA0C26352C534A817.49155"},"GroupName":"IAD","GroupCreatedInOTDS":"Yes","IsDivision":"true","IsChild":"No","GroupDescription":"International Affairs Division","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"IAD"}},{"FunctionalGroup-id":{"Id":"180226","ItemId":"002248573547A1ECA0C26352C534A817.180226"},"GroupName":"Migration Data Admin","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Migration Data Admin","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"Migration Data Admin"}},{"FunctionalGroup-id":{"Id":"163843","ItemId":"002248573547A1ECA0C26352C534A817.163843"},"GroupName":"SECURITY ADMIN","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Security Administrator","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"SECURITY ADMIN"}},{"FunctionalGroup-id":{"Id":"1","ItemId":"002248573547A1ECA0C26352C534A817.1"},"GroupName":"AGC","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"No","GroupDescription":"Attorney General Chambers","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"AGC"}},{"FunctionalGroup-id":{"Id":"49156","ItemId":"002248573547A1ECA0C26352C534A817.49156"},"GroupName":"REGISTRY (IAD)","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"Yes","GroupDescription":"Registry team of IAD","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"REGISTRY (IAD)"}}]
-      }
-      let resp = response.UserProfile;
-      UtilityService.CURRENT_USER_ITEM_ID = resp['UserProfile-id']['ItemId'];
-      UtilityService.IS_USER_PROFILE_TRIGGERED = true;
-      UtilityService.CURRENT_USER_INBOX_PREF=[{"field":"TASK_ACTION","label":"Action","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_TITLE","label":"Title","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_TITLE","label":"File Title","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_REF_NO","label":"Ref No.","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_ID","label":"Req ID","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"DELIVERY_DATE","label":"Received Date","type":"datetime","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"CIRCULATION_ID","label":"Circulation ID","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_DUE_DATE","label":"Due Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"EXPECTED_RESPONSE_DATE","label":"Expected Response Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"TASK_STATUS","label":"Status","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_FROM","label":"From","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"}]
-      this.dashboardTaskCols = UtilityService.CURRENT_USER_INBOX_PREF;
+    this.dashboardTaskCols = UtilityService.CURRENT_USER_INBOX_PREF;
       this.totalTableHeaderWidth = 255;
       this.dashboardTaskCols.forEach((col: any) => {
         this.totalTableHeaderWidth += Number(col.spanWidthPx)
       })
-      this.refreshColumnChooser();
-    } else{
-      this.dashboardTaskCols = UtilityService.CURRENT_USER_INBOX_PREF;
-      this.totalTableHeaderWidth = 255;
-      this.dashboardTaskCols.forEach((col: any) => {
-        this.totalTableHeaderWidth += Number(col.spanWidthPx)
-      })
-      this.refreshColumnChooser();
-    }
+    this.refreshColumnChooser();
   }
   refreshColumnChooser(){
     this.allColumns.forEach((ac: any) => {
@@ -142,18 +125,9 @@ export class DashboardComponent implements OnInit{
     })
   }
   getLoggedInUserDetails(){
-    //Service Integration
-    let response = {
-      "tuple":{"old":{"getLoggedInUserDetails":{"getLoggedInUserDetails":{"USER_DETAILS":{"USER_DN":"","USER_NAME":"priya"}}}}}
-    }
-    let resp = response.tuple.old.getLoggedInUserDetails.getLoggedInUserDetails.USER_DETAILS;
-    if(resp){
-      UtilityService.CURRENT_USER_NAME = resp.USER_NAME;
-      UtilityService.CURRENT_USER_DN = resp.USER_DN;
-      this.getAllNotifications();
-      this.loadTaskColumns();
-      this.utilService.cUserName.next({UserName: UtilityService.CURRENT_USER_NAME, UserDN: UtilityService.CURRENT_USER_DN});
-    }
+    this.getAllNotifications();
+    this.loadTaskColumns();
+    this.utilService.cUserName.next({UserName: UtilityService.CURRENT_USER_NAME, UserDN: UtilityService.CURRENT_USER_DN});
   }
   getTaskData(type: any){
     this.getTaskDataCount();
@@ -303,11 +277,11 @@ export class DashboardComponent implements OnInit{
                 Responder: item.responder,
                 Message: item.message,
                 Status: item.status,
-                CreatedDate: this.datePipe.transform(item.created_date.split('T')[0], 'MMM d, y'),
-                ModifiedDate: item.modified_date,
+                CreatedDate: this.datePipe.transform(item.created_on.split('T')[0], 'MMM d, y'),
+                ModifiedDate: item.modified_on,
                 MessageReadStatus: item.message_read_status,
                 UserGroup: item.user_group,
-                CreatedTime: item.created_date.split('T')[1].substring(0, 5),
+                CreatedTime: item.created_on.split('T')[1].substring(0, 5),
                 ShowRead: item.message_read_status == 'NotRead' ? true : false,
                 ShowDelete: item.status == 'A' ? true : false,
                 ShowNotf: item.status == 'A' ? true : false,
@@ -332,11 +306,11 @@ export class DashboardComponent implements OnInit{
               Responder: resp.responder,
               Message: resp.message,
               Status: resp.status,
-              CreatedDate: this.datePipe.transform(resp.created_date.split('T')[0], 'MMM d, y'),
-              ModifiedDate: resp.modified_date,
+              CreatedDate: this.datePipe.transform(resp.created_on.split('T')[0], 'MMM d, y'),
+              ModifiedDate: resp.modified_on,
               MessageReadStatus: resp.message_read_status,
               UserGroup: resp.user_group,
-              CreatedTime: resp.created_date.split('T')[1].substring(0, 5),
+              CreatedTime: resp.created_on.split('T')[1].substring(0, 5),
               ShowRead: resp.message_read_status == 'NotRead' ? true : false,
               ShowDelete: resp.status == 'A' ? true : false,
               ShowNotf: resp.status == 'A' ? true : false,

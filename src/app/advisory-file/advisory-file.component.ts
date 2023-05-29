@@ -276,10 +276,10 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
       if(resp){
         if(resp.length){
           resp.forEach((item:any) => {
-            this.fileOwners.push({ label: item.display_name, value: item.user_name })
+            this.fileOwners.push({ label: item.display_name, value: item.username })
           })
         } else{
-          this.fileOwners.push({ label: resp.display_name, value: resp.user_name })
+          this.fileOwners.push({ label: resp.display_name, value: resp.username })
         }
         this.showSpinner = false;
       }
@@ -316,7 +316,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
     this.foreignAgencyTypes = [];
     this.foreignAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('AGENCY_TYPE_FOREIGN').subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe((response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){

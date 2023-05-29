@@ -5,6 +5,7 @@ import * as _ from 'lodash';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MenuItem } from 'primeng/api';
 import { UtilityService } from './commons/utilities.service';
+import { AppService } from './commons/app.service';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,7 @@ import { UtilityService } from './commons/utilities.service';
 })
 export class AppComponent  implements OnInit{
   constructor(private modalService: BsModalService, private router: Router, 
-    private utilService: UtilityService, private datePipe: DatePipe) { }
+    private utilService: UtilityService, private datePipe: DatePipe, private appService: AppService) { }
   modalRef!: BsModalRef;
   userActions!: MenuItem[];
   userManagementInfo: any = {}
@@ -23,7 +24,6 @@ export class AppComponent  implements OnInit{
   @ViewChild('logoutModal') userLogout!: TemplateRef<any>;
   currentUserName: string = '';
   currentUserDN: string = '';
-  currentUserItemID: string = '';
   userInfo: any = {};
   isOOOEnabled: boolean = false;
   isReqSubmitted: boolean = false;
@@ -87,40 +87,7 @@ export class AppComponent  implements OnInit{
     this.router.navigate([routeName]);
   }
   getUserInfo(){
-    //Service Implementation
-    let response = {
-      "UserProfile":{"ContactNumber":{"@nil":"true"},"DisplayName":"Priya","OutOfOfficeMessage":{"@nil":"true"},"Name":"priya","DateFrom":{"@nil":"true"},"DepartmentName":"IAD","ReceiveEmailNotifications":"false","OutOfOffice":"false","LastUpdatedBy":"priya","LastUpdatedOn":"2022-11-02T08:48:58Z","UserID":"priya","DateUntil":{"@nil":"true"},"Email":{"@nil":"true"},"UserProfile-id":{"Id":"213000","ItemId":"002248573547A1ECA6E5D79B37C2E81A.213000"}},"FunctionalGroup":[{"FunctionalGroup-id":{"Id":"49155","ItemId":"002248573547A1ECA0C26352C534A817.49155"},"GroupName":"IAD","GroupCreatedInOTDS":"Yes","IsDivision":"true","IsChild":"No","GroupDescription":"International Affairs Division","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"IAD"}},{"FunctionalGroup-id":{"Id":"180226","ItemId":"002248573547A1ECA0C26352C534A817.180226"},"GroupName":"Migration Data Admin","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Migration Data Admin","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"Migration Data Admin"}},{"FunctionalGroup-id":{"Id":"163843","ItemId":"002248573547A1ECA0C26352C534A817.163843"},"GroupName":"SECURITY ADMIN","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Security Administrator","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"SECURITY ADMIN"}},{"FunctionalGroup-id":{"Id":"1","ItemId":"002248573547A1ECA0C26352C534A817.1"},"GroupName":"AGC","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"No","GroupDescription":"Attorney General Chambers","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"AGC"}},{"FunctionalGroup-id":{"Id":"49156","ItemId":"002248573547A1ECA0C26352C534A817.49156"},"GroupName":"REGISTRY (IAD)","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"Yes","GroupDescription":"Registry team of IAD","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"REGISTRY (IAD)"}}]
-    }
-    let resp = response.UserProfile;
-    let roles = response.FunctionalGroup;
-    this.removeNilAttribute(resp);
-    UtilityService.CURRENT_USER_ITEM_ID = resp['UserProfile-id']['ItemId'];
-    UtilityService.IS_USER_PROFILE_TRIGGERED = true;
-    UtilityService.CURRENT_USER_INBOX_PREF=[{"field":"TASK_ACTION","label":"Action","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_TITLE","label":"Title","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_TITLE","label":"File Title","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_REF_NO","label":"Ref No.","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_ID","label":"Req ID","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"DELIVERY_DATE","label":"Received Date","type":"datetime","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"CIRCULATION_ID","label":"Circulation ID","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_DUE_DATE","label":"Due Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"EXPECTED_RESPONSE_DATE","label":"Expected Response Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"TASK_STATUS","label":"Status","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_FROM","label":"From","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"}]
-    this.currentUserItemID = UtilityService.CURRENT_USER_ITEM_ID;
-    this.userInfo = {
-      DisplayName: resp.DisplayName,
-      UserDN: this.currentUserDN,
-      Email: resp.Email,
-      DepartmentName: resp.DepartmentName,
-      LastUpdatedOn: this.datePipe.transform(resp.LastUpdatedOn.split("T")[0], 'MMM d, y'),
-      LastUpdatedTime: resp.LastUpdatedOn.split("T")[1].substring(0, 5),
-      ItemID: this.currentUserItemID,
-      ReceiveEmailNotifications: resp.ReceiveEmailNotifications,
-      OutOfOffice: resp.OutOfOffice,
-      DateFrom: resp.DateFrom,
-      DateUntil: resp.DateUntil,
-      OutOfOfficeMessage: resp.OutOfOfficeMessage,
-      Roles: []
-    }
-    if(roles){
-      if(roles.length > 0){
-        roles.forEach((role:any) => {
-          if (role.IsDivision == 'false')
-            this.userInfo.Roles.push({ label: role.Title.Value, value: role.Title.Value })
-        })
-      }
-    }
+    this.userInfo = UtilityService.CURRENT_USER_INFO
     this.openModal(this.userProfile, 'md-modal');
   }
   getBossInfo(){

@@ -1,5 +1,6 @@
 <div class="container-fluid">
-    <form #mlaRequestForm="ngForm">
+    <p-progressSpinner class="request-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
+    <form #mlaRequestForm="ngForm" *ngIf="!showSpinner">
         <div class="row">
             <div class="col-lg-12 sm-padding no-padding">
                 <div class="sm-padding form-field-header form-divider no-top-padding">

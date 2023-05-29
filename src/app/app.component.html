@@ -1,7 +1,7 @@
 <div class="container-fluid" style="padding-left: 6px !important;">
   <div class="row" style="height: 55px;">
     <div class="col-lg-8 sm-padding lg-font" style="height: 55px;">
-      <span *ngIf="!hideUserActions" class="custom-wht-text pointer" (click)="goToURL('dashboard')"
+      <span class="custom-wht-text pointer" (click)="goToURL('dashboard')"
         tooltipStyleClass="custom-tooltip" pTooltip="Click to go to dashboard" style="font-weight: bold;">Demo</span>
     </div>
     <div class="col-lg-4 sm-padding" style="text-align: right;height: 55px; padding-right: 20px;">
@@ -17,9 +17,7 @@
             </div>
           </div>
         </div>
-        <div *ngIf="!hideUserActions" class="col-lg-3 sm-padding no-padding">
-          <button class="custom-dash-search-btn" pButton pRipple type="button" icon="pi pi-search" tooltipStyleClass="custom-tooltip"
-            pTooltip="Click to open search" tooltipPosition="bottom" (click)="openSearchText()"></button>
+        <div class="col-lg-3 sm-padding no-padding">
           <p-splitButton *ngIf="showBoss" class="custom-boss-split-btn" [model]="bossList"
             tooltipStyleClass="custom-tooltip" pTooltip="Click to choose boss" tooltipPosition="bottom"></p-splitButton>
           <p-splitButton class="custom-user-split-btn xxsm-padding-left" [model]="userActions" tooltipStyleClass="custom-tooltip"

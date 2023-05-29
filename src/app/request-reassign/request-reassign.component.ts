@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { UtilityService } from '../commons/utilities.service';
 import { OFFICER_DETAILS, REQUEST_REASSIGN } from '../entities/request-reassign';
 import * as _ from "lodash";
+import { AppService } from '../commons/app.service';
 
 @Component({
   selector: 'request-reassign',
@@ -25,7 +26,7 @@ export class RequestReassignComponent implements OnInit, OnChanges {
   division: string = '';
   pOfficersList: any[] = [];
 
-  constructor(private utilService: UtilityService) { }
+  constructor(private utilService: UtilityService, private appService: AppService) { }
 
   ngOnInit(): void {
     this.reqReassign = new REQUEST_REASSIGN();
@@ -44,10 +45,21 @@ export class RequestReassignComponent implements OnInit, OnChanges {
     }
   }
   loadOfficers(){
-    //Service Implementation
-    this.officerNames.push({ label: 'Priya', value: 'priya' });
-    this.officerNames.push({ label: 'Demo User 1', value: 'DemoUser1' });
-    this.officerNames.push({ label: 'Demo User 2', value: 'DemoUser2' });
+    this.appService.getUsers().subscribe((response) => {
+      let resp = Object.assign(response);
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            this.officerNames.push({ label: item.display_name, value: item.username })
+          })
+        } else{
+          this.officerNames.push({ label: resp.display_name, value: resp.username })
+        }
+      }
+    },
+    (error) => {
+      console.log('Request failed with error');
+    })
   }
   onSubmit() {
     this.formSubmitted = true;

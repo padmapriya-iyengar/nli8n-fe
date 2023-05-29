@@ -29,4 +29,10 @@ export class AppService {
     getUsers(){
         return this.http.get(this.apiURL.users);
     }
+    getUserProfile(username:string){
+        return this.http.get(this.apiURL.user_profile+'?username='+username);
+    }
+    getUserInfo(username:string){
+        return this.http.get(this.apiURL.user_details+'?username='+username);
+    }
 }
