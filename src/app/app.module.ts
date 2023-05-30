@@ -11,9 +11,6 @@ import { MlaFileComponent } from './mla-file/mla-file.component';
 import { MlaRequestComponent } from './mla-request/mla-request.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { NotificationComponent } from './notification/notification.component';
-import { RecallReassignComponent } from './recall-reassign/recall-reassign.component';
-import { RequestReopenComponent } from './request-reopen/request-reopen.component';
-import { RequestReassignComponent } from './request-reassign/request-reassign.component';
 import { UserProfileComponent } from './user-profile/user-profile.component';
 
 import { PrimeNGModule } from './commons/primeng.module'
@@ -47,9 +44,6 @@ import { AppService } from './commons/app.service';
     MlaRequestComponent,
     DashboardComponent,
     NotificationComponent,
-    RecallReassignComponent,
-    RequestReopenComponent,
-    RequestReassignComponent,
     UserProfileComponent,
     LoginComponent,
     DocumentUploadComponent,

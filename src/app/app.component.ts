@@ -6,6 +6,7 @@ import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MenuItem } from 'primeng/api';
 import { UtilityService } from './commons/utilities.service';
 import { AppService } from './commons/app.service';
+import { NOTIFICATION_DETAILS } from './entities/notification-details';
 
 @Component({
   selector: 'app-root',
@@ -27,14 +28,14 @@ export class AppComponent  implements OnInit{
   userInfo: any = {};
   isOOOEnabled: boolean = false;
   isReqSubmitted: boolean = false;
-  bossList!: MenuItem[];
-  bosses: any[] = [];
-  showBoss: boolean = false;
   hideUserActions: boolean = true;
   searchText: string = "";
   isSearchClicked: boolean = false;
   sClickCount: number = 0;
   newTabRoutes: any[] = [];
+  showSpinner: boolean = false;
+  allNotifications: NOTIFICATION_DETAILS[] = [];
+  notfCount:any;
 
   ngOnInit(): void {   
     this.newTabRoutes.push('migration','docUpload')
@@ -67,7 +68,7 @@ export class AppComponent  implements OnInit{
     this.utilService.cUserName.subscribe((userDetails:any) => {
       this.currentUserName = userDetails.UserName;
       this.currentUserDN = userDetails.UserDN;
-      this.getBossInfo();
+      this.getAllNotifications(this.currentUserName)
     })
     if (this.utilService.readFromStorage('IS_LOGGEDIN') != true) {
       this.goToURL('');
@@ -89,24 +90,6 @@ export class AppComponent  implements OnInit{
   getUserInfo(){
     this.userInfo = UtilityService.CURRENT_USER_INFO
     this.openModal(this.userProfile, 'md-modal');
-  }
-  getBossInfo(){
-    //Service Implementation
-    let response = {
-      "PersonalAssistant":{"BossDN":"","I_PAExists":"false","PAName":"Priya_PA","BossName":"IAD_LO_3","I_PAName":"priya_pa","I_BossName":"iadlo3","PersonalAssistant-id":{"Id":"245764","ItemId":"002248573547A1ECAFB4939FF615681E.245764"},"PA":{"Person-id":{"Id":"163856389","ItemId":"F8B156B4FF8F11E6E6562305FE2BDF32.163856389"}},"Boss":{"Person-id":{"Id":"163905543","ItemId":"F8B156B4FF8F11E6E6562305FE2BDF32.163905543"}}}
-    }
-    let bList: any[] = [];
-    let resp = response.PersonalAssistant;
-    if(resp){
-      bList.push({
-        label: resp.BossName, command: () => {
-          this.utilService.setBossDetails(resp.BossName, resp.BossDN);
-        }
-      })
-      this.bosses.push(resp.BossName);
-      this.showBoss = true;
-    }
-    this.bossList = bList
   }
   openModal(template: TemplateRef<any>, cssClass: string) {
     this.modalRef = this.modalService.show(template, {
@@ -151,23 +134,87 @@ export class AppComponent  implements OnInit{
       }
     })
   }
-  goToAdvSearch() {
-    if(!this.utilService.isEmpty(this.searchText)){
-      this.utilService.saveToStorage('SearchText', this.searchText);
-      this.utilService.saveToStorage('SearchType', 'basic');
-      this.utilService.pushRoute("search");
-      this.isSearchClicked = false;
-      this.searchText = '';
-      this.sClickCount = 0;
-    } else{
-      this.utilService.alert('info', 'Information!!', 'Please enter search text to proceed further!!', false);
-    }
+  getAllNotifications(username:string){
+    this.allNotifications = [];
+    this.appService.getUserNotifications(username).subscribe((response) => {
+      let resp = Object.assign(response)
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            if (item.status == 'A'){
+              this.allNotifications.push({
+                ItemId: item.id,
+                FileReferenceNo: item.file_reference_no,
+                RequestNo: item.request_no,
+                Actor: item.actor,
+                MessageCode: item.message_code,
+                MessageType: item.message_type,
+                Responder: item.responder,
+                Message: item.message,
+                Status: item.status,
+                CreatedDate: this.datePipe.transform(item.created_on.split('T')[0], 'MMM d, y'),
+                ModifiedDate: item.modified_on,
+                MessageReadStatus: item.message_read_status,
+                UserGroup: item.user_group,
+                CreatedTime: item.created_on.split('T')[1].substring(0, 5),
+                ShowRead: item.message_read_status == 'NotRead' ? true : false,
+                ShowDelete: item.status == 'A' ? true : false,
+                ShowNotf: item.status == 'A' ? true : false,
+                NotfHeader: _.capitalize(item.actor ? item.actor.substring(0, 1) : item.responder.substring(0, 1)),
+                StyleClass: item.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
+                RequestState: item.request_state,
+                SourceItemId: item.source_item_id,
+                LayoutID: '',
+                TaskEntityInstanceID: ''
+              })
+            }
+          })
+        } else{
+          if (resp.status == 'A'){
+            this.allNotifications.push({
+              ItemId: resp.id,
+              FileReferenceNo: resp.file_reference_no,
+              RequestNo: resp.request_no,
+              Actor: resp.actor,
+              MessageCode: resp.message_code,
+              MessageType: resp.message_type,
+              Responder: resp.responder,
+              Message: resp.message,
+              Status: resp.status,
+              CreatedDate: this.datePipe.transform(resp.created_on.split('T')[0], 'MMM d, y'),
+              ModifiedDate: resp.modified_on,
+              MessageReadStatus: resp.message_read_status,
+              UserGroup: resp.user_group,
+              CreatedTime: resp.created_on.split('T')[1].substring(0, 5),
+              ShowRead: resp.message_read_status == 'NotRead' ? true : false,
+              ShowDelete: resp.status == 'A' ? true : false,
+              ShowNotf: resp.status == 'A' ? true : false,
+              NotfHeader: _.capitalize(resp.actor ? resp.actor.substring(0, 1) : resp.responder.substring(0, 1)),
+              StyleClass: resp.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
+              RequestState: resp.request_state,
+              SourceItemId: resp.source_item_id,
+              LayoutID: '',
+              TaskEntityInstanceID: ''
+            })
+          }
+        }
+        this.notfCount = this.allNotifications.length;
+      }
+    },
+    (error) => {
+      console.error('Request failed with error')
+      this.showSpinner = false;
+    })
   }
-  openSearchText() {
-    this.sClickCount++;
-    if(this.sClickCount%2 == 0)
-      this.isSearchClicked = false;
-    else
-      this.isSearchClicked = true;
+  openNotfModal(template: TemplateRef<any>, cssClass: string) {
+    this.modalRef = this.modalService.show(template, {
+      class: cssClass, keyboard: false,
+      backdrop: true,
+      ignoreBackdropClick: true
+    });
+  }
+  hideNotfModal(){
+    this.getAllNotifications(this.currentUserName);
+    this.modalRef.hide();
   }
 }

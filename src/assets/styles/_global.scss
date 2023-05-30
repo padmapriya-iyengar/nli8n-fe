@@ -242,6 +242,7 @@
 }
 .custom-card{
     .p-component{
+        height: 120px !important;
         .p-card-subtitle{
             color: $primary-color;
             padding-top: 5px;
@@ -259,10 +260,92 @@
         }
     }
     .p-card:hover{
+        background: $disabled-field;
+        -webkit-box-shadow: inset $disabled-field;
+        -moz-box-shadow: inset $disabled-field;
+        box-shadow: inset $disabled-field;
+    }
+    .p-card .p-card-body{
+        padding: 0px !important
+    }
+}
+.custom-serv-card{
+    .p-component{
+        height: 70px !important;
+        background: $primary-gradient;
+        .p-card-subtitle{
+            color: $white-color;
+            padding-top: 5px;
+            padding-left: 10px;
+            border-bottom: 1px solid $white-color;
+            width: 99%;
+            font-family: $font-family !important;
+            height: 25px !important;
+            font-size: 14px !important;
+        }
+        .p-card-content{
+            padding: 0px !important;
+            font-family: $font-family !important;
+            height: 60px !important;
+            color: $white-color;
+        }
+    }
+    .p-card:hover{
         background: $grey-color;
         -webkit-box-shadow: inset $grey-color;
         -moz-box-shadow: inset $grey-color;
         box-shadow: inset $grey-color;
+        border-bottom: 1px solid $grey-color;
+        cursor: pointer;
+        .p-card-subtitle{
+            color: $primary-color !important;
+            border-bottom: 1px solid $primary-color;
+        }
+        .p-card-content{
+            color: $primary-color !important;
+        }
+    }
+    .p-card .p-card-body{
+        padding: 0px !important
+    }
+}
+.custom-mig-card{
+    .p-component{
+        height: 120px !important;
+        background: $primary-gradient;
+        .p-card-subtitle{
+            color: $white-color;
+            padding-top: 5px;
+            padding-left: 10px;
+            border-bottom: 1px solid $white-color;
+            width: 99%;
+            font-family: $font-family !important;
+            height: 30px !important;
+            font-size: 14px !important;
+            text-align: center;
+        }
+        .p-card-content{
+            padding: 0px !important;
+            font-family: $font-family !important;
+            height: 40px !important;
+            color: $white-color;
+            text-align: center;
+        }
+    }
+    .p-card:hover{
+        background: $grey-color;
+        -webkit-box-shadow: inset $grey-color;
+        -moz-box-shadow: inset $grey-color;
+        box-shadow: inset $grey-color;
+        border-bottom: 1px solid $grey-color;
+        cursor: pointer;
+        .p-card-subtitle{
+            color: $primary-color !important;
+            border-bottom: 1px solid $primary-color;
+        }
+        .p-card-content{
+            color: $primary-color !important;
+        }
     }
     .p-card .p-card-body{
         padding: 0px !important
@@ -699,56 +782,6 @@ p-calendar{
         .p-splitbutton-menubutton{
             .pi.pi-chevron-down:before{
                 content: "\e939";
-            }
-            span{
-                font-size: 25px;
-            }
-        }
-        .p-splitbutton-defaultbutton{
-            width: 1px;
-            display: none;
-        }
-    }
-}
-.custom-boss-split-btn{
-    .p-splitbutton{
-        height: 45px !important;
-        div{
-            left: -165.2875px !important;
-            li:hover{
-                background: $grey-color;
-            }
-            .p-menuitem{
-                .p-menuitem-link{
-                    .p-menuitem-text{
-                        font-size: 14px !important;
-                        font-weight: bold !important;
-                    }
-                }
-            }
-        }
-        button{
-            background-color: transparent !important;
-            border: 0px solid transparent !important;
-            font-size: larger;
-            bottom: 10px !important;
-            height: 60px !important;
-        }
-        button:enabled{
-            background-color: transparent !important;
-            border: 0px solid transparent !important;
-            box-shadow: 0px 0px 0px transparent !important;
-        }
-        p-menu{
-            .p-menuitem-link{
-                .p-menuitem-text{
-                    font-family: $font-family !important;
-                }
-            }
-        }
-        .p-splitbutton-menubutton{
-            .pi.pi-chevron-down:before{
-                content: "\e966";
             }
             span{
                 font-size: 25px;

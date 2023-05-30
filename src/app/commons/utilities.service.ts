@@ -18,7 +18,6 @@ export class UtilityService{
     public static IS_USER_PROFILE_TRIGGERED: boolean = false;
     public static CURRENT_USER_INFO: any = {};
     public cUserName: EventEmitter<any> = new EventEmitter();
-    public bossInfo: EventEmitter<any> = new EventEmitter();
     public userActions: EventEmitter<any> = new EventEmitter();
     public dashboardServ: EventEmitter<any> = new EventEmitter();
     public pushToMenu: EventEmitter<any> = new EventEmitter();
@@ -76,13 +75,6 @@ export class UtilityService{
     public alert(severity: string, summary: string, detail: string, sticky: boolean){
         this.message.clear();
         this.message.add({ severity: severity, summary: summary, detail: detail, sticky: sticky });
-    }
-    setBossDetails(bossName: string, bossDN: string) {
-        let bossInfo = {
-            BOSS_NAME: bossName,
-            BOSS_DN: bossDN
-        }
-        this.bossInfo.next(bossInfo);
     }
     setUserActions(details: any) {
         this.userActions.next(details);

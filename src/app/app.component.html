@@ -7,19 +7,12 @@
     <div class="col-lg-4 sm-padding" style="text-align: right;height: 55px; padding-right: 20px;">
       <div class="row">
         <div class="col-lg-9 sm-padding no-padding">
-          <div class="col-lg-12">
-            <div class="sm-padding no-top-padding no-right-padding">
-              <span class="p-input-icon-right" *ngIf="isSearchClicked" style="width: 100% !important;">
-                <input type="text" pInputText [(ngModel)]="searchText" name="sText" style="font-size: 13px !important;" #sText="ngModel"
-                  placeholder="Enter search text" class="input-field" (keydown.enter)="goToAdvSearch()"/>
-                <i class="pi pi-check" style="cursor: pointer !important; color: #000 !important;" (click)="goToAdvSearch()"></i>
-              </span>
-            </div>
-          </div>
+          
         </div>
-        <div class="col-lg-3 sm-padding no-padding">
-          <p-splitButton *ngIf="showBoss" class="custom-boss-split-btn" [model]="bossList"
-            tooltipStyleClass="custom-tooltip" pTooltip="Click to choose boss" tooltipPosition="bottom"></p-splitButton>
+        <div class="col-lg-2 sm-padding no-padding">
+          <i class="pi pi-bell text-3xl" style="font-size: 1.5rem; padding-top: 10px; color: white; cursor:pointer" pBadge value="{{notfCount}}" (click)="openNotfModal(notfModal,'lg-modal')"></i>
+        </div>
+        <div class="col-lg-1 sm-padding no-padding">
           <p-splitButton class="custom-user-split-btn xxsm-padding-left" [model]="userActions" tooltipStyleClass="custom-tooltip"
             pTooltip="{{currentUserName}}" tooltipPosition="bottom"></p-splitButton>
         </div>
@@ -79,5 +72,25 @@
         </div>
       </div>
     </div>
+  </div>
+</ng-template>
+<ng-template #notfModal>
+  <div class="app-card">
+      <div class="modal-action-bar right-align">
+          <div class="row">
+              <div class="col-lg-10 modal-header">
+                  <p class="custom-modal-heading">Notifications</p>
+              </div>
+          </div>
+      </div>
+      <div class="modal-content" style="border: none !important; box-shadow: none !important;">
+          <p-scrollPanel [style]="{width: '100%', height: '350px'}" class="custom-scroll">
+              <notification [allNotifications]="allNotifications"></notification>
+          </p-scrollPanel>
+      </div>
+      <div class="modal-footer">
+          <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to close" styleClass="p-button-sm"
+              class="custom-tertiary-btn" (click)="hideNotfModal()"></p-button>
+      </div>
   </div>
 </ng-template>

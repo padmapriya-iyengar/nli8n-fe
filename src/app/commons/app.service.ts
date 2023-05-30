@@ -3,42 +3,51 @@ import { Injectable } from "@angular/core";
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { api } from "src/config/api-url";
+import { environment } from "src/environments/environment";
 
 @Injectable()
 export class AppService {
     constructor(private http: HttpClient) { }
     apiURL:any = api;
+    apiEndpoint: any = environment.api_endpoint;
+
     getMasterDataByType(type:string) {
-        return this.http.get(this.apiURL.get_master_data+'?source=type&identifier='+type);
+        return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=type&identifier='+type);
     }
     getMasterDataByTypeAndParent(type:string,parent_code:string) {
-        return this.http.get(this.apiURL.get_master_data+'?source=type_parent&identifier='+type+'&parent_code='+parent_code);
+        return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=type_parent&identifier='+type+'&parent_code='+parent_code);
     }
     getMasterDataByCode(code:string) {
-        return this.http.get(this.apiURL.get_master_data+'?source=code&identifier='+code);
+        return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=code&identifier='+code);
     }
     getUserNotifications(username:string){
-        return this.http.get(this.apiURL.user_notifications+'?username='+username);
+        return this.http.get(this.apiEndpoint + this.apiURL.user_notifications+'?username='+username);
     }
     updateUserNotifications(id:string,action:string){
-        return this.http.post(this.apiURL.user_notifications+'?id='+id,{action: action});
+        return this.http.post(this.apiEndpoint + this.apiURL.user_notifications+'?id='+id,{action: action});
     }
     getUserDivisions(username:string){
-        return this.http.get(this.apiURL.user_divisions+'?username='+username);
+        return this.http.get(this.apiEndpoint + this.apiURL.user_divisions+'?username='+username);
     }
     getUsers(){
-        return this.http.get(this.apiURL.users);
+        return this.http.get(this.apiEndpoint + this.apiURL.users);
     }
     getUserProfile(username:string){
-        return this.http.get(this.apiURL.user_profile+'?username='+username);
+        return this.http.get(this.apiEndpoint + this.apiURL.user_profile+'?username='+username);
     }
     getUserInfo(username:string){
-        return this.http.get(this.apiURL.user_details+'?username='+username);
+        return this.http.get(this.apiEndpoint + this.apiURL.user_details+'?username='+username);
     }
     getSequence(type:string){
-        return this.http.get(this.apiURL.sequence+'?type='+type);
+        return this.http.get(this.apiEndpoint + this.apiURL.sequence+'?type='+type);
     }
     generateSequence(type:string){
-        return this.http.post(this.apiURL.sequence+'?type='+type,{});
+        return this.http.post(this.apiEndpoint + this.apiURL.sequence+'?type='+type,{});
+    }
+    readFile(fileNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.read_file+'?fileNo='+fileNo)
+    }
+    createFile(fileData:any){
+        return this.http.post(this.apiEndpoint + this.apiURL.create_file, {data: fileData});
     }
 }

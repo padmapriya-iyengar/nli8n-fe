@@ -27,12 +27,8 @@ export class DashboardComponent implements OnInit{
   modalRef!: BsModalRef;
   serviceTitle!: string;
   entityURL!: string;
-  allNotifications: NOTIFICATION_DETAILS[] = [];
   reqIdentifier!: string;
   isReqSubmitted!: boolean;
-  allServiceList: any[] = [];
-  accordionServiceList: any[] = [];
-  buttonServiceList: any[] = [];
   activeTabIndex: number = 0;
   searchText: string = '';
   @ViewChild('tasksDT') userTasks!: Table;
@@ -40,11 +36,7 @@ export class DashboardComponent implements OnInit{
   otherColumnsData: any[] = [];
   allColumns: any[] =[];
   isTaskSelected: boolean = false;
-  isBossSelected: boolean = false;
-  bossName: string = "";
-  bossDN: string = "";
   showSpinner: boolean = false;
-  servicesPresent: boolean = true;
   totalTableHeaderWidth: number = 255;
 
   ngOnInit(): void {
@@ -52,13 +44,6 @@ export class DashboardComponent implements OnInit{
     this.loadAllColumns();
     this.loadOtherColumns();
     this.getTaskData('PersonalTasks');
-    this.getMenuConfig();
-    this.utilService.bossInfo.subscribe(boss => {
-      this.isBossSelected = true;
-      this.bossName = boss.BOSS_NAME;
-      this.bossDN = boss.BOSS_DN
-      this.getDelegatedTasks('PersonalTasks');
-    })
   }
   loadAllColumns() {
     this.allColumns = [
@@ -125,7 +110,6 @@ export class DashboardComponent implements OnInit{
     })
   }
   getLoggedInUserDetails(){
-    this.getAllNotifications();
     this.loadTaskColumns();
     this.utilService.cUserName.next({UserName: UtilityService.CURRENT_USER_NAME, UserDN: UtilityService.CURRENT_USER_DN});
   }
@@ -155,85 +139,6 @@ export class DashboardComponent implements OnInit{
     }
     this.showSpinner = false;
   }
-  getDelegatedTasks(type: any){
-    this.getDelegatedTaskDataCount();
-    this.showSpinner = true;
-    this.filteredTasks = [];
-    //Service Integration
-    let response = {
-      "tuple":{"old":{"getDelegatedTasksForUser":{"getDelegatedTasksForUser":{"TaskDetailsResponse":{"TaskDetails":[{"URGENCY":"Not Urgent","URGENCYMARK":"","TASK_ID":"00224857-3547-A1ED-822D-8B0354C7A824","OPEN_DEFAULT_LAYOUT_ID":"N","TASK_TITLE":"Cir PA Test 5","FILE_TITLE":"","FILE_REF_NO":"AG/IAD/AIR/1/2022/000000002","REQUEST_ID":"","CIRCULATION_ID":"CIR000000038","DELIVERY_DATE":"2022-07-21T05:30:10.653000000","REQUEST_DUE_DATE":"","EXPECTED_RESPONSE_DATE":"","TASK_STATUS":"Inprogress","TASK_FROM":"iadlo1","ACTION_OFFICER":"iadlo3","ASSIGNEE":"iadlo3","LOCKED_TIME":"","REGISTRATION_NO":"","MAIN_FILE_ITEM_ID":"002248573547A1EC9E9CF72B1B84A817.2342914","RETENTION_PERIOD":"null","DISPOSITION_DATE":"null","DISPOSITION_ACTION":"null","LAST_ACTION_DATE":"null","FILE_TYPE":"null","CONVERSION_DATE":"null","TRANSFER_DATE":"null","SLA_BREACH":"N","REQUEST_TYPE":"Circulation","ITEM_ID":"002248573547A1ECA0C96326EA372817.1196037","LAYOUT_ID":"002248573547A1ECA970F4BBD4D0A81B","TASK_ENTITY_INSTANCE_ID":"002248573547A1ECA6914EC3CF45E81A.1196037.1163274","REQUEST_STATE":"Inprogress","TARGET_TYPE":"role","PROCESS_NAME":"Circulation"},{"URGENCY":"Not Urgent","URGENCYMARK":"","TASK_ID":"00224857-3547-A1ED-822D-6D265F582824","OPEN_DEFAULT_LAYOUT_ID":"N","TASK_TITLE":"Cir PA Test 4","FILE_TITLE":"","FILE_REF_NO":"AG/IAD/AIR/1/2022/000000002","REQUEST_ID":"","CIRCULATION_ID":"CIR000000037","DELIVERY_DATE":"2022-07-21T05:26:50.810000000","REQUEST_DUE_DATE":"","EXPECTED_RESPONSE_DATE":"","TASK_STATUS":"Inprogress","TASK_FROM":"iadlo1","ACTION_OFFICER":"iadlo3","ASSIGNEE":"iadlo3","LOCKED_TIME":"","REGISTRATION_NO":"","MAIN_FILE_ITEM_ID":"002248573547A1EC9E9CF72B1B84A817.2342914","RETENTION_PERIOD":"null","DISPOSITION_DATE":"null","DISPOSITION_ACTION":"null","LAST_ACTION_DATE":"null","FILE_TYPE":"null","CONVERSION_DATE":"null","TRANSFER_DATE":"null","SLA_BREACH":"N","REQUEST_TYPE":"Circulation","ITEM_ID":"002248573547A1ECA0C96326EA372817.1196036","LAYOUT_ID":"002248573547A1ECA970F4BBD4D0A81B","TASK_ENTITY_INSTANCE_ID":"002248573547A1ECA6914EC3CF45E81A.1196036.1163272","REQUEST_STATE":"Inprogress","TARGET_TYPE":"role","PROCESS_NAME":"Circulation"},{"URGENCY":"Not Urgent","URGENCYMARK":"","TASK_ID":"00224857-3547-A1ED-822D-5B3BE88FA824","OPEN_DEFAULT_LAYOUT_ID":"N","TASK_TITLE":"Cir PA Test 3","FILE_TITLE":"","FILE_REF_NO":"AG/IAD/AIR/1/2022/000000002","REQUEST_ID":"","CIRCULATION_ID":"CIR000000036","DELIVERY_DATE":"2022-07-21T05:24:47.437000000","REQUEST_DUE_DATE":"","EXPECTED_RESPONSE_DATE":"","TASK_STATUS":"Inprogress","TASK_FROM":"iadlo1","ACTION_OFFICER":"iadlo3","ASSIGNEE":"iadlo3","LOCKED_TIME":"","REGISTRATION_NO":"","MAIN_FILE_ITEM_ID":"002248573547A1EC9E9CF72B1B84A817.2342914","RETENTION_PERIOD":"null","DISPOSITION_DATE":"null","DISPOSITION_ACTION":"null","LAST_ACTION_DATE":"null","FILE_TYPE":"null","CONVERSION_DATE":"null","TRANSFER_DATE":"null","SLA_BREACH":"N","REQUEST_TYPE":"Circulation","ITEM_ID":"002248573547A1ECA0C96326EA372817.1196035","LAYOUT_ID":"002248573547A1ECA970F4BBD4D0A81B","TASK_ENTITY_INSTANCE_ID":"002248573547A1ECA6914EC3CF45E81A.1196035.1163270","REQUEST_STATE":"Inprogress","TARGET_TYPE":"role","PROCESS_NAME":"Circulation"},{"URGENCY":"Not Urgent","URGENCYMARK":"","TASK_ID":"00224857-3547-A1ED-822D-2B7300306824","OPEN_DEFAULT_LAYOUT_ID":"N","TASK_TITLE":"Cir PA Test 2","FILE_TITLE":"","FILE_REF_NO":"AG/IAD/AIR/1/2022/000000002","REQUEST_ID":"","CIRCULATION_ID":"CIR000000035","DELIVERY_DATE":"2022-07-21T05:19:28.697000000","REQUEST_DUE_DATE":"","EXPECTED_RESPONSE_DATE":"","TASK_STATUS":"Inprogress","TASK_FROM":"iadlo1","ACTION_OFFICER":"iadlo3","ASSIGNEE":"iadlo3","LOCKED_TIME":"","REGISTRATION_NO":"","MAIN_FILE_ITEM_ID":"002248573547A1EC9E9CF72B1B84A817.2342914","RETENTION_PERIOD":"null","DISPOSITION_DATE":"null","DISPOSITION_ACTION":"null","LAST_ACTION_DATE":"null","FILE_TYPE":"null","CONVERSION_DATE":"null","TRANSFER_DATE":"null","SLA_BREACH":"N","REQUEST_TYPE":"Circulation","ITEM_ID":"002248573547A1ECA0C96326EA372817.1196034","LAYOUT_ID":"002248573547A1ECA970F4BBD4D0A81B","TASK_ENTITY_INSTANCE_ID":"002248573547A1ECA6914EC3CF45E81A.1196034.1163268","REQUEST_STATE":"Inprogress","TARGET_TYPE":"role","PROCESS_NAME":"Circulation"},{"URGENCY":"Not Urgent","URGENCYMARK":"","TASK_ID":"00224857-3547-A1ED-822C-AC84C974A824","OPEN_DEFAULT_LAYOUT_ID":"N","TASK_TITLE":"Cir PA Test 1","FILE_TITLE":"","FILE_REF_NO":"AG/IAD/AIR/1/2022/000000002","REQUEST_ID":"","CIRCULATION_ID":"CIR000000034","DELIVERY_DATE":"2022-07-21T05:05:20.197000000","REQUEST_DUE_DATE":"","EXPECTED_RESPONSE_DATE":"","TASK_STATUS":"Inprogress","TASK_FROM":"iadlo1","ACTION_OFFICER":"iadlo3","ASSIGNEE":"iadlo3","LOCKED_TIME":"","REGISTRATION_NO":"","MAIN_FILE_ITEM_ID":"002248573547A1EC9E9CF72B1B84A817.2342914","RETENTION_PERIOD":"null","DISPOSITION_DATE":"null","DISPOSITION_ACTION":"null","LAST_ACTION_DATE":"null","FILE_TYPE":"null","CONVERSION_DATE":"null","TRANSFER_DATE":"null","SLA_BREACH":"N","REQUEST_TYPE":"Circulation","ITEM_ID":"002248573547A1ECA0C96326EA372817.1196033","LAYOUT_ID":"002248573547A1ECA970F4BBD4D0A81B","TASK_ENTITY_INSTANCE_ID":"002248573547A1ECA6914EC3CF45E81A.1196033.1163266","REQUEST_STATE":"Inprogress","TARGET_TYPE":"role","PROCESS_NAME":"Circulation"}]}}}}}
-    }
-    let resp = response.tuple.old.getDelegatedTasksForUser.getDelegatedTasksForUser.TaskDetailsResponse;
-    if (resp) {
-      if (resp.TaskDetails.length > 0) {
-        resp.TaskDetails.forEach((task: any) => {
-          if (task.REQUEST_STATE != 'Draft') {
-            task.icon = 'fa fa-user'
-            task.LOCKED = !this.utilService.isEmpty(task.ASSIGNEE) ? 'Y' : 'N'
-            this.filteredTasks.push(task);
-          } else {
-            task.icon = 'fa fa-pencil'
-          }
-        })
-      }
-    }
-    this.showSpinner = false;
-  }
-  
-  getMenuConfig(){
-    this.allServiceList = [];
-    //Service Integration
-    let response = {"Services":{"MenuService":[{"Services":{"Title":{"Value":"ADVISORY"},"ServiceName":"Advisory","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Advisory Main menu","ServiceTooltip":"Advisory","HasChildren":"true","IsMainService":"false","ServiceCode":"ADVISORY","ServiceIconPath":null,"Services-id":{"Id":"16386","ItemId":"002248573547A1ECA231DC72645DE817.16386"}},"ChildServices":{"Services":[{"Title":{"Value":"ADV_FILE"},"ServiceName":"Create File","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Create New Advisory File","ServiceTooltip":null,"HasChildren":"false","IsMainService":"false","ServiceCode":"ADV_FILE","ServiceIconPath":"/images/a.png","Services-id":{"Id":"16387","ItemId":"002248573547A1ECA231DC72645DE817.16387"}},{"Title":{"Value":"ADV_REQ"},"ServiceName":"Create Request","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Create New Advisory Request","ServiceTooltip":null,"HasChildren":null,"IsMainService":"false","ServiceCode":"ADV_REQ","ServiceIconPath":null,"Services-id":{"Id":"16389","ItemId":"002248573547A1ECA231DC72645DE817.16389"}}]}},{"Services":{"Title":{"Value":"MLA"},"ServiceName":"MLA / Extradition","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"MLA Main menu","ServiceTooltip":null,"HasChildren":"true","IsMainService":"false","ServiceCode":"MLA","ServiceIconPath":null,"Services-id":{"Id":"16388","ItemId":"002248573547A1ECA231DC72645DE817.16388"}},"ChildServices":{"Services":[{"Title":{"Value":"MLA_FILE"},"ServiceName":"Create File","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Create MLA/Extradition File","ServiceTooltip":null,"HasChildren":"false","IsMainService":"false","ServiceCode":"MLA_FILE","ServiceIconPath":null,"Services-id":{"Id":"65538","ItemId":"002248573547A1ECA231DC72645DE817.65538"}},{"Title":{"Value":"MLA_REQ"},"ServiceName":"Create Request","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Create New MLA/Extradition Request","ServiceTooltip":null,"HasChildren":"false","IsMainService":"false","ServiceCode":"MLA_REQ","ServiceIconPath":null,"Services-id":{"Id":"65540","ItemId":"002248573547A1ECA231DC72645DE817.65540"}}]}},{"Services":{"Title":{"Value":"REOPEN_REQ"},"ServiceName":"Re-Open Closed Request","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Re-Open Closed Request","ServiceTooltip":null,"HasChildren":null,"IsMainService":"false","ServiceCode":"REOPEN_REQ","ServiceIconPath":null,"Services-id":{"Id":"16391","ItemId":"002248573547A1ECA231DC72645DE817.16391"}}},{"Services":{"Title":{"Value":"RECALL_REASSIGN"},"ServiceName":"Recall / Reassign Request","ServiceURL":null,"ServiceType":"Application Menu","ServiceDescription":"Recall / Reassign Request","ServiceTooltip":null,"HasChildren":null,"IsMainService":"false","ServiceCode":"RECALL_REASSIGN","ServiceIconPath":null,"Services-id":{"Id":"16392","ItemId":"002248573547A1ECA231DC72645DE817.16392"}}},{"Services":{"Title":{"Value":"DOCUMENT"},"ServiceName":"Upload Document","ServiceURL":"docUpload","ServiceType":"Application Menu","ServiceDescription":"Upload Document","ServiceTooltip":"Upload Document","HasChildren":"false","IsMainService":"false","ServiceCode":null,"ServiceIconPath":null,"Services-id":{"Id":"131071","ItemId":"002248573547A1ECA231DC72645DE817.131071"}}},{"Services":{"Title":{"Value":"MIGRATION_PORTAL"},"ServiceName":"Migration","ServiceURL":"migration","ServiceType":"Application Menu","ServiceDescription":"Migration","ServiceTooltip":"Migration","HasChildren":"false","IsMainService":"false","ServiceCode":null,"ServiceIconPath":null,"Services-id":{"Id":"131076","ItemId":"002248573547A1ECA231DC72645DE817.131076"}}}]}}
-
-    let resp = response.Services
-    if (null != resp) {
-      if (resp.MenuService.length > 0) {
-        resp.MenuService.forEach((serv: any) => {
-          this.allServiceList.push({
-            ServiceId: serv.Services.ServiceCode,
-            ServiceName: serv.Services.ServiceName,
-            ExternalUrl: serv.Services.ServiceURL,
-            Tooltip: serv.Services.ServiceTooltip,
-            ServiceTitle: serv.Services.Title.Value,
-            ServiceCode: serv.Services.ServiceCode,
-            ServiceDescription: serv.Services.ServiceDescription,
-            ChildServices: serv.ChildServices ? serv.ChildServices.Services : null
-          })
-        })
-      } 
-    }
-    if (this.allServiceList.length > 0) {
-      this.filterServices();
-      this.servicesPresent = true;
-    } else {
-      this.servicesPresent = false;
-    }
-  }
-  filterServices(){
-    this.accordionServiceList = [];
-    this.buttonServiceList = [];
-    _.forEach(this.allServiceList, serv => {
-      if (serv.ChildServices && serv.ChildServices.length > 0){
-        this.accordionServiceList.push(serv);
-      } else if (serv.ChildServices && !serv.ChildServices.length) {
-        let service: any = { ChildServices: []}
-        service.ExternalUrl = serv.ExternalUrl
-        service.ServiceCode = serv.ServiceCode
-        service.ServiceDescription = serv.ServiceDescription
-        service.ServiceId = serv.ServiceId
-        service.ServiceName = serv.ServiceName
-        service.ServiceTitle = serv.ServiceTitle
-        service.Tooltip = serv.Tooltip
-        service.ChildServices.push(serv.ChildServices)
-        this.accordionServiceList.push(service);
-      }
-    })
-    _.forEach(this.allServiceList, serv => {
-      if (!serv.ChildServices || (serv.ChildServices && serv.ChildServices.length == 0)) {
-        this.buttonServiceList.push(serv);
-      }
-    })
-  }
   filterTask(status: string){
     this.filteredTasks = [];
     this.activeTabIndex = 0;
@@ -259,77 +164,34 @@ export class DashboardComponent implements OnInit{
       this.getTaskData('DraftTasks')
     }
   }
-  getAllNotifications(){
-    this.allNotifications = [];
-    this.appService.getUserNotifications(UtilityService.CURRENT_USER_NAME).subscribe((response) => {
-      let resp = Object.assign(response)
-      if(resp){
-        if(resp.length){
-          resp.forEach((item:any) => {
-            if (item.status == 'A'){
-              this.allNotifications.push({
-                ItemId: item.id,
-                FileReferenceNo: item.file_reference_no,
-                RequestNo: item.request_no,
-                Actor: item.actor,
-                MessageCode: item.message_code,
-                MessageType: item.message_type,
-                Responder: item.responder,
-                Message: item.message,
-                Status: item.status,
-                CreatedDate: this.datePipe.transform(item.created_on.split('T')[0], 'MMM d, y'),
-                ModifiedDate: item.modified_on,
-                MessageReadStatus: item.message_read_status,
-                UserGroup: item.user_group,
-                CreatedTime: item.created_on.split('T')[1].substring(0, 5),
-                ShowRead: item.message_read_status == 'NotRead' ? true : false,
-                ShowDelete: item.status == 'A' ? true : false,
-                ShowNotf: item.status == 'A' ? true : false,
-                NotfHeader: _.capitalize(item.actor ? item.actor.substring(0, 1) : item.responder.substring(0, 1)),
-                StyleClass: item.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
-                RequestState: item.request_state,
-                SourceItemId: item.source_item_id,
-                LayoutID: '',
-                TaskEntityInstanceID: ''
-              })
-            }
-          })
-        } else{
-          if (resp.status == 'A'){
-            this.allNotifications.push({
-              ItemId: resp.id,
-              FileReferenceNo: resp.file_reference_no,
-              RequestNo: resp.request_no,
-              Actor: resp.actor,
-              MessageCode: resp.message_code,
-              MessageType: resp.message_type,
-              Responder: resp.responder,
-              Message: resp.message,
-              Status: resp.status,
-              CreatedDate: this.datePipe.transform(resp.created_on.split('T')[0], 'MMM d, y'),
-              ModifiedDate: resp.modified_on,
-              MessageReadStatus: resp.message_read_status,
-              UserGroup: resp.user_group,
-              CreatedTime: resp.created_on.split('T')[1].substring(0, 5),
-              ShowRead: resp.message_read_status == 'NotRead' ? true : false,
-              ShowDelete: resp.status == 'A' ? true : false,
-              ShowNotf: resp.status == 'A' ? true : false,
-              NotfHeader: _.capitalize(resp.actor ? resp.actor.substring(0, 1) : resp.responder.substring(0, 1)),
-              StyleClass: resp.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
-              RequestState: resp.request_state,
-              SourceItemId: resp.source_item_id,
-              LayoutID: '',
-              TaskEntityInstanceID: ''
-            })
-          }
-        }
-        this.dashboardCountObj.notfCount = this.allNotifications.length;
-      }
-    },
-    (error) => {
-      console.error('Request failed with error')
-      this.showSpinner = false;
-    })
+  openService(template: TemplateRef<any>, serviceName:any){
+    let serviceObj = {
+      ServiceDescription:'',
+      ExternalUrl:'',
+      ServiceCode:''
+    };
+    if(serviceName == 'ADV_FILE'){
+      serviceObj.ServiceDescription = 'Create New Advisory File';
+      serviceObj.ServiceCode = serviceName;
+    }
+    if(serviceName == 'ADV_REQ'){
+      serviceObj.ServiceDescription = 'Create New Advisory Request';
+      serviceObj.ServiceCode = serviceName;
+    }
+    if(serviceName == 'MLA_FILE'){
+      serviceObj.ServiceDescription = 'Create MLA/Extradition File';
+      serviceObj.ServiceCode = serviceName;
+    }
+    if(serviceName == 'MLA_REQ'){
+      serviceObj.ServiceDescription = 'Create New MLA/Extradition Request';
+      serviceObj.ServiceCode = serviceName;
+    }
+    if(serviceName == 'MIGRATION_PORTAL'){
+      serviceObj.ServiceDescription = 'Migration';
+      serviceObj.ExternalUrl = 'migration'
+      serviceObj.ServiceCode = serviceName;
+    }
+    this.openServiceModal(template,serviceObj,'xxl-modal')
   }
   openServiceModal(template: TemplateRef<any>, serviceObj: any, cssClass: string) {
     this.serviceTitle = serviceObj.ServiceDescription
@@ -345,28 +207,8 @@ export class DashboardComponent implements OnInit{
       this.utilService.pushRoute(this.entityURL);
     }
   }
-  openNotfModal(template: TemplateRef<any>, cssClass: string) {
-    this.modalRef = this.modalService.show(template, {
-      class: cssClass, keyboard: false,
-      backdrop: true,
-      ignoreBackdropClick: true
-    });
-  }
   hideModal(){
     this.modalRef.hide()
-  }
-  hideNotfModal(){
-    this.getAllNotifications();
-    this.modalRef.hide();
-  }
-  goToSearch() {
-    this.utilService.saveToStorage('SearchText',this.searchText);
-    this.utilService.saveToStorage('SearchType', 'basic');
-    this.utilService.pushRoute("search");
-  }
-  goToAdvSearch() {
-    this.utilService.saveToStorage('SearchType', 'advanced');
-    this.utilService.pushRoute("search");
   }
   createServiceRequest(){
       this.isReqSubmitted = true;
@@ -410,55 +252,10 @@ export class DashboardComponent implements OnInit{
       }
     })
   }
-  openOtherColumnModal(template: TemplateRef<any>, cssClass: string){
-    this.openNotfModal(template,cssClass);
-  }
-  onRecallReassignSubmit(data: any){
-    if (data.ACTION == 'RECALL'){
-      if (data.STATUS == 'SUCCESS'){
-        this.utilService.alert('success', 'Success', 'Request ' + data.REQUEST_ID + ' recalled successfully!!', false);
-        this.hideRequestModal();
-        this.getTaskData('PersonalTasks');
-      }
-    } else if (data.ACTION == 'REASSIGN') {
-      if (data.STATUS == 'SUCCESS') {
-        this.utilService.alert('success', 'Success', 'Request ' + data.REQUEST_ID + ' reassigned successfully!!', false);
-        this.hideRequestModal();
-        this.getTaskData('PersonalTasks');
-      }
-    }
-  }
-  onReopenSubmit(data: any) {
-    if (data.STATUS == 'SUCCESS') {
-      this.utilService.alert('success', 'Success', 'Request ' + data.REQUEST_ID + ' reopened successfully!!', false);
-      this.hideRequestModal();
-      this.getTaskData('PersonalTasks');
-    }
-  }
-  onCirculationSubmit(data: any) {
-    if (data.ACTION == 'RECALL') {
-      if (data.STATUS == 'SUCCESS') {
-        this.utilService.alert('success', 'Success', 'Circulation ' + data.CirculationID + ' recalled successfully!!', true);
-        this.hideRequestModal();
-        this.getTaskData('PersonalTasks');
-      }
-    }
-    else if (data.ACTION == 'TERMINATE') {
-      if (data.STATUS == 'SUCCESS') {
-        this.utilService.alert('success', 'Success', 'Circulation ' + data.CirculationID + ' terminated successfully!!', true);
-        this.hideRequestModal();
-        this.getTaskData('PersonalTasks');
-      }
-    }
-  }
   refreshTasks(){
     this.filteredTasks = [];
     let context:any = this;
-    if(this.isBossSelected){
-      setTimeout(function () { context.getDelegatedTasks('PersonalTasks'); }, 1000);
-    } else{
-      setTimeout(function () { context.getTaskData('PersonalTasks'); }, 1000);
-    }
+    setTimeout(function () { context.getTaskData('PersonalTasks'); }, 1000);
   }
   onTaskSelected(data: any){
     this.isTaskSelected = true;
@@ -493,12 +290,6 @@ export class DashboardComponent implements OnInit{
   }
   revokeRequest(data: any){
     
-  }
-  removeBoss(){
-    this.isBossSelected = false;
-    this.bossName = "";
-    this.bossDN = ""
-    this.getTaskData('PersonalTasks');
   }
   resetDashboardCount(){
     this.dashboardCountObj.sharedCount = '0'
