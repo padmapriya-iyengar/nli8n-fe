@@ -29,6 +29,7 @@ import { BlockUIModule } from 'primeng/blockui';
 import { InputSwitchModule } from 'primeng/inputswitch';
 import { DividerModule } from 'primeng/divider';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
+import { PasswordModule } from 'primeng/password';
 
 @NgModule({
     declarations: [
@@ -65,7 +66,8 @@ import { BreadcrumbModule } from 'primeng/breadcrumb';
         BlockUIModule,
         InputSwitchModule,
         DividerModule,
-        BreadcrumbModule
+        BreadcrumbModule,
+        PasswordModule
     ],
     providers: [MessageService],
     bootstrap: []

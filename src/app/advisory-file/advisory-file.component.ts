@@ -437,9 +437,21 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
       let reqDetails:any = _.cloneDeep(this.advisoryFile)
       reqDetails.Sensitivity = reqDetails.Sensitivity == 'Yes'? true: false
       reqDetails.FileCreatedBy = UtilityService.CURRENT_USER_NAME;
-      reqDetails.FileCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss"); 
+      reqDetails.FileCreatedDate = new Date(); 
+
+      this.appService.generateSequence('Advisory File').subscribe((response) => {
+        let resp = Object.assign(response);
+        if(resp){
+          this.appService.createFile(reqDetails).subscribe((response) => {
+            let createResp = Object.assign(response);
+            if(createResp){
+              let refNo= createResp[0].ReferenceNo;
+              this.utilService.alert('success','Success','Advisory File '+refNo+' created successfully', false)
+              this.reqSubmit.emit({ status: 'SUCCESS' });
+            }
+          })
+        }
+      })
     }
-    //@ToDo
-    //Service Integration and seq id count update
   }
 }

@@ -6,6 +6,6 @@ export const api = {
     user_profile: '/agc/user-profile',
     user_details: '/agc/user-details',
     sequence: '/agc/sequence',
-    read_file: '/agc/read-file',
-    create_file: '/agc/create-file'
+    read_file: '/agc/file/read-file',
+    create_file: '/agc/file/create-file'
 }
