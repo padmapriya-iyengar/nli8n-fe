@@ -136,7 +136,7 @@ export class AppComponent  implements OnInit{
   }
   getAllNotifications(username:string){
     this.allNotifications = [];
-    this.appService.getUserNotifications(username).subscribe((response) => {
+    this.appService.getUserNotifications(username).subscribe({ next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -173,10 +173,10 @@ export class AppComponent  implements OnInit{
         this.notfCount = this.allNotifications.length;
       }
     },
-    (error) => {
+    error: (error) => {
       console.error('Request failed with error')
       this.showSpinner = false;
-    })
+    }})
   }
   openNotfModal(template: TemplateRef<any>, cssClass: string) {
     this.modalRef = this.modalService.show(template, {

@@ -22,7 +22,7 @@ export class NotificationComponent implements OnInit {
   actOnNotf(action: string, data: any){
     let index = _.findIndex(this.notifications, function (notf) { return notf.ItemId == data.ItemId; })
     if(index != -1){
-      this.appService.updateUserNotifications(this.notifications[index].ItemId,action).subscribe((response) => {
+      this.appService.updateUserNotifications(this.notifications[index].ItemId,action).subscribe({next: (response) => {
         if(action === 'READ'){
           this.notifications[index].ShowRead = false
           this.notifications[index].StyleClass = 'notf-row'
@@ -34,9 +34,10 @@ export class NotificationComponent implements OnInit {
           this.utilService.alert('success', 'Success', 'Notification deleted successfully!!', false);
         }
       },
-      (error) => {
+      error: (error) => {
         console.error('Request failed with error')
-      })
+      }
+    })
     }
   }
   openNotification(data: any) {

@@ -33,7 +33,7 @@ export class LoginComponent implements OnInit{
     let divisions: any = [];
     let roles: any[] = [];
     let userInfo: any = {}
-    this.appService.getUserInfo(this.userName).subscribe((response) => {
+    this.appService.getUserInfo(this.userName).subscribe({next: (response) => {
       let resp = Object.assign(response)
       divisions = resp.agc_user_divisions
       let inboxPref = [];
@@ -75,9 +75,10 @@ export class LoginComponent implements OnInit{
       }
       this.utilService.pushRoute('dashboard');
     },
-    (error) => {
+    error: (error) => {
       console.error('Request failed with error')
-    })
+    }
+  })
   }
   //@ToDo
   //Service implementation for login

@@ -76,17 +76,18 @@ export class MlaFileComponent implements OnInit, OnChanges {
   }
   setSerialNo(){
     this.showSpinner = true;
-    this.appService.getSequence('MLA File').subscribe((response) => {
+    this.appService.getSequence('MLA File').subscribe({next: (response) => {
       let resp = Object.assign(response)
       let prefix = resp[0].prefix?resp[0].prefix:''
       let count = Number(resp[0].seq_count)+1
       let suffix = resp[0].suffix?resp[0].suffix:''
       this.mlaFile.I_SerialNo = prefix + count + suffix;
     },
-    (error) => {
+    error: (error) => {
       console.error("Request failed with error")
       this.showSpinner = false;
-    })
+    }
+  })
   }
   onRequestOriginChange(data: any){
     if (data.value == 'ADDR_F'){
@@ -106,7 +107,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileOrigins() {
     this.fileOrigin = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_ORIGIN').subscribe((response) => {
+    this.appService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -120,16 +121,17 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.error('Request failed with error')
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getCaseTypes() {
     this.caseTypes = [];
     this.mlaFile.MLACaseType = '';
     this.showSpinner = true;
-    this.appService.getMasterDataByType('MLA_CASE_TYPE').subscribe((response) => {
+    this.appService.getMasterDataByType('MLA_CASE_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -153,16 +155,17 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.error('Request failed with error')
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getCaseSubTypes() {
     this.caseSubTypes = [];
     this.mlaFile.MLASubType='';
     this.showSpinner = true;
-    this.appService.getMasterDataByType('MLA_CASE_SUB_TYPE').subscribe((response) => {
+    this.appService.getMasterDataByType('MLA_CASE_SUB_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -178,29 +181,31 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.error('Request failed with error')
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getAGItemID(){
     this.showSpinner = true;
-    this.appService.getMasterDataByType('ROOT_CODE').subscribe((response) => {
+    this.appService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         this.getFileDivisions(resp[0].code)
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getFileDivisions(agItemID: string) {
     this.allFileDivisions = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -213,15 +218,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error')
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getCurrentUserFileDivisions(){
     this.fileDivisions = [];
     this.showSpinner = true;
-    this.appService.getUserDivisions(UtilityService.CURRENT_USER_NAME).subscribe((response) => {
+    this.appService.getUserDivisions(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -235,15 +241,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getFileHeader1(divItemID: string) {
     this.header1 = []
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_HEADER1',divItemID).subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('FILE_HEADER1',divItemID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -255,15 +262,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getFileHeader2(header1ItemID: string) {
     this.header2 = []
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_HEADER2',header1ItemID).subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('FILE_HEADER2',header1ItemID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -275,15 +283,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getFileYear() {
     this.year = []
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_YEAR').subscribe((response) => {
+    this.appService.getMasterDataByType('FILE_YEAR').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -294,15 +303,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getFileComplexity() {
     this.fileCmplxts = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_COMPLEXITY').subscribe((response) => {
+    this.appService.getMasterDataByType('CASE_COMPLEXITY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -313,15 +323,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getSecurityClassifications() {
     this.secClassification = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe((response) => {
+    this.appService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -333,15 +344,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error')
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getFATFPurpose(){
     this.fatfPurposes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_FATF').subscribe((response) => {
+    this.appService.getMasterDataByType('CASE_FATF').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -352,15 +364,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getLocalAgencyTypes() {
     this.lAgencyTypes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe((response) => {
+    this.appService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -372,15 +385,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getForeignCountries() {
     this.cfList = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('COUNTRY').subscribe((response) => {
+    this.appService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -392,16 +406,17 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getForeignAgencyTypes(countryCodeID: any) {
     this.fAgencyTypes = [];
     this.fAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -413,15 +428,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getCaseStatus() {
     this.caseStatus = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_STATUS').subscribe((response) => {
+    this.appService.getMasterDataByType('CASE_STATUS').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -434,15 +450,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.mlaFile.FileStatus = 'CSTAT_DO'
         this.mlaFile.MLACaseStatus = 'CSTAT_DO'
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   getRequestedUnder(caseTypeRequestUnder: string) {
     this.reqUnder = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('REQUESTED_UNDER',caseTypeRequestUnder).subscribe((response) => {
+    this.appService.getMasterDataByTypeAndParent('REQUESTED_UNDER',caseTypeRequestUnder).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -453,15 +470,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   onLocalAgencyTypeChange(data: any) {
     this.lAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe((response) => {
+    this.appService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -472,15 +490,16 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   onForeignAgencyTypeChange(data: any) {
     this.fAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe((response) => {
+    this.appService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -491,10 +510,11 @@ export class MlaFileComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    (error) => {
+    error: (error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
-    })
+    }
+  })
   }
   onFileDivisionChange(data: any) {
     this.showSpinner = true;
@@ -554,7 +574,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
         mla_file.AgencyType+','+mla_file.AgencyName+','+mla_file.CountryForeignOrg+','+mla_file.ForeignAgencyType+","+
         mla_file.ForeignAgencyName+','+mla_file.FileStatus+','+mla_file.MLACaseStatus+','+mla_file.MLAComplexity+','+
         mla_file.MLAFATFPurpose+','+mla_file.MLARequestedUnder+','+mla_file.MLASubType;
-      this.appService.getMasterDataByCodes(descQueryParam).subscribe((response) => {
+      this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
         let masterDataMap: Map<string,string> = new Map();
         let resp = Object.assign(response);
         if(resp){
@@ -577,29 +597,36 @@ export class MlaFileComponent implements OnInit, OnChanges {
           mla_file.MLARequestedUnderDesc = masterDataMap.get(mla_file.MLARequestedUnder)
           mla_file.MLASubTypeDesc = masterDataMap.get(mla_file.MLASubType)
 
-          this.appService.generateSequence('MLA File').subscribe((response) => {
+          this.appService.generateSequence('MLA File').subscribe({next: (response) => {
             let resp = Object.assign(response);
             if(resp){
-              this.appService.createFile(mla_file).subscribe((response) => {
+              this.appService.createFile(mla_file).subscribe({next: (response) => {
                 let createResp = Object.assign(response);
                 if(createResp){
                   let refNo= createResp[0].ReferenceNo;
                   this.utilService.alert('success','Success','MLA File '+refNo+' created successfully', false)
                   this.reqSubmit.emit({ status: 'SUCCESS' });
                 }
-              })
+              },
+              error: (error) => {
+                console.log('Request failed with error');
+                this.showSpinner = false;
+              }
+            })
             }
           },
-          (error) => {
+          error: (error) => {
             console.log('Request failed with error');
             this.showSpinner = false;
-          })
+          }
+        })
         }
       },
-      (error) => {
+      error: (error) => {
         console.log('Request failed with error');
         this.showSpinner = false;
-      })
+      }
+    })
     }
   }
 }

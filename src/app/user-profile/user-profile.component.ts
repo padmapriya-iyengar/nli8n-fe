@@ -87,17 +87,18 @@ export class UserProfileComponent implements OnInit, OnChanges{
       user_profile.ooo_message = user_profile.OutOfOfficeMessage;
       user_profile.ooo = user_profile.OutOfOffice;
     
-      this.appService.updateUserProfile(UtilityService.CURRENT_USER_NAME,user_profile).subscribe((response) => {
+      this.appService.updateUserProfile(UtilityService.CURRENT_USER_NAME,user_profile).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if(resp){
           this.reqSubmit.emit({status:'SUCCESS'})
           this.oooEnable.emit({value: user_profile.OutOfOffice})
         }
       },
-      (error)=>{
+      error: (error)=>{
         console.error('Request failed with error')
         this.reqSubmit.emit({status:'FAILURE'})
-      })
+      }
+    })
       }
   }
   removeOOO(){

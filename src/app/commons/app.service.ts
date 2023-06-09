@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, throwError } from 'rxjs';
+import { Observable, throwError, from } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
 import { api } from "src/config/api-url";
 import { environment } from "src/environments/environment";
@@ -12,7 +12,7 @@ export class AppService {
     apiEndpoint: any = environment.api_endpoint;
 
     getMasterDataByType(type:string) {
-        return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=type&identifier='+type);
+        return from(this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=type&identifier='+type));
     }
     getMasterDataByTypeAndParent(type:string,parent_code:string) {
         return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=type_parent&identifier='+type+'&parent_code='+parent_code);
