@@ -32,6 +32,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   foreignAgencyTypes: any[]=[];
   fileOrigin: any[]=[];
   fileOwners: any[]=[];
+  caseStatus: any[]=[];
   todaysDate: Date = new Date();
   agcFileReFNo: string='';
   fileSerialNumber:number=0;
@@ -62,6 +63,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
     this.getSecurityClassifications();
     this.getAGItemID()
     this.getFileOwners();
+    this.getCaseStatus();
     this.advisoryFile.FileType = 'ADVISORY';
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -93,8 +95,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           resp.forEach((item:any) => {
             this.fileOrigin.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.fileOrigin.push({ label: resp.value, value: resp.code })
         }
         this.advisoryFile.LocalForeign = 'ADDR_L';
         this.advisoryFile.LocalOrForeign = 'ADDR_L';
@@ -117,8 +117,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           resp.forEach((item:any) => {
             this.secClassification.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.secClassification.push({ label: resp.value, value: resp.code })
         }
         this.advisoryFile.SecurityClassification = 'SCLASS_S';
         this.showSpinner = false;
@@ -126,6 +124,26 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
     },
     (error) => {
       console.log('Request failed with error')
+      this.showSpinner = false;
+    })
+  }
+  getCaseStatus() {
+    this.caseStatus = [];
+    this.showSpinner = true;
+    this.appService.getMasterDataByType('CASE_STATUS').subscribe((response) => {
+      let resp = Object.assign(response);
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            this.caseStatus.push({ label: item.value, value: item.code })
+          })
+        }
+        this.showSpinner = false;
+      }
+        this.advisoryFile.FileStatus = 'CSTAT_DO'
+    },
+    (error) => {
+      console.log('Request failed with error');
       this.showSpinner = false;
     })
   }
@@ -154,9 +172,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
             this.allFileDivisions.push({ label: item.value, value: item.code })
             this.fileDivisionItemIDMap.set(item.value, item.code)
           })
-        } else{
-          this.allFileDivisions.push({ label: resp.value, value: resp.code })
-          this.fileDivisionItemIDMap.set(resp.value, resp.code)
         }
         this.getCurrentUserFileDivisions();
         this.showSpinner = false;
@@ -180,11 +195,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
               this.fileDivisions.push({ label: item.group_name, value: item.title })
             }
           })
-        } else{
-          let index = _.findIndex(this.allFileDivisions, function (fg: any) { return fg.value == resp.title; })
-          if (index != -1) {
-            this.fileDivisions.push({ label: resp.group_name, value: resp.title })
-          }
         }
         this.showSpinner = false;
       }
@@ -205,9 +215,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
             this.header1.push({ label: item.value, value: item.code })
             this.fileHeader1ItemIDMap.set(item.code, item.code)
           })
-        } else{
-          this.header1.push({ label: resp.value, value: resp.code })
-          this.fileHeader1ItemIDMap.set(resp.code, resp.code)
         }
         this.showSpinner = false;
       }
@@ -228,9 +235,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
             this.header2.push({ label: item.value, value: item.code })
             this.fileHeader2ItemIDMap.set(item.code, item.code)
           })
-        } else{
-          this.header2.push({ label: resp.value, value: resp.code })
-          this.fileHeader2ItemIDMap.set(resp.code, resp.code)
         }
         this.showSpinner = false;
       }
@@ -250,8 +254,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           resp.forEach((item:any) => {
             this.year.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.year.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -272,9 +274,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
             this.localAgencyTypes.push({ label: item.value, value: item.code })
             this.localAgencyTypeCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.localAgencyTypes.push({ label: resp.value, value: resp.code })
-          this.localAgencyTypeCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -294,8 +293,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           resp.forEach((item:any) => {
             this.fileOwners.push({ label: item.display_name, value: item.username })
           })
-        } else{
-          this.fileOwners.push({ label: resp.display_name, value: resp.username })
         }
         this.showSpinner = false;
       }
@@ -316,9 +313,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
             this.foreignCountries.push({ label: item.value, value: item.code })
             this.foreignAgencyCountryCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.foreignCountries.push({ label: resp.value, value: resp.code })
-          this.foreignAgencyCountryCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -340,9 +334,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
             this.foreignAgencyTypes.push({ label: item.value, value: item.code })
             this.foreignAgencyTypeCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.foreignAgencyTypes.push({ label: resp.value, value: resp.code })
-          this.foreignAgencyTypeCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -377,8 +368,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           resp.forEach((item:any) => {
             this.localAgencyNames.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.localAgencyNames.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -398,8 +387,6 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           resp.forEach((item:any) => {
             this.foreignAgencyNames.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.foreignAgencyNames.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -439,18 +426,49 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
       reqDetails.FileCreatedBy = UtilityService.CURRENT_USER_NAME;
       reqDetails.FileCreatedDate = new Date(); 
 
-      this.appService.generateSequence('Advisory File').subscribe((response) => {
+      let descQueryParam = reqDetails.SecurityClassification+','+reqDetails.LocalForeign+','+
+        reqDetails.AgencyType+','+reqDetails.AgencyName+','+reqDetails.CountryForeignOrg+','+reqDetails.ForeignAgencyType+","+
+        reqDetails.ForeignAgencyName+','+reqDetails.FileStatus;
+      this.appService.getMasterDataByCodes(descQueryParam).subscribe((response)=>{
+        let masterDataMap: Map<string,string> = new Map();
         let resp = Object.assign(response);
         if(resp){
-          this.appService.createFile(reqDetails).subscribe((response) => {
-            let createResp = Object.assign(response);
-            if(createResp){
-              let refNo= createResp[0].ReferenceNo;
-              this.utilService.alert('success','Success','Advisory File '+refNo+' created successfully', false)
-              this.reqSubmit.emit({ status: 'SUCCESS' });
+          if(resp.length){
+            resp.forEach((item:any) => {
+              masterDataMap.set(item.code,item.value)
+            })
+          }
+          reqDetails.SecurityClassificationDesc = masterDataMap.get(reqDetails.SecurityClassification)
+          reqDetails.LocalForeignDesc = masterDataMap.get(reqDetails.LocalForeign)
+          reqDetails.AgencyTypeDesc = masterDataMap.get(reqDetails.AgencyType)
+          reqDetails.AgencyNameDesc = masterDataMap.get(reqDetails.AgencyName)
+          reqDetails.CountryForeignOrgDesc = masterDataMap.get(reqDetails.CountryForeignOrg)
+          reqDetails.FileForeignAgencyTypeDesc = masterDataMap.get(reqDetails.ForeignAgencyType)
+          reqDetails.ForeignAgencyNameDesc = masterDataMap.get(reqDetails.ForeignAgencyName)
+          reqDetails.FileStatusDesc = masterDataMap.get(reqDetails.FileStatus)
+
+          this.appService.generateSequence('Advisory File').subscribe((response) => {
+            let resp = Object.assign(response);
+            if(resp){
+              this.appService.createFile(reqDetails).subscribe((response) => {
+                let createResp = Object.assign(response);
+                if(createResp){
+                  let refNo= createResp[0].ReferenceNo;
+                  this.utilService.alert('success','Success','Advisory File '+refNo+' created successfully', false)
+                  this.reqSubmit.emit({ status: 'SUCCESS' });
+                }
+              },
+              (error) => {
+                console.log('Request failed with error');
+                this.showSpinner = false;
+              })
             }
           })
         }
+      },
+      (error)=>{
+        console.log('Request failed with error');
+        this.showSpinner = false;
       })
     }
   }

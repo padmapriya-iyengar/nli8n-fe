@@ -113,8 +113,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.fileOrigin.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.fileOrigin.push({ label: resp.value, value: resp.code })
         }
         this.mlaFile.LocalForeign = 'ADDR_L';
         this.mlaFile.LocalOrForeign = 'ADDR_L';
@@ -138,8 +136,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.caseTypes.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.caseTypes.push({ label: resp.value, value: resp.code })
         }
         if (_.includes(this.mlaFile.I_Header1, 'MLA')){
           this.mlaFile.MLACaseType = 'MLA'
@@ -173,12 +169,10 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.caseSubTypes.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.caseSubTypes.push({ label: resp.value, value: resp.code })
         }
-        if (_.includes(this.mlaFile.I_Header1, '-T')) {
+        if (_.includes(this.mlaFile.I_Header2, '-T')) {
           this.mlaFile.MLASubType = 'O'
-        } else if (_.includes(this.mlaFile.I_Header1, '-F')) {
+        } else if (_.includes(this.mlaFile.I_Header2, '-F')) {
           this.mlaFile.MLASubType = 'I'
         }
         this.showSpinner = false;
@@ -214,9 +208,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
             this.allFileDivisions.push({ label: item.value, value: item.code })
             this.fileDivisionItemIDMap.set(item.value, item.code)
           })
-        } else{
-          this.allFileDivisions.push({ label: resp.value, value: resp.code })
-          this.fileDivisionItemIDMap.set(resp.value, resp.code)
         }
         this.getCurrentUserFileDivisions();
         this.showSpinner = false;
@@ -240,11 +231,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
               this.fileDivisions.push({ label: item.group_name, value: item.title })
             }
           })
-        } else{
-          let index = _.findIndex(this.allFileDivisions, function (fg: any) { return fg.value == resp.title; })
-          if (index != -1) {
-            this.fileDivisions.push({ label: resp.group_name, value: resp.title })
-          }
         }
         this.showSpinner = false;
       }
@@ -265,9 +251,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
             this.header1.push({ label: item.value, value: item.code })
             this.fileHeader1ItemIDMap.set(item.code, item.code)
           })
-        } else{
-          this.header1.push({ label: resp.value, value: resp.code })
-          this.fileHeader1ItemIDMap.set(resp.code, resp.code)
         }
         this.showSpinner = false;
       }
@@ -288,9 +271,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
             this.header2.push({ label: item.value, value: item.code })
             this.fileHeader2ItemIDMap.set(item.code, item.code)
           })
-        } else{
-          this.header2.push({ label: resp.value, value: resp.code })
-          this.fileHeader2ItemIDMap.set(resp.code, resp.code)
         }
         this.showSpinner = false;
       }
@@ -310,8 +290,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.year.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.year.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -331,8 +309,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.fileCmplxts.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.fileCmplxts.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -352,8 +328,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.secClassification.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.secClassification.push({ label: resp.value, value: resp.code })
         }
         this.mlaFile.SecurityClassification = 'SCLASS_S'
         this.showSpinner = false;
@@ -374,8 +348,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.fatfPurposes.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.fatfPurposes.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -396,9 +368,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
             this.lAgencyTypes.push({ label: item.value, value: item.code })
             this.localAgencyTypeCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.lAgencyTypes.push({ label: resp.value, value: resp.code })
-          this.localAgencyTypeCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -419,9 +388,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
             this.cfList.push({ label: item.value, value: item.code })
             this.foreignAgencyCountryCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.cfList.push({ label: resp.value, value: resp.code })
-          this.foreignAgencyCountryCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -443,9 +409,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
             this.fAgencyTypes.push({ label: item.value, value: item.code })
             this.foreignAgencyTypeCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.fAgencyTypes.push({ label: resp.value, value: resp.code })
-          this.foreignAgencyTypeCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -465,8 +428,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.caseStatus.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.caseStatus.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -488,8 +449,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.reqUnder.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.reqUnder.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -509,8 +468,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.lAgencyNames.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.lAgencyNames.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -530,8 +487,6 @@ export class MlaFileComponent implements OnInit, OnChanges {
           resp.forEach((item:any) => {
             this.fAgencyNames.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.fAgencyNames.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -549,6 +504,11 @@ export class MlaFileComponent implements OnInit, OnChanges {
   onFileHeader1Change(data: any) {
     this.showSpinner = true;
     let header1ItemID: any = this.fileHeader1ItemIDMap.get(data.value);
+    this.getFileHeader2(header1ItemID);
+    this.getCaseTypes();
+  }
+  onFileHeader2Change(data: any) {
+    this.getFileYear();
     if (data.value == 'MLA-F'){
       this.mlaFile.I_MLA_HOA = 'HA_MLAI_MACMA'
     } else if (data.value == 'MLA-T'){
@@ -560,12 +520,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
     } else{
       this.mlaFile.I_MLA_HOA = ''
     }
-    this.getFileHeader2(header1ItemID);
-    this.getCaseTypes();
     this.getCaseSubTypes();
-  }
-  onFileHeader2Change(data: any) {
-    this.getFileYear();
   }
   onFileYearChange(data: any){
     if(data.value){
@@ -594,8 +549,57 @@ export class MlaFileComponent implements OnInit, OnChanges {
       mla_file.Sensitivity = mla_file.Sensitivity == 'Yes' ? true : false
       mla_file.FileCreatedBy = UtilityService.CURRENT_USER_NAME;
       mla_file.FileCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
+      
+      let descQueryParam = mla_file.SecurityClassification+','+mla_file.LocalForeign+','+
+        mla_file.AgencyType+','+mla_file.AgencyName+','+mla_file.CountryForeignOrg+','+mla_file.ForeignAgencyType+","+
+        mla_file.ForeignAgencyName+','+mla_file.FileStatus+','+mla_file.MLACaseStatus+','+mla_file.MLAComplexity+','+
+        mla_file.MLAFATFPurpose+','+mla_file.MLARequestedUnder+','+mla_file.MLASubType;
+      this.appService.getMasterDataByCodes(descQueryParam).subscribe((response) => {
+        let masterDataMap: Map<string,string> = new Map();
+        let resp = Object.assign(response);
+        if(resp){
+          if(resp.length){
+            resp.forEach((item:any) => {
+              masterDataMap.set(item.code,item.value)
+            })
+          }
+          mla_file.SecurityClassificationDesc = masterDataMap.get(mla_file.SecurityClassification)
+          mla_file.LocalForeignDesc = masterDataMap.get(mla_file.LocalForeign)
+          mla_file.AgencyTypeDesc = masterDataMap.get(mla_file.AgencyType)
+          mla_file.AgencyNameDesc = masterDataMap.get(mla_file.AgencyName)
+          mla_file.CountryForeignOrgDesc = masterDataMap.get(mla_file.CountryForeignOrg)
+          mla_file.FileForeignAgencyTypeDesc = masterDataMap.get(mla_file.ForeignAgencyType)
+          mla_file.ForeignAgencyNameDesc = masterDataMap.get(mla_file.ForeignAgencyName)
+          mla_file.FileStatusDesc = masterDataMap.get(mla_file.FileStatus)
+          mla_file.MLACaseStatusDesc = masterDataMap.get(mla_file.MLACaseStatus)
+          mla_file.MLAComplexityDesc = masterDataMap.get(mla_file.MLAComplexity)
+          mla_file.MLAFATFPurposeDesc = masterDataMap.get(mla_file.MLAFATFPurpose)
+          mla_file.MLARequestedUnderDesc = masterDataMap.get(mla_file.MLARequestedUnder)
+          mla_file.MLASubTypeDesc = masterDataMap.get(mla_file.MLASubType)
+
+          this.appService.generateSequence('MLA File').subscribe((response) => {
+            let resp = Object.assign(response);
+            if(resp){
+              this.appService.createFile(mla_file).subscribe((response) => {
+                let createResp = Object.assign(response);
+                if(createResp){
+                  let refNo= createResp[0].ReferenceNo;
+                  this.utilService.alert('success','Success','MLA File '+refNo+' created successfully', false)
+                  this.reqSubmit.emit({ status: 'SUCCESS' });
+                }
+              })
+            }
+          },
+          (error) => {
+            console.log('Request failed with error');
+            this.showSpinner = false;
+          })
+        }
+      },
+      (error) => {
+        console.log('Request failed with error');
+        this.showSpinner = false;
+      })
     }
-    //@ToDo
-    //Service Integration and seq id count update
   }
 }

@@ -6,6 +6,7 @@ export class ADVISORY_FILE {
     I_SerialNo!: Number;
     FileTitle!: string;
     FileType!: string;
+    FileStatus!: string;
     SecurityClassification!: string;
     Sensitivity!: string;
     LocalForeign!: string;

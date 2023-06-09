@@ -20,6 +20,12 @@ export class AppService {
     getMasterDataByCode(code:string) {
         return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=code&identifier='+code);
     }
+    getMasterDataByTypes(types:string) {
+        return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=types&identifier='+types);
+    }
+    getMasterDataByCodes(codes:string) {
+        return this.http.get(this.apiEndpoint + this.apiURL.get_master_data+'?source=codes&identifier='+codes);
+    }
     getUserNotifications(username:string){
         return this.http.get(this.apiEndpoint + this.apiURL.user_notifications+'?username='+username);
     }
@@ -49,5 +55,8 @@ export class AppService {
     }
     createFile(fileData:any){
         return this.http.post(this.apiEndpoint + this.apiURL.create_file, {data: fileData});
+    }
+    updateUserProfile(username:string, userdata:any){
+        return this.http.post(this.apiEndpoint + this.apiURL.user_profile+'?username='+username, {data: userdata});
     }
 }

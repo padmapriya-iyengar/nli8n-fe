@@ -4,6 +4,7 @@ import { NgForm } from '@angular/forms';
 import * as _ from "lodash";
 import { UtilityService } from '../commons/utilities.service';
 import { USER_PROFILE } from '../entities/user-profile';
+import { AppService } from '../commons/app.service';
 
 @Component({
   selector: 'user-profile',
@@ -17,7 +18,7 @@ export class UserProfileComponent implements OnInit, OnChanges{
   @Input() modalSubmit!: boolean;
   @ViewChild('upForm') upForm!: NgForm;
 
-  constructor(private utilService: UtilityService, private datePipe: DatePipe) { }
+  constructor(private utilService: UtilityService, private datePipe: DatePipe, private appService: AppService) { }
 
   userHeader!: string;
   formattedUserName!: string;
@@ -73,6 +74,8 @@ export class UserProfileComponent implements OnInit, OnChanges{
     }
   }
   onSubmit() {
+    //@ToDo
+    //Service not updating
     this.formSubmitted = true;
     if (this.upForm && !this.upForm.valid) {
       this.reqSubmit.emit({ status: 'FAILURE' });
@@ -81,9 +84,27 @@ export class UserProfileComponent implements OnInit, OnChanges{
       let user_profile: any = _.cloneDeep(this.userProfile);
       user_profile.DateFrom = user_profile.DateFrom ? this.datePipe.transform(user_profile.DateFrom, "yyyy-MM-dd'T'hh:mm:ss") : null;
       user_profile.DateUntil = user_profile.DateUntil ? this.datePipe.transform(user_profile.DateUntil, "yyyy-MM-dd'T'hh:mm:ss") : null;
-    }
+      user_profile.ooo_message = user_profile.OutOfOfficeMessage;
+      user_profile.ooo = user_profile.OutOfOffice;
+    
+      this.appService.updateUserProfile(UtilityService.CURRENT_USER_NAME,user_profile).subscribe((response) => {
+        let resp = Object.assign(response)
+        if(resp){
+          this.reqSubmit.emit({status:'SUCCESS'})
+          this.oooEnable.emit({value: user_profile.OutOfOffice})
+        }
+      },
+      (error)=>{
+        console.error('Request failed with error')
+        this.reqSubmit.emit({status:'FAILURE'})
+      })
+      }
   }
   removeOOO(){
-    
+    let user_profile: any = _.cloneDeep(this.userProfile);
+    this.userProfile.ooo_message = null
+    this.userProfile.ooo_date_from = null
+    this.userProfile.ooo_data_until = null
+    this.userProfile.ooo = false;
   }
 }

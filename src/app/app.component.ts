@@ -109,7 +109,7 @@ export class AppComponent  implements OnInit{
     this.utilService.pushRoute('login');
   }
   onOOOEnable(data: any){
-    this.isOOOEnabled = data;
+    this.isOOOEnabled = data.value;
   }
   updateUserProfile(){
     this.isReqSubmitted = true;
@@ -169,34 +169,6 @@ export class AppComponent  implements OnInit{
               })
             }
           })
-        } else{
-          if (resp.status == 'A'){
-            this.allNotifications.push({
-              ItemId: resp.id,
-              FileReferenceNo: resp.file_reference_no,
-              RequestNo: resp.request_no,
-              Actor: resp.actor,
-              MessageCode: resp.message_code,
-              MessageType: resp.message_type,
-              Responder: resp.responder,
-              Message: resp.message,
-              Status: resp.status,
-              CreatedDate: this.datePipe.transform(resp.created_on.split('T')[0], 'MMM d, y'),
-              ModifiedDate: resp.modified_on,
-              MessageReadStatus: resp.message_read_status,
-              UserGroup: resp.user_group,
-              CreatedTime: resp.created_on.split('T')[1].substring(0, 5),
-              ShowRead: resp.message_read_status == 'NotRead' ? true : false,
-              ShowDelete: resp.status == 'A' ? true : false,
-              ShowNotf: resp.status == 'A' ? true : false,
-              NotfHeader: _.capitalize(resp.actor ? resp.actor.substring(0, 1) : resp.responder.substring(0, 1)),
-              StyleClass: resp.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
-              RequestState: resp.request_state,
-              SourceItemId: resp.source_item_id,
-              LayoutID: '',
-              TaskEntityInstanceID: ''
-            })
-          }
         }
         this.notfCount = this.allNotifications.length;
       }

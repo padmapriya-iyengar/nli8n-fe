@@ -317,21 +317,4 @@ export class DashboardComponent implements OnInit{
       this.dashboardCountObj.draftCount = resp.TaskCounter.DraftTasks;
     }
   }
-  getDelegatedTaskDataCount(){
-    this.resetDashboardCount();
-    //Service Integration
-    let response = {
-      "tuple":{"old":{"getDelegatedTasksForUser":{"getDelegatedTasksForUser":{"TaskDetailsResponse":{"TaskCounter":{"PersonalTasks":"5","PersonalOverDueTasks":"0","SharedTasks":"0","SharedOverDueTasks":"0","AllTasks":"5","AllOverDueTasks":"0","DraftTasks":"0"}}}}}}
-    }
-    let resp = response.tuple.old.getDelegatedTasksForUser.getDelegatedTasksForUser.TaskDetailsResponse;
-    if (resp.TaskCounter) {
-      this.dashboardCountObj.allCount = resp.TaskCounter.AllTasks;
-      this.dashboardCountObj.allOverdueCount = resp.TaskCounter.AllOverDueTasks;
-      this.dashboardCountObj.pendingCount = resp.TaskCounter.PersonalTasks;
-      this.dashboardCountObj.pendingOverdueCount = resp.TaskCounter.PersonalOverDueTasks
-      this.dashboardCountObj.sharedCount = resp.TaskCounter.SharedTasks;
-      this.dashboardCountObj.sharedOverdueCount = resp.TaskCounter.SharedOverDueTasks;
-      this.dashboardCountObj.draftCount = resp.TaskCounter.DraftTasks;
-    }
-  }
 }

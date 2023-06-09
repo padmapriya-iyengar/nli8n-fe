@@ -16,7 +16,8 @@
             <div class="xsm-padding login-input" style="text-align:center !important;">
                <!-- <input type="text" pInputText placeholder="Password" [(ngModel)]="password"
                name="password" #pwd="ngModel"/> -->
-               <p-password class="pwd-field" [(ngModel)]="password" #pwd="ngModel" name="pwd" [feedback]="false" placeholder="Password"></p-password>
+               <p-password class="pwd-field" [(ngModel)]="password" #pwd="ngModel" name="pwd" [feedback]="false" placeholder="Password"
+               (keyup.enter)="loadDashboard()"></p-password>
             </div>
          </div>
     </div>

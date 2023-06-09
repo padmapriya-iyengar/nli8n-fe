@@ -88,8 +88,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.secClassification.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.secClassification.push({ label: resp.value, value: resp.code })
         }
         this.advisoryRequest.SecurityClassification = 'SCLASS_S';
         this.showSpinner = false;
@@ -110,8 +108,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.reqStatus.push({ label: item.value, value: item.code });
           })
-        } else{
-          this.reqStatus.push({ label: resp.value, value: resp.code });
         }
         this.advisoryRequest.RequestStatus = 'RSTAT_O'
         this.showSpinner = false;
@@ -133,9 +129,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
             this.reqCmplxts.push({ label: item.value, value: item.code })
             this.cmplxTimeMap.set(item.code, item.attribute_1);
           })
-        } else{
-          this.reqCmplxts.push({ label: resp.value, value: resp.code })
-            this.cmplxTimeMap.set(resp.code, resp.attribute_1);
         }
         this.showSpinner = false;
       }
@@ -155,8 +148,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.reqType.push({ label: item.value, value: item.code });
           })
-        } else{
-          this.reqType.push({ label: resp.value, value: resp.code });
         }
         this.advisoryRequest.RequestType = 'RTYPE_ADV'
         this.showSpinner = false;
@@ -177,8 +168,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.reqModes.push({ label: item.value, value: item.code });
           })
-        } else{
-          this.reqModes.push({ label: resp.value, value: resp.code });
         }
         this.showSpinner = false;
       }
@@ -198,8 +187,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.reqUrgency.push({ label: item.value, value: item.code });
           })
-        } else{
-          this.reqUrgency.push({ label: resp.value, value: resp.code });
         }
         this.advisoryRequest.Urgency = 'RURGENT_NU'
         this.showSpinner = false;
@@ -221,9 +208,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
             this.foreignCountries.push({ label: item.value, value: item.code })
             this.foreignAgencyCountryCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.foreignCountries.push({ label: resp.value, value: resp.code })
-          this.foreignAgencyCountryCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -245,9 +229,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
             this.foreignAgencyTypes.push({ label: item.value, value: item.code })
             this.foreignAgencyTypeCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.foreignAgencyTypes.push({ label: resp.value, value: resp.code })
-          this.foreignAgencyTypeCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -268,9 +249,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
             this.reqLocalAgencyTypes.push({ label: item.value, value: item.code })
             this.localAgencyTypeCodeIDMap.set(item.code, item.code);
           })
-        } else{
-          this.reqLocalAgencyTypes.push({ label: resp.value, value: resp.code })
-          this.localAgencyTypeCodeIDMap.set(resp.code, resp.code);
         }
         this.showSpinner = false;
       }
@@ -290,8 +268,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.fileOrigin.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.fileOrigin.push({ label: resp.value, value: resp.code })
         }
         this.advisoryRequest.LocalForeign = 'ADDR_L';
         this.getLocalAgencyTypes();
@@ -327,8 +303,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.allDivisions.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.allDivisions.push({ label: resp.value, value: resp.code })
         }
         this.getCurrentUserFileDivisions();
         this.showSpinner = false;
@@ -352,11 +326,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
               this.reqDivisions.push({ label: item.group_name, value: item.title })
             }
           })
-        } else{
-          let index = _.findIndex(this.allDivisions, function (fg: any) { return fg.value == resp.title; })
-          if (index != -1) {
-            this.reqDivisions.push({ label: resp.group_name, value: resp.title })
-          }
         }
         this.showSpinner = false;
       }
@@ -401,8 +370,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.reqLocalAgencyNames.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.reqLocalAgencyNames.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }
@@ -422,8 +389,6 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
           resp.forEach((item:any) => {
             this.foreignAgencyNames.push({ label: item.value, value: item.code })
           })
-        } else{
-          this.foreignAgencyNames.push({ label: resp.value, value: resp.code })
         }
         this.showSpinner = false;
       }

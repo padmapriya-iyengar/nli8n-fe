@@ -7,9 +7,11 @@ import { MigrationDashboardComponent } from './migration-dashboard/migration-das
 
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
-  { path: "migration", component: MigrationDashboardComponent },
   { path: "docUpload", component: DocumentUploadComponent },
   { path: "login", component: LoginComponent },
+  { path: "migration", 
+    loadChildren: () => import('./migration.module').then(mod => mod.MigrationModule)
+  },
   { path: '', redirectTo: "login", pathMatch: 'full' }
 ];
 
