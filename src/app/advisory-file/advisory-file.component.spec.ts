@@ -20,4 +20,7 @@ describe('AdvisoryFileComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+  it('should load divisions', () => {
+    console.log(component.advfileForm.controls['fileDiv'].value);
+  })
 });

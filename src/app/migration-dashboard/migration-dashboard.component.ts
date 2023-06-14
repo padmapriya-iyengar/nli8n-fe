@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { UtilityService } from '../commons/utilities.service';
+import { UtilityService } from '../commons/services/utilities.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import * as _ from 'lodash';

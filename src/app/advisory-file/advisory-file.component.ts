@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UtilityService } from 'src/app/commons/utilities.service';
+import { UtilityService } from 'src/app/commons/services/utilities.service';
 import { ADVISORY_FILE } from 'src/app/entities/advisory-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { AppService } from '../commons/app.service';
+import { AppService } from '../commons/services/app.service';
 
 @Component({
   selector: 'advisory-file',
@@ -414,14 +414,17 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   onFileDivisionChange(data: any) {
     this.showSpinner = true;
     let divItemID: any = this.fileDivisionItemIDMap.get(data.value);
+    this.advisoryFile.ReferenceNo = "AG/"+this.advisoryFile.I_Division+"/"+this.advisoryFile.I_Header1+"/"+this.advisoryFile.I_Header2+"/"+this.advisoryFile.I_Year+"/"+this.advisoryFile.I_SerialNo;
     this.getFileHeader1(divItemID);
   }
   onFileHeader1Change(data: any) {
     this.showSpinner = true;
     let header1ItemID: any = this.fileHeader1ItemIDMap.get(data.value);
+    this.advisoryFile.ReferenceNo = "AG/"+this.advisoryFile.I_Division+"/"+this.advisoryFile.I_Header1+"/"+this.advisoryFile.I_Header2+"/"+this.advisoryFile.I_Year+"/"+this.advisoryFile.I_SerialNo;
     this.getFileHeader2(header1ItemID);
   }
   onFileHeader2Change(data: any) {
+    this.advisoryFile.ReferenceNo = "AG/"+this.advisoryFile.I_Division+"/"+this.advisoryFile.I_Header1+"/"+this.advisoryFile.I_Header2+"/"+this.advisoryFile.I_Year+"/"+this.advisoryFile.I_SerialNo;
     this.getFileYear();
   }
   onFileYearChange(data: any){
@@ -468,7 +471,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
               this.appService.createFile(reqDetails).subscribe({next: (response) => {
                 let createResp = Object.assign(response);
                 if(createResp){
-                  let refNo= createResp[0].ReferenceNo;
+                  let refNo= createResp.ReferenceNo;
                   this.utilService.alert('success','Success','Advisory File '+refNo+' created successfully', false)
                   this.reqSubmit.emit({ status: 'SUCCESS' });
                 }

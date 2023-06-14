@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { NgForm } from '@angular/forms';
 import * as _ from 'lodash';
 import { MLA_REQUEST } from '../entities/mla-request';
-import { UtilityService } from '../commons/utilities.service';
+import { UtilityService } from '../commons/services/utilities.service';
 import { DatePipe } from '@angular/common';
-import { AppService } from '../commons/app.service';
+import { AppService } from '../commons/services/app.service';
 
 @Component({
   selector: 'mla-request',
@@ -36,6 +36,8 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   fileOrigin: any[] = [];
   showSpinner: boolean = false;
   reqIDAvailable: boolean = false;
+  fileReferenceNo: string = '';
+  fileReferences:any[] = [];
 
   constructor(private utilService: UtilityService, private datePipe: DatePipe,
     private appService: AppService) { }
@@ -58,6 +60,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     this.getLocalAgencyTypes();
     this.getAGItemID();
     this.getFileOrigins();
+    this.getFileReferences();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['modalSubmit'].currentValue) {
@@ -414,6 +417,24 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     }
   })
   }
+  getFileReferences(){
+    this.showSpinner = true;
+    this.appService.getFileByFilter('type','MLA').subscribe({next: (response) => {
+      let resp = Object.assign(response);
+      if(resp){
+        if(resp.length){
+          resp.forEach((item: any) => {
+            this.fileReferences.push({label: item.ReferenceNo, value: item.ReferenceNo})
+          })
+        }
+        this.showSpinner = false;
+      }
+    },
+    error: (error) => {
+      console.log('Request failed with error');
+      this.showSpinner = false;
+    }})
+  }
   onSubmit() {
     this.formSubmitted = true;
     if (this.reqForm && !this.reqForm.valid) {
@@ -428,9 +449,65 @@ export class MlaRequestComponent implements OnInit, OnChanges {
       mla_req.Sensitivity = mla_req.Sensitivity == 'Yes' ? true : false
       mla_req.RequestCreatedBy = UtilityService.CURRENT_USER_NAME;
       mla_req.RequestCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
+
+      let descQueryParam = mla_req.RequestType+','+mla_req.RequestStatus+','+mla_req.LocalForeign+','+mla_req.RequestingAgencyType+','+
+        mla_req.RequestingAgencyName+','+mla_req.CountryForeignOrg+','+mla_req.ForeignAgencyType+","+mla_req.ForeignAgencyName+','+
+        mla_req.SecurityClassification+','+mla_req.RequestReceivedMode+','+mla_req.Complexity+','+mla_req.Urgency;
+      
+        this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
+          let masterDataMap: Map<string,string> = new Map();
+          let resp = Object.assign(response);
+          if(resp){
+            if(resp.length){
+              resp.forEach((item: any) => {
+                masterDataMap.set(item.code,item.value)
+              })
+            }
+            mla_req.RequestTypeDesc = masterDataMap.get(mla_req.RequestType)
+            mla_req.RequestStatusDesc = masterDataMap.get(mla_req.RequestStatus)
+            mla_req.LocalForeignDesc = masterDataMap.get(mla_req.LocalForeign)
+            mla_req.RequestingAgencyTypeDesc = masterDataMap.get(mla_req.RequestingAgencyType)
+            mla_req.RequestingAgencyNameDesc = masterDataMap.get(mla_req.RequestingAgencyName)
+            mla_req.CountryForeignOrgDesc = masterDataMap.get(mla_req.CountryForeignOrg)
+            mla_req.ForeignAgencyTypeDesc = masterDataMap.get(mla_req.ForeignAgencyType)
+            mla_req.ForeignAgencyNameDesc = masterDataMap.get(mla_req.ForeignAgencyName)
+            mla_req.SecurityClassificationDesc = masterDataMap.get(mla_req.SecurityClassification)
+            mla_req.RequestReceivedModeDesc = masterDataMap.get(mla_req.RequestReceivedMode)
+            mla_req.ComplexityDesc = masterDataMap.get(mla_req.Complexity)
+            mla_req.UrgencyDesc = masterDataMap.get(mla_req.Urgency)
+
+            this.appService.generateSequence('MLA Request').subscribe({next: (response) => {
+                let resp = Object.assign(response)
+                if(resp){
+                    this.appService.createRequest(this.fileReferenceNo,mla_req).subscribe({next: (response) => {
+                      let createResp = Object.assign(response);
+                      if(createResp){
+                        let reqNo= createResp.RequestNo;
+                        this.utilService.alert('success','Success','MLA Request '+reqNo+' created successfully', false)
+                        this.reqSubmit.emit({ status: 'SUCCESS' });
+                      }
+                    },
+                    error: (error) => {
+                      console.log('Request failed with error');
+                      this.showSpinner = false;
+                    }
+                  })
+                }
+              },
+              error: (error) => {
+                console.log('Request failed with error');
+                this.showSpinner = false;
+              }
+            })
+          }
+        }, 
+        error: (error) => {
+          console.log('Request failed with error');
+          this.showSpinner = false;
+        }
+      })
     }
-    //@ToDo
-    //Check error in adddays
-    //Service Integration and seq id count update
   }
 }
+//@ToDo
+//Check error in adddays

@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MenuItem } from 'primeng/api';
-import { UtilityService } from './commons/utilities.service';
-import { AppService } from './commons/app.service';
+import { UtilityService } from './commons/services/utilities.service';
+import { AppService } from './commons/services/app.service';
 import { NOTIFICATION_DETAILS } from './entities/notification-details';
 
 @Component({
@@ -36,6 +36,7 @@ export class AppComponent  implements OnInit{
   showSpinner: boolean = false;
   allNotifications: NOTIFICATION_DETAILS[] = [];
   notfCount:any;
+  title = 'InterviewDemo';
 
   ngOnInit(): void {   
     this.newTabRoutes.push('migration','docUpload')

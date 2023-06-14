@@ -13,12 +13,12 @@ import { MigConsolidatedReportComponent } from "./mig-consolidated-report/mig-co
 import { MigrationReportComponent } from "./migration-report/migration-report.component";
 import { RecordDataComponent } from "./record-data/record-data.component";
 import { ValidationReportComponent } from "./validation-report/validation-report.component";
-import { UtilityService } from "./commons/utilities.service";
+import { UtilityService } from "./commons/services/utilities.service";
 import { CommonModule, DatePipe, HashLocationStrategy, LocationStrategy } from "@angular/common";
 import { BsModalService } from "ngx-bootstrap/modal";
-import { SIWMigrationService } from "./commons/migration.service";
+import { SIWMigrationService } from "./commons/services/migration.service";
 import { ConfirmationService, MessageService } from "primeng/api";
-import { AppService } from "./commons/app.service";
+import { AppService } from "./commons/services/app.service";
 import { RouterModule, Routes } from "@angular/router";
 
 const routes: Routes = [{path: '', component: MigrationDashboardComponent}]

@@ -4,16 +4,32 @@
         <p-tabPanel header="Request Details ({{advisoryRequest.RequestNo}})">
             <form #advReqForm="ngForm" *ngIf="!showSpinner">
                 <div class="row">
-                    <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
-                        <div class="sm-padding form-field-header no-bottom-padding">
-                            Request Title
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                            <div class="sm-padding form-field-header no-bottom-padding">
+                                Request Title
+                            </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                            <div class="xsm-padding">
+                                <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="advisoryRequest.RequestTitle" name="reqTitle" 
+                                    #reqTitle="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to enter request title" 
+                                    [required]="!readOnly" [ngClass]="{ 'is-invalid':formSubmitted && reqTitle.invalid }"/>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 xsm-padding">
-                        <div class="xsm-padding">
-                            <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="advisoryRequest.RequestTitle" name="reqTitle" 
-                                #reqTitle="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to enter request title" 
-                                [required]="!readOnly" [ngClass]="{ 'is-invalid':formSubmitted && reqTitle.invalid }"/>
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                            <div class="sm-padding form-field-header no-bottom-padding">
+                                File Reference
+                            </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                            <div class="xsm-padding">
+                                <p-dropdown [filter]="true" filterBy="label" [required]="!readOnly" [disabled]="readOnly" appendTo="body" [options]="fileReferences" class="custom-dropdown"
+                                    [(ngModel)]="fileReferenceNo" name="frno" pTooltip="Click to choose file reference"
+                                    #frno="ngModel" tooltipStyleClass="custom-tooltip" [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && frno.invalid }"></p-dropdown>
+                            </div>
                         </div>
                     </div>
                 </div>

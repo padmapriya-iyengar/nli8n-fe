@@ -3,7 +3,7 @@ import { REQUEST_DOCS } from '../entities/document-details';
 import { ConfirmationService, TreeNode } from 'primeng/api';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as _ from "lodash";
-import { UtilityService } from '../commons/utilities.service';
+import { UtilityService } from '../commons/services/utilities.service';
 import { DatePipe } from '@angular/common';
 import { Table } from 'primeng/table';
 declare var jQuery: any;

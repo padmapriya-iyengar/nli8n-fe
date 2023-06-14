@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from "lodash";
-import { UtilityService } from '../commons/utilities.service';
+import { UtilityService } from '../commons/services/utilities.service';
 import { DASHBOARD_TASKS } from '../entities/dashboard-tasks';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
@@ -8,7 +8,7 @@ import { NOTIFICATION_DETAILS } from '../entities/notification-details';
 import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
-import { AppService } from '../commons/app.service';
+import { AppService } from '../commons/services/app.service';
 
 @Component({
   selector: 'dashboard',

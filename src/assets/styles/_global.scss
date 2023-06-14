@@ -2184,3 +2184,9 @@ p-paginator{
         width: 100%;
     }
 }
+.error-span{
+    font-size: 10px;
+    font-style: italic;
+    color: $error-color;
+    font-weight: bold;;
+}

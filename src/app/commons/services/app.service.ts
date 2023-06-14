@@ -50,13 +50,46 @@ export class AppService {
     generateSequence(type:string){
         return this.http.post(this.apiEndpoint + this.apiURL.sequence+'?type='+type,{});
     }
+    updateUserProfile(username:string, userdata:any){
+        return this.http.post(this.apiEndpoint + this.apiURL.user_profile+'?username='+username, {data: userdata});
+    }
+    getFileDetails(fileNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.file_details+'?fileReferenceNo='+fileNo)
+    }
     readFile(fileNo:string){
-        return this.http.get(this.apiEndpoint + this.apiURL.read_file+'?fileNo='+fileNo)
+        return this.http.get(this.apiEndpoint + this.apiURL.read_file+'?fileReferenceNo='+fileNo)
     }
     createFile(fileData:any){
         return this.http.post(this.apiEndpoint + this.apiURL.create_file, {data: fileData});
     }
-    updateUserProfile(username:string, userdata:any){
-        return this.http.post(this.apiEndpoint + this.apiURL.user_profile+'?username='+username, {data: userdata});
+    allFiles(){
+        return this.http.get(this.apiEndpoint + this.apiURL.all_files);
+    }
+    getFile(fileNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.get_file+'?source=reference&identifier='+fileNo)
+    }
+    getFileByFilter(source:string, filterValue:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.get_file+'?source='+source+'&identifier='+filterValue)
+    }
+    getFilesForRequest(reqNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.files_for_request+'?requestNo='+reqNo)
+    }
+    readRequest(reqNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.read_request+'?requestNo='+reqNo)
+    }
+    createRequest(fileNo:string, reqData:any){
+        return this.http.post(this.apiEndpoint + this.apiURL.create_request+'?fileReferenceNo='+fileNo, {data: reqData});
+    }
+    allRequests(){
+        return this.http.get(this.apiEndpoint + this.apiURL.all_requests);
+    }
+    getRequest(reqNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.get_file+'?requestNo='+reqNo)
+    }
+    getRequestDetails(reqNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.request_details+'?requestNo='+reqNo)
+    }
+    getRequestsForFile(fileNo:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.requests_for_file+'?fileReferenceNo='+fileNo)
     }
 }

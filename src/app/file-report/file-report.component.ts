@@ -2,8 +2,8 @@ import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import * as _ from 'lodash';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Table } from 'primeng/table';
-import { SIWMigrationService } from '../commons/migration.service';
-import { UtilityService } from '../commons/utilities.service';
+import { SIWMigrationService } from '../commons/services/migration.service';
+import { UtilityService } from '../commons/services/utilities.service';
 
 @Component({
   selector: 'file-report',

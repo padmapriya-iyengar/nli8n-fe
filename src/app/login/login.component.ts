@@ -1,7 +1,7 @@
 import { Component,OnInit } from '@angular/core';
-import { UtilityService } from '../commons/utilities.service';
+import { UtilityService } from '../commons/services/utilities.service';
 import { ConfirmationService } from 'primeng/api';
-import { AppService } from '../commons/app.service';
+import { AppService } from '../commons/services/app.service';
 import { DatePipe } from '@angular/common';
 
 @Component({

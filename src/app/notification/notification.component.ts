@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NOTIFICATION_DETAILS } from '../entities/notification-details';
 import * as _ from "lodash";
-import { UtilityService } from '../commons/utilities.service';
-import { AppService } from '../commons/app.service';
+import { UtilityService } from '../commons/services/utilities.service';
+import { AppService } from '../commons/services/app.service';
 
 @Component({
   selector: 'notification',

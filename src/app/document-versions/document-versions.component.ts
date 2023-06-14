@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as _ from "lodash";
 import { Table } from 'primeng/table';
-import { UtilityService } from '../commons/utilities.service';
+import { UtilityService } from '../commons/services/utilities.service';
 declare var jQuery: any;
 
 @Component({

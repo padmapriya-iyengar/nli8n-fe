@@ -2,9 +2,9 @@ import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import * as _ from 'lodash';
-import { UtilityService } from 'src/app/commons/utilities.service';
+import { UtilityService } from 'src/app/commons/services/utilities.service';
 import { ADVISORY_REQUEST } from 'src/app/entities/advisory-request';
-import { AppService } from '../commons/app.service';
+import { AppService } from '../commons/services/app.service';
 
 @Component({
   selector: 'advisory-request',
@@ -44,6 +44,8 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
   fileOrigin: any[] = [];
   showSpinner: boolean = false;
   reqIDAvailable: boolean = false;
+  fileReferenceNo: string = '';
+  fileReferences:any[] = [];
 
   ngOnInit(): void {
     this.formSubmitted = false;
@@ -57,6 +59,7 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
     this.getRequestUrgency();
     this.getAGItemID();
     this.getFileOrigins();
+    this.getFileReferences();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (changes['modalSubmit'].currentValue){
@@ -414,6 +417,24 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
     }
   })
   }
+  getFileReferences(){
+    this.showSpinner = true;
+    this.appService.getFileByFilter('type','ADVISORY').subscribe({next: (response) => {
+      let resp = Object.assign(response);
+      if(resp){
+        if(resp.length){
+          resp.forEach((item: any) => {
+            this.fileReferences.push({label: item.ReferenceNo, value: item.ReferenceNo})
+          })
+        }
+        this.showSpinner = false;
+      }
+    },
+    error: (error) => {
+      console.log('Request failed with error');
+      this.showSpinner = false;
+    }})
+  }
   onSubmit() {
     this.formSubmitted = true;
     if (this.reqForm && !this.reqForm.valid) {
@@ -428,9 +449,65 @@ export class AdvisoryRequestComponent implements OnInit,OnChanges {
       adv_req.Sensitivity = adv_req.Sensitivity == 'Yes' ? true : false
       adv_req.RequestCreatedBy = UtilityService.CURRENT_USER_NAME;
       adv_req.RequestCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
+
+      let descQueryParam = adv_req.RequestType+','+adv_req.RequestStatus+','+adv_req.LocalForeign+','+adv_req.RequestingAgencyType+','+
+        adv_req.RequestingAgencyName+','+adv_req.CountryForeignOrg+','+adv_req.ForeignAgencyType+","+adv_req.ForeignAgencyName+','+
+        adv_req.SecurityClassification+','+adv_req.RequestReceivedMode+','+adv_req.Complexity+','+adv_req.Urgency;
+      
+        this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
+          let masterDataMap: Map<string,string> = new Map();
+          let resp = Object.assign(response);
+          if(resp){
+            if(resp.length){
+              resp.forEach((item: any) => {
+                masterDataMap.set(item.code,item.value)
+              })
+            }
+            adv_req.RequestTypeDesc = masterDataMap.get(adv_req.RequestType)
+            adv_req.RequestStatusDesc = masterDataMap.get(adv_req.RequestStatus)
+            adv_req.LocalForeignDesc = masterDataMap.get(adv_req.LocalForeign)
+            adv_req.RequestingAgencyTypeDesc = masterDataMap.get(adv_req.RequestingAgencyType)
+            adv_req.RequestingAgencyNameDesc = masterDataMap.get(adv_req.RequestingAgencyName)
+            adv_req.CountryForeignOrgDesc = masterDataMap.get(adv_req.CountryForeignOrg)
+            adv_req.ForeignAgencyTypeDesc = masterDataMap.get(adv_req.ForeignAgencyType)
+            adv_req.ForeignAgencyNameDesc = masterDataMap.get(adv_req.ForeignAgencyName)
+            adv_req.SecurityClassificationDesc = masterDataMap.get(adv_req.SecurityClassification)
+            adv_req.RequestReceivedModeDesc = masterDataMap.get(adv_req.RequestReceivedMode)
+            adv_req.ComplexityDesc = masterDataMap.get(adv_req.Complexity)
+            adv_req.UrgencyDesc = masterDataMap.get(adv_req.Urgency)
+
+            this.appService.generateSequence('Advisory Request').subscribe({next: (response) => {
+                let resp = Object.assign(response)
+                if(resp){
+                    this.appService.createRequest(this.fileReferenceNo,adv_req).subscribe({next: (response) => {
+                      let createResp = Object.assign(response);
+                      if(createResp){
+                        let reqNo= createResp.RequestNo;
+                        this.utilService.alert('success','Success','Advisory Request '+reqNo+' created successfully', false)
+                        this.reqSubmit.emit({ status: 'SUCCESS' });
+                      }
+                    },
+                    error: (error) => {
+                      console.log('Request failed with error');
+                      this.showSpinner = false;
+                    }
+                  })
+                }
+              },
+              error: (error) => {
+                console.log('Request failed with error');
+                this.showSpinner = false;
+              }
+            })
+          }
+        }, 
+        error: (error) => {
+          console.log('Request failed with error');
+          this.showSpinner = false;
+        }
+      })
     }
-    //@ToDo
-    //Check error in adddays
-    //Service Integration and seq id count update
   }
 }
+//@ToDo
+//Check error in adddays

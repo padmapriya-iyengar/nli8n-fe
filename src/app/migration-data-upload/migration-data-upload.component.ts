@@ -3,8 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { SIWMigrationService } from '../commons/migration.service';
-import { UtilityService } from '../commons/utilities.service';
+import { SIWMigrationService } from '../commons/services/migration.service';
+import { UtilityService } from '../commons/services/utilities.service';
 
 @Component({
   selector: 'migration-data-upload',

@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UtilityService } from 'src/app/commons/utilities.service';
+import { UtilityService } from 'src/app/commons/services/utilities.service';
 import { MLA_FILE } from 'src/app/entities/mla-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
-import { AppService } from '../commons/app.service';
+import { AppService } from '../commons/services/app.service';
 
 @Component({
   selector: 'mla-file',
@@ -603,7 +603,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
               this.appService.createFile(mla_file).subscribe({next: (response) => {
                 let createResp = Object.assign(response);
                 if(createResp){
-                  let refNo= createResp[0].ReferenceNo;
+                  let refNo= createResp.ReferenceNo;
                   this.utilService.alert('success','Success','MLA File '+refNo+' created successfully', false)
                   this.reqSubmit.emit({ status: 'SUCCESS' });
                 }

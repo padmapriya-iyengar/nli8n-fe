@@ -1,8 +1,8 @@
 export class ADVISORY_FILE {
-    I_Division!: string;
-    I_Header1!: string;
-    I_Header2!: string;
-    I_Year!: string;
+    I_Division: string = '';
+    I_Header1: string = '';
+    I_Header2: string = '';
+    I_Year: string = '';
     I_SerialNo!: Number;
     FileTitle!: string;
     FileType!: string;

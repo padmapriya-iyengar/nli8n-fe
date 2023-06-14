@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import { SIWMigrationService } from '../commons/migration.service';
-import { UtilityService } from '../commons/utilities.service';
+import { SIWMigrationService } from '../commons/services/migration.service';
+import { UtilityService } from '../commons/services/utilities.service';
 
 @Component({
   selector: 'record-data',
