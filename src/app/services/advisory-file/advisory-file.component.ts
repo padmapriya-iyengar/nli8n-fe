@@ -5,7 +5,7 @@ import { ADVISORY_FILE } from 'src/app/entities/advisory-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { AppService } from '../commons/services/app.service';
+import { AppService } from '../../commons/services/app.service';
 
 @Component({
   selector: 'advisory-file',

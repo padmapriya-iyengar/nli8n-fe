@@ -5,7 +5,7 @@ import { UtilityService } from 'src/app/commons/services/utilities.service';
 import { MLA_FILE } from 'src/app/entities/mla-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
-import { AppService } from '../commons/services/app.service';
+import { AppService } from '../../commons/services/app.service';
 
 @Component({
   selector: 'mla-file',

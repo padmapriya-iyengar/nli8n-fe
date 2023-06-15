@@ -5,10 +5,10 @@ import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { AdvisoryFileComponent } from './advisory-file/advisory-file.component';
-import { AdvisoryRequestComponent } from './advisory-request/advisory-request.component';
-import { MlaFileComponent } from './mla-file/mla-file.component';
-import { MlaRequestComponent } from './mla-request/mla-request.component';
+import { AdvisoryFileComponent } from './services/advisory-file/advisory-file.component';
+import { AdvisoryRequestComponent } from './services/advisory-request/advisory-request.component';
+import { MlaFileComponent } from './services/mla-file/mla-file.component';
+import { MlaRequestComponent } from './services/mla-request/mla-request.component';
 import { DashboardComponent } from './commons/components/dashboard/dashboard.component';
 import { NotificationComponent } from './commons/components/notification/notification.component';
 import { UserProfileComponent } from './commons/components/user-profile/user-profile.component';

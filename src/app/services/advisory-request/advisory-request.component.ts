@@ -1,32 +1,40 @@
+import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import * as _ from 'lodash';
-import { MLA_REQUEST } from '../entities/mla-request';
-import { UtilityService } from '../commons/services/utilities.service';
-import { DatePipe } from '@angular/common';
-import { AppService } from '../commons/services/app.service';
+import { UtilityService } from 'src/app/commons/services/utilities.service';
+import { ADVISORY_REQUEST } from 'src/app/entities/advisory-request';
+import { AppService } from '../../commons/services/app.service';
 
 @Component({
-  selector: 'mla-request',
-  templateUrl: './mla-request.component.html',
-  styleUrls: ['./mla-request.component.scss']
+  selector: 'advisory-request',
+  templateUrl: './advisory-request.component.html',
+  styleUrls: ['./advisory-request.component.scss']
 })
-export class MlaRequestComponent implements OnInit, OnChanges {
-  todaysDate: Date = new Date();
+export class AdvisoryRequestComponent implements OnInit,OnChanges {
+  constructor(private utilService: UtilityService, private datePipe: DatePipe,
+    private appService: AppService) { }
+
+  advisoryRequest!: ADVISORY_REQUEST;
   readOnly: boolean = false;
-  mlaRequest!: MLA_REQUEST;
-  formSubmitted: boolean = false;
-  reqType: any[] = [];
-  reqCmplxts: any[] = [];
-  reqModes: any[] = [];
   secClassification: any[] = [];
+  reqType: any[] = [];
+  reqStatus: any[] = [];
+  reqModes: any[] = [];
+  reqCmplxts: any[] = [];
   reqUrgency: any[] = [];
   allDivisions: any[] = [];
   reqDivisions: any[] = [];
-  showForeignAgencyDetails: boolean = false;
-  reqStatus: any[] = [];
+  todaysDate: Date = new Date();
+  @ViewChild('advReqForm') reqForm!: NgForm;
+  formSubmitted: boolean = false;
+  @Input() modalSubmit: boolean = false;
+  @Output() reqSubmit = new EventEmitter<any>();
+  alertMessages: any[] = [];
   reqLocalAgencyTypes: any[] = [];
   reqLocalAgencyNames: any[] = [];
+  cmplxTimeMap: Map<string, number> = new Map<string, number>();
+  showForeignAgencyDetails: boolean = false;
   foreignAgencyNames: any[] = [];
   foreignAgencyTypes: any[] = [];
   foreignCountries: any[] = [];
@@ -39,17 +47,9 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   fileReferenceNo: string = '';
   fileReferences:any[] = [];
 
-  constructor(private utilService: UtilityService, private datePipe: DatePipe,
-    private appService: AppService) { }
-
-  @ViewChild('mlaRequestForm') reqForm!: NgForm;
-  @Output() reqSubmit = new EventEmitter<any>();
-  @Input() modalSubmit: boolean = false;
-  cmplxTimeMap: Map<string, number> = new Map<string, number>();
-
   ngOnInit(): void {
     this.formSubmitted = false;
-    this.mlaRequest = new MLA_REQUEST();
+    this.advisoryRequest = new ADVISORY_REQUEST();
     this.setSerialNo();
     this.getSecurityClassifications();
     this.getRequestStatus();
@@ -57,24 +57,23 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     this.getRequestTypes();
     this.getRequestModes();
     this.getRequestUrgency();
-    this.getLocalAgencyTypes();
     this.getAGItemID();
     this.getFileOrigins();
     this.getFileReferences();
   }
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['modalSubmit'].currentValue) {
+    if (changes['modalSubmit'].currentValue){
       this.onSubmit()
     }
   }
   setSerialNo(){
     this.showSpinner = true;
-    this.appService.getSequence('MLA Request').subscribe({next: (response) => {
+    this.appService.getSequence('Advisory Request').subscribe({next: (response) => {
       let resp = Object.assign(response)
       let prefix = resp[0].prefix?resp[0].prefix:''
       let count = Number(resp[0].seq_count)+1
       let suffix = resp[0].suffix?resp[0].suffix:''
-      this.mlaRequest.RequestNo = prefix + count + suffix;
+      this.advisoryRequest.RequestNo = prefix + count + suffix;
       this.reqIDAvailable = true;
     },
     error: (error) => {
@@ -94,7 +93,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
             this.secClassification.push({ label: item.value, value: item.code })
           })
         }
-        this.mlaRequest.SecurityClassification = 'SCLASS_S';
+        this.advisoryRequest.SecurityClassification = 'SCLASS_S';
         this.showSpinner = false;
       }
     },
@@ -115,7 +114,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
             this.reqStatus.push({ label: item.value, value: item.code });
           })
         }
-        this.mlaRequest.RequestStatus = 'RSTAT_O'
+        this.advisoryRequest.RequestStatus = 'RSTAT_O'
         this.showSpinner = false;
       }
     },
@@ -140,7 +139,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
         this.showSpinner = false;
       }
     },
-    error: (error) => {
+    error:(error) => {
       console.log('Request failed with error');
       this.showSpinner = false;
     }
@@ -157,6 +156,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
             this.reqType.push({ label: item.value, value: item.code });
           })
         }
+        this.advisoryRequest.RequestType = 'RTYPE_ADV'
         this.showSpinner = false;
       }
     },
@@ -186,7 +186,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     }
   })
   }
-  getRequestUrgency() {
+  getRequestUrgency(){
     this.reqUrgency = [];
     this.showSpinner = true;
     this.appService.getMasterDataByType('REQUEST_URGENCY').subscribe({next: (response) => {
@@ -197,7 +197,50 @@ export class MlaRequestComponent implements OnInit, OnChanges {
             this.reqUrgency.push({ label: item.value, value: item.code });
           })
         }
-        this.mlaRequest.Urgency = 'RURGENT_NU'
+        this.advisoryRequest.Urgency = 'RURGENT_NU'
+        this.showSpinner = false;
+      }
+    },
+    error: (error) => {
+      console.log('Request failed with error');
+      this.showSpinner = false;
+    }
+  })
+  }
+  getForeignCountries() {
+    this.foreignCountries = [];
+    this.showSpinner = true;
+    this.appService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
+      let resp = Object.assign(response);
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            this.foreignCountries.push({ label: item.value, value: item.code })
+            this.foreignAgencyCountryCodeIDMap.set(item.code, item.code);
+          })
+        }
+        this.showSpinner = false;
+      }
+    },
+    error: (error) => {
+      console.log('Request failed with error');
+      this.showSpinner = false;
+    }
+  })
+  }
+  getForeignAgencyTypes(countryCodeID: any) {
+    this.foreignAgencyTypes = [];
+    this.foreignAgencyNames = [];
+    this.showSpinner = true;
+    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
+      let resp = Object.assign(response);
+      if(resp){
+        if(resp.length){
+          resp.forEach((item:any) => {
+            this.foreignAgencyTypes.push({ label: item.value, value: item.code })
+            this.foreignAgencyTypeCodeIDMap.set(item.code, item.code);
+          })
+        }
         this.showSpinner = false;
       }
     },
@@ -239,7 +282,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
             this.fileOrigin.push({ label: item.value, value: item.code })
           })
         }
-        this.mlaRequest.LocalForeign = 'ADDR_L';
+        this.advisoryRequest.LocalForeign = 'ADDR_L';
         this.getLocalAgencyTypes();
         this.showSpinner = false;
       }
@@ -309,18 +352,18 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     }
   })
   }
-  onComplexityChange(data: any) {
+  onComplexityChange(data: any){
     let days: any;
-    if (this.mlaRequest.ReceivedDate) {
+    if (this.advisoryRequest.ReceivedDate){
       days = this.cmplxTimeMap.get(data.value);
-      this.utilService.addDays(this.mlaRequest.ReceivedDate, days, this.mlaRequest, 'RequestDueDate');
+      this.utilService.addDays(this.advisoryRequest.ReceivedDate, days, this.advisoryRequest, 'RequestDueDate');
     }
   }
-  onReceivedDateChange(data: any) {
+  onReceivedDateChange(data: any){
     let days: any;
-    if (!this.utilService.isEmpty(this.mlaRequest.Complexity)) {
-      days = this.cmplxTimeMap.get(this.mlaRequest.Complexity);
-      this.utilService.addDays(data, days, this.mlaRequest, 'RequestDueDate');
+    if (!this.utilService.isEmpty(this.advisoryRequest.Complexity)) {
+      days = this.cmplxTimeMap.get(this.advisoryRequest.Complexity);
+      this.utilService.addDays(data, days, this.advisoryRequest, 'RequestDueDate');
     }
   }
   onLocalForeignChange(data: any) {
@@ -331,51 +374,8 @@ export class MlaRequestComponent implements OnInit, OnChanges {
       this.showForeignAgencyDetails = false;
     }
   }
-  onForeignAgencyCountryChange(data: any) {
+  onForeignAgencyCountryChange(data: any){
     this.getForeignAgencyTypes(this.foreignAgencyCountryCodeIDMap.get(data.value));
-  }
-  getForeignCountries() {
-    this.foreignCountries = [];
-    this.showSpinner = true;
-    this.appService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
-      let resp = Object.assign(response);
-      if(resp){
-        if(resp.length){
-          resp.forEach((item:any) => {
-            this.foreignCountries.push({ label: item.value, value: item.code })
-            this.foreignAgencyCountryCodeIDMap.set(item.code, item.code);
-          })
-        }
-        this.showSpinner = false;
-      }
-    },
-    error: (error) => {
-      console.log('Request failed with error');
-      this.showSpinner = false;
-    }
-  })
-  }
-  getForeignAgencyTypes(countryCodeID: any) {
-    this.foreignAgencyTypes = [];
-    this.foreignAgencyNames = [];
-    this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
-      let resp = Object.assign(response);
-      if(resp){
-        if(resp.length){
-          resp.forEach((item:any) => {
-            this.foreignAgencyTypes.push({ label: item.value, value: item.code })
-            this.foreignAgencyTypeCodeIDMap.set(item.code, item.code);
-          })
-        }
-        this.showSpinner = false;
-      }
-    },
-    error: (error) => {
-      console.log('Request failed with error');
-      this.showSpinner = false;
-    }
-  })
   }
   onLocalAgencyTypeChange(data: any) {
     this.reqLocalAgencyNames = [];
@@ -419,7 +419,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   }
   getFileReferences(){
     this.showSpinner = true;
-    this.appService.getFileByFilter('type','MLA').subscribe({next: (response) => {
+    this.appService.getFileByFilter('type','ADVISORY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -441,18 +441,18 @@ export class MlaRequestComponent implements OnInit, OnChanges {
       this.reqSubmit.emit({ status: 'FAILURE' });
       this.utilService.alert('error', 'Error', 'Please fill all mandatory details!!', false);
     } else {
-      let mla_req: any = _.cloneDeep(this.mlaRequest);
-      mla_req.ReceivedDate = mla_req.ReceivedDate ? this.datePipe.transform(mla_req.ReceivedDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
-      mla_req.RequestDueDate = mla_req.RequestDueDate ? this.datePipe.transform(mla_req.RequestDueDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
-      mla_req.OriginalDueDate = mla_req.RequestDueDate;
-      mla_req.ExpResponseDate = mla_req.ExpResponseDate ? this.datePipe.transform(mla_req.ExpResponseDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
-      mla_req.Sensitivity = mla_req.Sensitivity == 'Yes' ? true : false
-      mla_req.RequestCreatedBy = UtilityService.CURRENT_USER_NAME;
-      mla_req.RequestCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
+      let adv_req: any = _.cloneDeep(this.advisoryRequest);
+      adv_req.ReceivedDate = adv_req.ReceivedDate ? this.datePipe.transform(adv_req.ReceivedDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
+      adv_req.RequestDueDate = adv_req.RequestDueDate ? this.datePipe.transform(adv_req.RequestDueDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
+      adv_req.OriginalDueDate = adv_req.RequestDueDate;
+      adv_req.ExpResponseDate = adv_req.ExpResponseDate ? this.datePipe.transform(adv_req.ExpResponseDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
+      adv_req.Sensitivity = adv_req.Sensitivity == 'Yes' ? true : false
+      adv_req.RequestCreatedBy = UtilityService.CURRENT_USER_NAME;
+      adv_req.RequestCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
 
-      let descQueryParam = mla_req.RequestType+','+mla_req.RequestStatus+','+mla_req.LocalForeign+','+mla_req.RequestingAgencyType+','+
-        mla_req.RequestingAgencyName+','+mla_req.CountryForeignOrg+','+mla_req.ForeignAgencyType+","+mla_req.ForeignAgencyName+','+
-        mla_req.SecurityClassification+','+mla_req.RequestReceivedMode+','+mla_req.Complexity+','+mla_req.Urgency;
+      let descQueryParam = adv_req.RequestType+','+adv_req.RequestStatus+','+adv_req.LocalForeign+','+adv_req.RequestingAgencyType+','+
+        adv_req.RequestingAgencyName+','+adv_req.CountryForeignOrg+','+adv_req.ForeignAgencyType+","+adv_req.ForeignAgencyName+','+
+        adv_req.SecurityClassification+','+adv_req.RequestReceivedMode+','+adv_req.Complexity+','+adv_req.Urgency;
       
         this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
           let masterDataMap: Map<string,string> = new Map();
@@ -463,27 +463,27 @@ export class MlaRequestComponent implements OnInit, OnChanges {
                 masterDataMap.set(item.code,item.value)
               })
             }
-            mla_req.RequestTypeDesc = masterDataMap.get(mla_req.RequestType)
-            mla_req.RequestStatusDesc = masterDataMap.get(mla_req.RequestStatus)
-            mla_req.LocalForeignDesc = masterDataMap.get(mla_req.LocalForeign)
-            mla_req.RequestingAgencyTypeDesc = masterDataMap.get(mla_req.RequestingAgencyType)
-            mla_req.RequestingAgencyNameDesc = masterDataMap.get(mla_req.RequestingAgencyName)
-            mla_req.CountryForeignOrgDesc = masterDataMap.get(mla_req.CountryForeignOrg)
-            mla_req.ForeignAgencyTypeDesc = masterDataMap.get(mla_req.ForeignAgencyType)
-            mla_req.ForeignAgencyNameDesc = masterDataMap.get(mla_req.ForeignAgencyName)
-            mla_req.SecurityClassificationDesc = masterDataMap.get(mla_req.SecurityClassification)
-            mla_req.RequestReceivedModeDesc = masterDataMap.get(mla_req.RequestReceivedMode)
-            mla_req.ComplexityDesc = masterDataMap.get(mla_req.Complexity)
-            mla_req.UrgencyDesc = masterDataMap.get(mla_req.Urgency)
+            adv_req.RequestTypeDesc = masterDataMap.get(adv_req.RequestType)
+            adv_req.RequestStatusDesc = masterDataMap.get(adv_req.RequestStatus)
+            adv_req.LocalForeignDesc = masterDataMap.get(adv_req.LocalForeign)
+            adv_req.RequestingAgencyTypeDesc = masterDataMap.get(adv_req.RequestingAgencyType)
+            adv_req.RequestingAgencyNameDesc = masterDataMap.get(adv_req.RequestingAgencyName)
+            adv_req.CountryForeignOrgDesc = masterDataMap.get(adv_req.CountryForeignOrg)
+            adv_req.ForeignAgencyTypeDesc = masterDataMap.get(adv_req.ForeignAgencyType)
+            adv_req.ForeignAgencyNameDesc = masterDataMap.get(adv_req.ForeignAgencyName)
+            adv_req.SecurityClassificationDesc = masterDataMap.get(adv_req.SecurityClassification)
+            adv_req.RequestReceivedModeDesc = masterDataMap.get(adv_req.RequestReceivedMode)
+            adv_req.ComplexityDesc = masterDataMap.get(adv_req.Complexity)
+            adv_req.UrgencyDesc = masterDataMap.get(adv_req.Urgency)
 
-            this.appService.generateSequence('MLA Request').subscribe({next: (response) => {
+            this.appService.generateSequence('Advisory Request').subscribe({next: (response) => {
                 let resp = Object.assign(response)
                 if(resp){
-                    this.appService.createRequest(this.fileReferenceNo,mla_req).subscribe({next: (response) => {
+                    this.appService.createRequest(this.fileReferenceNo,adv_req).subscribe({next: (response) => {
                       let createResp = Object.assign(response);
                       if(createResp){
                         let reqNo= createResp.RequestNo;
-                        this.utilService.alert('success','Success','MLA Request '+reqNo+' created successfully', false)
+                        this.utilService.alert('success','Success','Advisory Request '+reqNo+' created successfully', false)
                         this.reqSubmit.emit({ status: 'SUCCESS' });
                       }
                     },
