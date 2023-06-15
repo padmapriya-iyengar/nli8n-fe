@@ -1,16 +1,16 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { DocumentUploadComponent } from './document-upload/document-upload.component';
-import { LoginComponent } from './login/login.component';
-import { MigrationDashboardComponent } from './migration-dashboard/migration-dashboard.component';
+import { DashboardComponent } from './commons/components/dashboard/dashboard.component';
+import { DocumentUploadComponent } from './commons/components/document-upload/document-upload.component';
+import { LoginComponent } from './commons/components/login/login.component';
+import { MigrationDashboardComponent } from './migration/migration-dashboard/migration-dashboard.component';
 
 const routes: Routes = [
   { path: "dashboard", component: DashboardComponent },
   { path: "docUpload", component: DocumentUploadComponent },
   { path: "login", component: LoginComponent },
   { path: "migration", 
-    loadChildren: () => import('./migration.module').then(mod => mod.MigrationModule)
+    loadChildren: () => import('./migration/migration.module').then(mod => mod.MigrationModule)
   },
   { path: '', redirectTo: "login", pathMatch: 'full' }
 ];

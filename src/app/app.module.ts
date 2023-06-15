@@ -9,9 +9,9 @@ import { AdvisoryFileComponent } from './advisory-file/advisory-file.component';
 import { AdvisoryRequestComponent } from './advisory-request/advisory-request.component';
 import { MlaFileComponent } from './mla-file/mla-file.component';
 import { MlaRequestComponent } from './mla-request/mla-request.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { NotificationComponent } from './notification/notification.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
+import { DashboardComponent } from './commons/components/dashboard/dashboard.component';
+import { NotificationComponent } from './commons/components/notification/notification.component';
+import { UserProfileComponent } from './commons/components/user-profile/user-profile.component';
 
 import { PrimeNGModule } from './commons/primeng.module'
 import { UtilityService } from './commons/services/utilities.service';
@@ -20,13 +20,13 @@ import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ConfirmationService, MessageService } from 'primeng/api';
-import { LoginComponent } from './login/login.component';
-import { DocumentUploadComponent } from './document-upload/document-upload.component';
-import { DocumentDetailsComponent } from './document-details/document-details.component';
-import { DocumentVersionsComponent } from './document-versions/document-versions.component';
+import { LoginComponent } from './commons/components/login/login.component';
+import { DocumentUploadComponent } from './commons/components/document-upload/document-upload.component';
+import { DocumentDetailsComponent } from './commons/components/document-details/document-details.component';
+import { DocumentVersionsComponent } from './commons/components/document-versions/document-versions.component';
 import { AppService } from './commons/services/app.service';
 import { FileTitleDirective } from './commons/directives/file-title.directive';
-import { MigrationDashboardComponent } from './migration-dashboard/migration-dashboard.component';
+import { MigrationDashboardComponent } from './migration/migration-dashboard/migration-dashboard.component';
 
 @NgModule({
   declarations: [
