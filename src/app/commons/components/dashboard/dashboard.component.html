@@ -90,73 +90,146 @@
             <div class="row" style="padding-left: 12px !important; height: 735px !important;">
                 <div class="xsm-padding xsm-pm-border lg-card-height pm-lt-bk" style="width: 99.5%;">
                     <p-progressSpinner class="dashboard-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
-                    <p-table *ngIf="!showSpinner" class="custom-dashboard-table" #tasksDT [value]="filteredTasks" 
-                        [(selection)]="selectedTask" [columns]="dashboardTaskCols" [filterDelay]="5" 
-                        [scrollable]="true" scrollHeight="675px" scrollDirection="both" (onRowSelect)="onTaskSelected($event)"
-                            (onRowUnselect)="onTaskUnselected($event)" sortField="DELIVERY_DATE" [sortOrder]="-1"
-                            [globalFilterFields]="['FILE_REF_NO','REQUEST_ID','TASK_TITLE','TASK_ACTION','TASK_STATUS','TASK_FROM']">
-                        <ng-template pTemplate="caption">
-                            <div class="table-header" style="text-align: left;">
-                                <span style="width: 30%;" class="p-input-icon-right">
-                                    <input #myTasksSearch style="width: 100%; height: 30px; font-size: 12px !important;"
-                                        class="xsm-pm-border sm-font" pInputText type="text"
-                                        (input)="tasksDT.filterGlobal(myTasksSearch.value, 'contains')" placeholder="Search" />
-                                </span>
-                                <span style="width: 30%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
-                                    Total Records: {{filteredTasks.length}}
-                                </span>
-                                <span [ngStyle]="{'width': '58%'}"
-                                    style="padding-bottom: 10px !important; cursor: pointer;" class="p-input-icon-right">
-                                    <i class="fa fa-refresh" style="right: 3rem;" tooltipStyleClass="custom-tooltip" pTooltip="Click to refresh"
-                                        (click)="refreshTasks()" tooltipPosition="left"></i>
-                                </span>
-                            </div>
-                        </ng-template>
-                        <ng-template pTemplate="header" let-columns>
-                            <tr style="width:{{totalTableHeaderWidth}}px">
-                                <th style="width: 25px !important;">
-                                    <p><i class="fa fa-exclamation"></i></p>
-                                </th>
-                                <th style="width: 25px !important;">
-                                </th>
-                                <th style="width: 25px !important;">
-                                </th>
-                                <th style="width:{{col.spanWidthPx}}px" *ngFor="let col of columns" [pSortableColumn]="col.field">
-                                    {{col.label}}
-                                    <p-sortIcon [field]="col.field"></p-sortIcon>
-                                </th>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
-                            <tr class="pointer" [ngStyle]="{'color': rowData['SLA_BREACH']=='Y' ? '#f00a0a' : null }" style="width:{{totalTableHeaderWidth}}px">
-                                <td class="alarm-notf" style="width: 25px !important;">
-                                    <p style="width: 25px !important; font-size: 14px; font-weight: bolder; padding-top: 15px !important;">
-                                        {{rowData['URGENCYMARK']}}
-                                    </p>
-                                </td>
-                                <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
-                                    <p><i *ngIf="rowData['LOCKED'] == 'Y'" class="fa fa-lock"></i></p>
-                                </td>
-                                <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
-                                    <p><i class="{{rowData.icon}}"></i></p>
-                                </td>
-                                <ng-template ngFor let-col [ngForOf]="columns">
-                                    <td (click)="onTaskSelect(rowData)" style="width:{{col.spanWidthPx}}px" tooltipStyleClass="custom-tooltip"
-                                        tooltipPosition="top"
-                                        pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
-                                        {{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ?
-                                        (rowData[col.field] | date:'dd/MM/yyyy') :
-                                        rowData[col.field] }}
-                                    </td>
+                    <p-tabView class="dashboard-tab">
+                        <p-tabPanel header="Files">
+                            <p-table *ngIf="!showSpinner" class="custom-dashboard-table" #fileTasksDT [value]="fileTasks" 
+                            [columns]="fileTaskCols" [filterDelay]="5" [scrollable]="true" scrollHeight="630px" 
+                            scrollDirection="both" (onRowSelect)="onFileTaskSelected($event)"
+                            (onRowUnselect)="onFileTaskUnselected($event)" sortField="DELIVERY_DATE" [sortOrder]="-1"
+                            [globalFilterFields]="['FILE_REF_NO','TASK_TITLE','FILE_TITLE','TASK_STATUS','TASK_FROM','FILE_TYPE']">
+                                <ng-template pTemplate="caption">
+                                    <div class="table-header" style="text-align: left;">
+                                        <span style="width: 30%;" class="p-input-icon-right">
+                                            <input #myFileTasksSearch style="width: 100%; height: 30px; font-size: 12px !important;"
+                                                class="xsm-pm-border sm-font" pInputText type="text"
+                                                (input)="fileTasksDT.filterGlobal(myFileTasksSearch.value, 'contains')" placeholder="Search" />
+                                        </span>
+                                        <span style="width: 30%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                                            Total Records: {{fileTasks.length}}
+                                        </span>
+                                        <span [ngStyle]="{'width': '60%'}"
+                                            style="padding-bottom: 10px !important; cursor: pointer;" class="p-input-icon-right">
+                                            <i class="fa fa-refresh" style="right: 3rem;" tooltipStyleClass="custom-tooltip" pTooltip="Click to refresh"
+                                                (click)="refreshFileTasks()" tooltipPosition="left"></i>
+                                        </span>
+                                    </div>
                                 </ng-template>
-                            </tr>
-                        </ng-template>
-                        <ng-template pTemplate="emptymessage">
-                            <tr style="width:{{totalTableHeaderWidth}}px">
-                                <td class="custom-info-text" style="text-align: center !important; font-size: 14px !important;">No tasks available!!</td>
-                            </tr>
-                        </ng-template>
-                    </p-table>
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr style="width:{{totalTableHeaderWidth}}px">
+                                        <th style="width: 25px !important;">
+                                            <p><i class="fa fa-exclamation"></i></p>
+                                        </th>
+                                        <th style="width: 25px !important;">
+                                        </th>
+                                        <th style="width: 25px !important;">
+                                        </th>
+                                        <th style="width:{{col.spanWidthPx}}px" *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                            {{col.label}}
+                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                    <tr class="pointer" [ngStyle]="{'color': rowData['SLA_BREACH']=='Y' ? '#f00a0a' : null }" style="width:{{totalTableHeaderWidth}}px">
+                                        <td class="alarm-notf" style="width: 25px !important;">
+                                            <p style="width: 25px !important; font-size: 14px; font-weight: bolder; padding-top: 15px !important;">
+                                                {{rowData['URGENCYMARK']}}
+                                            </p>
+                                        </td>
+                                        <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
+                                            <p><i *ngIf="rowData['LOCKED'] == 'Y'" class="fa fa-lock"></i></p>
+                                        </td>
+                                        <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
+                                            <p><i class="{{rowData.icon}}"></i></p>
+                                        </td>
+                                        <ng-template ngFor let-col [ngForOf]="columns">
+                                            <td (click)="onFileTaskSelect(rowData)" style="width:{{col.spanWidthPx}}px" tooltipStyleClass="custom-tooltip"
+                                                tooltipPosition="top"
+                                                pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                                {{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ?
+                                                (rowData[col.field] | date:'dd/MM/yyyy') :
+                                                rowData[col.field] }}
+                                            </td>
+                                        </ng-template>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="11" class="custom-info-text" style="text-align: center !important; font-size: 14px !important;">No files available!!</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-tabPanel>
+                        <p-tabPanel header="Requests">
+                            <p-table *ngIf="!showSpinner" class="custom-dashboard-table" #reqTasksDT [value]="requestTasks" 
+                            [columns]="requestTaskCols" [filterDelay]="5" [scrollable]="true" scrollHeight="630px" 
+                            scrollDirection="both" (onRowSelect)="onRequestTaskSelected($event)"
+                            (onRowUnselect)="onRequestTaskUnselected($event)" sortField="DELIVERY_DATE" [sortOrder]="-1"
+                            [globalFilterFields]="['FILE_REF_NO','TASK_TITLE','FILE_TITLE','TASK_STATUS','TASK_FROM','FILE_TYPE']">
+                                <ng-template pTemplate="caption">
+                                    <div class="table-header" style="text-align: left;">
+                                        <span style="width: 30%;" class="p-input-icon-right">
+                                            <input #myReqTasksSearch style="width: 100%; height: 30px; font-size: 12px !important;"
+                                                class="xsm-pm-border sm-font" pInputText type="text"
+                                                (input)="reqTasksDT.filterGlobal(myReqTasksSearch.value, 'contains')" placeholder="Search" />
+                                        </span>
+                                        <span style="width: 30%; padding-left: 40px;font-size: 14px !important; font-weight: bold !important;">
+                                            Total Records: {{requestTasks.length}}
+                                        </span>
+                                        <span [ngStyle]="{'width': '60%'}"
+                                            style="padding-bottom: 10px !important; cursor: pointer;" class="p-input-icon-right">
+                                            <i class="fa fa-refresh" style="right: 3rem;" tooltipStyleClass="custom-tooltip" pTooltip="Click to refresh"
+                                                (click)="refreshRequestTasks()" tooltipPosition="left"></i>
+                                        </span>
+                                    </div>
+                                </ng-template>
+                                <ng-template pTemplate="header" let-columns>
+                                    <tr style="width:{{totalTableHeaderWidth}}px">
+                                        <th style="width: 25px !important;">
+                                            <p><i class="fa fa-exclamation"></i></p>
+                                        </th>
+                                        <th style="width: 25px !important;">
+                                        </th>
+                                        <th style="width: 25px !important;">
+                                        </th>
+                                        <th style="width:{{col.spanWidthPx}}px" *ngFor="let col of columns" [pSortableColumn]="col.field">
+                                            {{col.label}}
+                                            <p-sortIcon [field]="col.field"></p-sortIcon>
+                                        </th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns" let-i="rowIndex">
+                                    <tr class="pointer" [ngStyle]="{'color': rowData['SLA_BREACH']=='Y' ? '#f00a0a' : null }" style="width:{{totalTableHeaderWidth}}px">
+                                        <td class="alarm-notf" style="width: 25px !important;">
+                                            <p style="width: 25px !important; font-size: 14px; font-weight: bolder; padding-top: 15px !important;">
+                                                {{rowData['URGENCYMARK']}}
+                                            </p>
+                                        </td>
+                                        <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
+                                            <p><i *ngIf="rowData['LOCKED'] == 'Y'" class="fa fa-lock"></i></p>
+                                        </td>
+                                        <td style="width: 25px !important; padding-top: 15px !important; color: #000 !important;">
+                                            <p><i class="{{rowData.icon}}"></i></p>
+                                        </td>
+                                        <ng-template ngFor let-col [ngForOf]="columns">
+                                            <td (click)="onRequestTaskSelect(rowData)" style="width:{{col.spanWidthPx}}px" tooltipStyleClass="custom-tooltip"
+                                                tooltipPosition="top"
+                                                pTooltip="{{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ? (rowData[col.field] | date:'dd/MM/yyyy') : rowData[col.field] }}">
+                                                {{ col.type == 'datetime' ? (rowData[col.field] | date:'dd/MM/yyyy h:mm:ss') : col.type == 'date' ?
+                                                (rowData[col.field] | date:'dd/MM/yyyy') :
+                                                rowData[col.field] }}
+                                            </td>
+                                        </ng-template>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage">
+                                    <tr>
+                                        <td colspan="13" class="custom-info-text" style="text-align: center !important; font-size: 14px !important;">No requests available!!</td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-tabPanel>
+                    </p-tabView>
                 </div>
             </div>
         </div>
@@ -194,54 +267,3 @@
         </div>
     </div>
 </ng-template>
-<ng-template #tasksColumnFilterModal>
-    <div class="app-card">
-        <div class="modal-action-bar right-align">
-            <div class="row">
-                <div class="col-lg-10 modal-header">
-                    <p class="custom-modal-heading">Column Chooser</p>
-                </div>
-                <div class="col-lg-2 modal-header">
-                    <button type="button" class="btn-close close" aria-label="Close" (click)="hideModal()"></button>
-                </div>
-            </div>
-        </div>
-        <div class="modal-content">
-            <p-scrollPanel [style]="{width: '100%', height: '250px'}" class="custom-scroll sm-padding">
-                <div class="row sm-padding">
-                    <ng-template ngFor let-aColumn [ngForOf]="allColumns" let-i="index">
-                        <div class="col-lg-6" *ngIf="aColumn.display">
-                            <div class="row">
-                                <div class="col-lg-1">
-                                    <div class="p-field-radiobutton">
-                                        <p-checkbox id="allColumn_{{i}}" class="custom-checkbox" [binary]="true"
-                                            (onChange)="onOtherColumnSelect($event, aColumn)" name="allColumnName_{{i}}"
-                                            #allColumn="ngModel" [(ngModel)]="aColumn.isSelected"></p-checkbox>
-                                    </div>
-                                </div>
-                                <div class="col-lg-10" style="padding-top: 3px;">
-                                    <div class="no-padding form-field-header">
-                                        {{aColumn.label}}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </ng-template>
-                </div>
-            </p-scrollPanel>
-        </div>
-        <div class="modal-footer">
-            <p-button label="Ok" tooltipStyleClass="custom-tooltip" pTooltip="Click to add columns"
-                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="addNewColumns()"></p-button>
-            <p-button label="Cancel" tooltipStyleClass="custom-tooltip" pTooltip="Click to cancel"
-                styleClass="p-button-sm" class="custom-tertiary-btn" (click)="hideModal()"></p-button>
-        </div>
-    </div>
-</ng-template>
-<p-toast position="top-right"></p-toast>
-<p-confirmDialog #cd [style]="{width: '35vw'}" [baseZIndex]="10000" class="custom-confirmation">
-    <ng-template pTemplate="footer">
-        <button type="button" pButton icon="pi pi-check" label="Ok" (click)="cd.accept()"></button>
-        <button type="button" pButton icon="pi pi-times" label="Cancel" (click)="cd.reject()"></button>
-    </ng-template>
-</p-confirmDialog>

@@ -26,6 +26,7 @@ export class UtilityService{
     public rowDetails: EventEmitter<any> = new EventEmitter();
     public pageNo: EventEmitter<any> = new EventEmitter();
     public fileSource: EventEmitter<any> = new EventEmitter();
+    public userNotfs: EventEmitter<any> = new EventEmitter();
     public BREADCRUMB: any[] = [];
 
     applyLikeFilter(array: any[] , reqKey: any, reqValue: string): any[]{
@@ -44,6 +45,9 @@ export class UtilityService{
     }
     getUserName(userDetails: any) {
         this.cUserName.next(userDetails);
+    }
+    getUserNotfs(allNotfs:any){
+        this.userNotfs.next(allNotfs)
     }
     public saveToStorage(key: any, value: any) {
         value = JSON.stringify(value);

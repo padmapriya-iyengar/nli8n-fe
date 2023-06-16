@@ -35,8 +35,7 @@ export class AppComponent  implements OnInit{
   newTabRoutes: any[] = [];
   showSpinner: boolean = false;
   allNotifications: NOTIFICATION_DETAILS[] = [];
-  notfCount:any;
-  title = 'InterviewDemo';
+  notfCount:any = 0;
 
   ngOnInit(): void {   
     this.newTabRoutes.push('migration','docUpload')
@@ -69,7 +68,9 @@ export class AppComponent  implements OnInit{
     this.utilService.cUserName.subscribe((userDetails:any) => {
       this.currentUserName = userDetails.UserName;
       this.currentUserDN = userDetails.UserDN;
-      this.getAllNotifications(this.currentUserName)
+    })
+    this.utilService.userNotfs.subscribe((allNotifications:any) => {
+      this.getAllNotifications(allNotifications,this.currentUserName)
     })
     if (this.utilService.readFromStorage('IS_LOGGEDIN') != true) {
       this.goToURL('');
@@ -135,49 +136,43 @@ export class AppComponent  implements OnInit{
       }
     })
   }
-  getAllNotifications(username:string){
+  getAllNotifications(allNotfs:any[], username:string){
     this.allNotifications = [];
-    this.appService.getUserNotifications(username).subscribe({ next: (response) => {
-      let resp = Object.assign(response)
-      if(resp){
-        if(resp.length){
-          resp.forEach((item:any) => {
-            if (item.status == 'A'){
-              this.allNotifications.push({
-                ItemId: item.id,
-                FileReferenceNo: item.file_reference_no,
-                RequestNo: item.request_no,
-                Actor: item.actor,
-                MessageCode: item.message_code,
-                MessageType: item.message_type,
-                Responder: item.responder,
-                Message: item.message,
-                Status: item.status,
-                CreatedDate: this.datePipe.transform(item.created_on.split('T')[0], 'MMM d, y'),
-                ModifiedDate: item.modified_on,
-                MessageReadStatus: item.message_read_status,
-                UserGroup: item.user_group,
-                CreatedTime: item.created_on.split('T')[1].substring(0, 5),
-                ShowRead: item.message_read_status == 'NotRead' ? true : false,
-                ShowDelete: item.status == 'A' ? true : false,
-                ShowNotf: item.status == 'A' ? true : false,
-                NotfHeader: _.capitalize(item.actor ? item.actor.substring(0, 1) : item.responder.substring(0, 1)),
-                StyleClass: item.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
-                RequestState: item.request_state,
-                SourceItemId: item.source_item_id,
-                LayoutID: '',
-                TaskEntityInstanceID: ''
-              })
-            }
-          })
-        }
-        this.notfCount = this.allNotifications.length;
+    let resp = allNotfs.filter((ntf) => ntf.responder === username)
+    if(resp){
+      if(resp.length){
+        resp.forEach((item:any) => {
+          if (item.status == 'A'){
+            this.allNotifications.push({
+              ItemId: item.id,
+              FileReferenceNo: item.file_reference_no,
+              RequestNo: item.request_no,
+              Actor: item.actor,
+              MessageCode: item.message_code,
+              MessageType: item.message_type,
+              Responder: item.responder,
+              Message: item.message,
+              Status: item.status,
+              CreatedDate: this.datePipe.transform(item.created_on.split('T')[0], 'MMM d, y'),
+              ModifiedDate: item.modified_on,
+              MessageReadStatus: item.message_read_status,
+              UserGroup: item.user_group,
+              CreatedTime: item.created_on.split('T')[1].substring(0, 5),
+              ShowRead: item.message_read_status == 'NotRead' ? true : false,
+              ShowDelete: item.status == 'A' ? true : false,
+              ShowNotf: item.status == 'A' ? true : false,
+              NotfHeader: _.capitalize(item.actor ? item.actor.substring(0, 1) : item.responder.substring(0, 1)),
+              StyleClass: item.message_read_status == 'Read' ? 'notf-row' : 'read-notf-row',
+              RequestState: item.request_state,
+              SourceItemId: item.source_item_id,
+              LayoutID: '',
+              TaskEntityInstanceID: ''
+            })
+          }
+        })
       }
-    },
-    error: (error) => {
-      console.error('Request failed with error')
-      this.showSpinner = false;
-    }})
+      this.notfCount = this.allNotifications.length;
+    }
   }
   openNotfModal(template: TemplateRef<any>, cssClass: string) {
     this.modalRef = this.modalService.show(template, {
@@ -187,7 +182,6 @@ export class AppComponent  implements OnInit{
     });
   }
   hideNotfModal(){
-    this.getAllNotifications(this.currentUserName);
     this.modalRef.hide();
   }
 }

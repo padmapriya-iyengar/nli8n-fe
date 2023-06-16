@@ -27,6 +27,7 @@ import { DocumentVersionsComponent } from './commons/components/document-version
 import { AppService } from './commons/services/app.service';
 import { FileTitleDirective } from './commons/directives/file-title.directive';
 import { MigrationDashboardComponent } from './migration/migration-dashboard/migration-dashboard.component';
+import { WebSocketService } from './commons/services/websocket.service';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,7 @@ import { MigrationDashboardComponent } from './migration/migration-dashboard/mig
     HttpClientModule,
     CommonModule
   ],
-  providers: [UtilityService, DatePipe, BsModalService, ConfirmationService, MessageService, AppService,
+  providers: [UtilityService, DatePipe, BsModalService, ConfirmationService, MessageService, AppService, WebSocketService, 
     { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })

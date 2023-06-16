@@ -92,4 +92,10 @@ export class AppService {
     getRequestsForFile(fileNo:string){
         return this.http.get(this.apiEndpoint + this.apiURL.requests_for_file+'?fileReferenceNo='+fileNo)
     }
+    getFilesForDashboard(){
+        return this.http.get(this.apiEndpoint + this.apiURL.dashboard_files);
+    }
+    getRequestsForDashboard(){
+        return this.http.get(this.apiEndpoint + this.apiURL.dashboard_requests);
+    }
 }
