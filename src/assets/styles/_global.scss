@@ -361,6 +361,7 @@
         }
         .p-scrollpanel-wrapper{
             background: $white-color;
+            height: 90% !important;
         }
         font-family: $font-family !important;
     }
@@ -502,20 +503,29 @@ input{
     max-width:1200px !important;
 }
 .lg-modal {
-    max-width:1000px !important;
+    max-width:1200px !important;
+    .modal-content{
+        height: 465px !important;
+    }
 }
 .md-modal {
     max-width:750px !important;
+    .modal-content{
+        height: 580px !important;
+    }
 }
 .sm-modal {
-    max-width:500px !important;
+    max-width:750px !important;
+    .modal-content{
+        height: 200px !important;
+    }
 }
 .modal-action-bar {
   color: white;
   position: relative;
   background: $tertiary-color !important;
 }
-.modal-content {
+.custom-modl-content {
   position: relative;
   background-color: $white-color;
   box-shadow: 0px 0px 2px 0px;
@@ -524,6 +534,15 @@ input{
   margin: 10px !important;
   height: 86% !important;
 }
+.sm-custom-modl-content {
+    position: relative;
+    background-color: $white-color;
+    box-shadow: 0px 0px 2px 0px;
+    border-radius: 0px !important;
+    width: 98% !important;
+    margin: 10px !important;
+    height: 56% !important;
+  }
 .modal-footer {
   color: $primary-color;
   background-color: $white-color;
@@ -952,6 +971,14 @@ p-calendar:disabled{
             border: 1px solid crimson !important;
             border-bottom: 2px solid crimson !important;
         }
+    }
+}
+.pwd-is-invalid, .pwd-is-invalid:focus {
+    box-shadow: none;
+    .p-password{
+        box-shadow: none;
+        border: 1px solid crimson !important;
+        border-bottom: 2px solid crimson !important;
     }
 }
 .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus{
@@ -2058,13 +2085,21 @@ p-paginator{
     }
     .custom-tertiary-login-btn{
         .p-button{
-            height:50px !important;
+            height:40px !important;
             border-radius: 10px !important;
-            width: 10% !important;
+            width: 80% !important;
             .p-button-label{
                 font-size: 23px !important;
             }
         }
+    }
+    .sign-up{
+        color: $white-color;
+        font-size: 17px;
+        font-weight: bold;
+        text-decoration: underline;
+        font-style: italic;
+        cursor: pointer;
     }
 }
 .custom-tag-user{
@@ -2205,4 +2240,58 @@ p-paginator{
     font-style: italic;
     color: $error-color;
     font-weight: bold;;
+}
+.sign-up-form{
+    background-color: $tertiary-color;
+    margin-top: 5% !important;
+    border-radius: 5px !important;
+}
+.signup-form-field-header{
+    color: $white-color;
+    font-weight: bold;
+    font-size: 13px !important;
+}
+.signup-pwd-field{
+    div{
+        width: 100%;
+    }
+}
+.signup-input{
+    .p-inputtext{
+        height:50px !important;
+        width: 30% !important;
+        font-size: large !important;
+        font-style: italic !important;
+    }
+    .custom-tertiary-login-btn{
+        .p-button{
+            height:40px !important;
+            border-radius: 10px !important;
+            width: 80% !important;
+            background-color: $white-color;
+            .p-button-label{
+                font-size: 23px !important;
+                color: $tertiary-color;
+            }
+        }
+    }
+}
+.input-number{
+    width: 100% !important;
+    span{
+        width: 100% !important;
+    }
+}
+.input-multiselect{
+    .p-multiselect{
+        width: 100% !important;
+    }
+    p-overlay{
+        .p-overlay{
+            width: 100% !important;
+            ul{
+                font-family: $font-family;
+            }
+        }
+    }
 }

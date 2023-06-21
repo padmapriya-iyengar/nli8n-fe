@@ -17,17 +17,24 @@
                <!-- <input type="text" pInputText placeholder="Password" [(ngModel)]="password"
                name="password" #pwd="ngModel"/> -->
                <p-password class="pwd-field" [(ngModel)]="password" #pwd="ngModel" name="pwd" [feedback]="false" placeholder="Password"
-               (keyup.enter)="loadDashboard()"></p-password>
+               (keyup.enter)="login()"></p-password>
             </div>
          </div>
     </div>
     <div class="row">
-        <div class="col-lg-12 xsm-padding">
+        <div class="col-lg-4 xsm-padding"></div>
+        <div class="col-lg-2 xsm-padding">
             <div class="xsm-padding login-input" style="text-align:center !important;">
                 <p-button label="Sign in" tooltipStyleClass="custom-tooltip" pTooltip="Click to sign in"
-                styleClass="p-button-sm" class="custom-tertiary-login-btn" (click)="loadDashboard()"></p-button>
+                styleClass="p-button-sm" class="custom-tertiary-login-btn" (click)="login()"></p-button>
             </div>
-         </div>
+        </div>
+        <div class="col-lg-2 xsm-padding">
+          <div class="xsm-padding login-input" style="text-align:center !important; padding-top: 15px !important;">
+              <a class="sign-up" routerLink="/signup">Sign Up?</a>
+          </div>
+       </div>
+       <div class="col-lg-4 xsm-padding"></div>
     </div>
   </div>
   <p-toast position="top-right"></p-toast>

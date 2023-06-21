@@ -28,6 +28,8 @@ import { AppService } from './commons/services/app.service';
 import { FileTitleDirective } from './commons/directives/file-title.directive';
 import { MigrationDashboardComponent } from './migration/migration-dashboard/migration-dashboard.component';
 import { WebSocketService } from './commons/services/websocket.service';
+import { BackButtonDisableModule } from 'angular-disable-browser-back-button';
+import { SignUpComponent } from './commons/components/sign-up/sign-up.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +45,8 @@ import { WebSocketService } from './commons/services/websocket.service';
     DocumentUploadComponent,
     DocumentDetailsComponent,
     DocumentVersionsComponent,
-    FileTitleDirective
+    FileTitleDirective,
+    SignUpComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,10 @@ import { WebSocketService } from './commons/services/websocket.service';
     BrowserAnimationsModule,
     NgxDropzoneModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    BackButtonDisableModule.forRoot({
+      preserveScroll: true
+    })
   ],
   providers: [UtilityService, DatePipe, BsModalService, ConfirmationService, MessageService, AppService, WebSocketService, 
     { provide: LocationStrategy, useClass: HashLocationStrategy }],

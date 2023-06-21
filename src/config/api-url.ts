@@ -19,5 +19,8 @@ export const api = {
     requests_for_file: '/request/requests-for-file',
     all_requests: '/request/requests',
     dashboard_files:'/dashboard-files',
-    dashboard_requests:'/dashboard-requests'
+    dashboard_requests:'/dashboard-requests',
+    generate_hash:'/hash',
+    login:'/login',
+    create_user:'/create-user'
 }

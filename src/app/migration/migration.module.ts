@@ -20,6 +20,7 @@ import { SIWMigrationService } from "../commons/services/migration.service";
 import { ConfirmationService, MessageService } from "primeng/api";
 import { AppService } from "../commons/services/app.service";
 import { RouterModule, Routes } from "@angular/router";
+import { BackButtonDisableModule } from "angular-disable-browser-back-button";
 
 const routes: Routes = [{path: '', component: MigrationDashboardComponent}]
 
@@ -34,8 +35,14 @@ const routes: Routes = [{path: '', component: MigrationDashboardComponent}]
         RecordDataComponent,
         ValidationReportComponent
     ],
-    providers: [UtilityService, DatePipe, BsModalService, SIWMigrationService, ConfirmationService, MessageService, AppService],
-    imports: [CommonModule, FormsModule, PrimeNGModule, NgxDropzoneModule, RouterModule.forChild(routes)],
+    providers: [UtilityService, DatePipe, BsModalService, SIWMigrationService, ConfirmationService, MessageService, AppService,
+        { provide: LocationStrategy, useClass: HashLocationStrategy }
+    ],
+    imports: [CommonModule, FormsModule, PrimeNGModule, NgxDropzoneModule, RouterModule.forChild(routes),
+        BackButtonDisableModule.forRoot({
+            preserveScroll: true
+        })
+    ],
     exports: [RouterModule],
     bootstrap: [MigrationDashboardComponent]
 })

@@ -58,7 +58,7 @@ export class AppComponent  implements OnInit{
       },
       {
         label: 'Signout', command: () => {
-          this.openModal(this.userLogout, 'md-modal');
+          this.openModal(this.userLogout, 'sm-modal');
         }
       }
     ];
@@ -126,6 +126,54 @@ export class AppComponent  implements OnInit{
         this.isReqSubmitted = false;
       });
     }
+    this.reloadUserProfile();
+  }
+  reloadUserProfile(){
+    let divisions: any = [];
+    let roles: any[] = [];
+    let userInfo: any = {}
+    this.appService.getUserInfo(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+      let resp = Object.assign(response)
+      divisions = resp[0].agc_user_divisions
+      let inboxPref = [];
+      if(resp){
+        UtilityService.CURRENT_USER_ITEM_ID = resp[0].username;
+        UtilityService.IS_USER_PROFILE_TRIGGERED = true;
+        inboxPref = resp[0].agc_user_profile.inbox_preference;
+        UtilityService.CURRENT_USER_INBOX_PREF=inboxPref;
+        UtilityService.CURRENT_USER_DN = resp[0].username
+        userInfo = {
+          DisplayName: resp[0].display_name,
+          UserDN: resp[0].username,
+          Email: resp[0].agc_user_profile.email,
+          DepartmentName: resp[0].agc_user_profile.department,
+          LastUpdatedOn: this.datePipe.transform(resp[0].agc_user_profile.updated_on.split("T")[0], 'MMM d, y'),
+          LastUpdatedTime: resp[0].agc_user_profile.updated_on.split("T")[1].substring(0, 5),
+          ItemID: resp[0].username,
+          ReceiveEmailNotifications: resp[0].agc_user_profile.email_notifications==1?true:false,
+          OutOfOffice: resp[0].agc_user_profile.ooo==1?true:false,
+          DateFrom: resp[0].agc_user_profile.ooo_date_from,
+          DateUntil: resp[0].agc_user_profile.ooo_date_until,
+          OutOfOfficeMessage: resp[0].agc_user_profile.ooo_message,
+          Roles: []
+        }
+        if(divisions){
+          if(divisions.length){
+            divisions.forEach((item:any) => {
+              userInfo.Roles.push({ label: item.group_name, value: item.title })
+            })
+          } else{
+            userInfo.Roles.push({ label: divisions.group_name, divisions: divisions.title })
+          }
+        }
+        UtilityService.CURRENT_USER_INFO = userInfo;
+      }
+      this.utilService.pushRoute('dashboard');
+    },
+    error: (error) => {
+      console.error('Request failed with error')
+    }
+  })
   }
   removeNilAttribute(jsonObject: any){
     let keys: any[] = _.keys(jsonObject);
@@ -166,7 +214,8 @@ export class AppComponent  implements OnInit{
               RequestState: item.request_state,
               SourceItemId: item.source_item_id,
               LayoutID: '',
-              TaskEntityInstanceID: ''
+              TaskEntityInstanceID: '',
+              CreatedOn: item.created_on
             })
           }
         })

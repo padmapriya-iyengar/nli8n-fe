@@ -1,0 +1,187 @@
+<div class="container-fluid" style="background-color: #FFF; height: 845px;">
+    <form #signupForm="ngForm">
+        <div class="row no-padding">
+            <div class="col-lg-2 sm-padding"></div>
+            <div class="col-lg-8 md-padding sign-up-form">
+                <div class="row">
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              First Name
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="userObj.first_name"
+                                name="fName" #fName="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter first name" tooltipPosition="bottom"
+                                [ngClass]="{ 'is-invalid':formSubmitted && fName.invalid }" [required]="!readOnly" placeholder="First Name"/>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Last Name
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="userObj.last_name"
+                                name="lName" #lName="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter last name" tooltipPosition="bottom"
+                                [ngClass]="{ 'is-invalid':formSubmitted && lName.invalid }" [required]="!readOnly" placeholder="Last Name"/>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Display Name
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="userObj.display_name"
+                                name="dName" #dName="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter display name" tooltipPosition="bottom"
+                                [ngClass]="{ 'is-invalid':formSubmitted && dName.invalid }" [required]="!readOnly" placeholder="Display Name"/>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Contact
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <p-inputNumber mode="decimal" inputId="withoutgrouping" [useGrouping]="false" 
+                                [disabled]="readOnly" [(ngModel)]="userObj.contact"
+                                name="contact" #contact="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter contact" tooltipPosition="bottom" class="input-number"
+                                [ngClass]="{ 'is-invalid':formSubmitted && contact.invalid }" [required]="!readOnly" placeholder="Contact"/>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Email
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="userObj.email"
+                                name="email" #email="ngModel" tooltipStyleClass="custom-tooltip"
+                                pTooltip="Click to enter email" tooltipPosition="bottom" email
+                                [ngClass]="{ 'is-invalid':formSubmitted && email.invalid }" [required]="!readOnly" placeholder="Email"/>
+                           </div>
+                        </div>
+                     </div>
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Department
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <p-dropdown [filter]="true" filterBy="label" [disabled]="readOnly" appendTo="body" [options]="departments" class="custom-dropdown"
+                                placeholder="Choose a department" [(ngModel)]="userObj.department" name="dept"
+                                #dept="ngModel" tooltipStyleClass="custom-tooltip" pTooltip="Click to choose department" [required]="!readOnly"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && dept.invalid }" tooltipPosition="bottom"></p-dropdown>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Divisions
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <p-multiSelect [disabled]="readOnly" [options]="divisions" [(ngModel)]="userObj.divisions" 
+                                placeholder="Choose divisons" class="input-multiselect"
+                                optionLabel="label" #div="ngModel" name="div" [required]="!readOnly"
+                                [ngClass]="{ 'p-dropdown-is-invalid':formSubmitted && dept.invalid }"></p-multiSelect>
+                           </div>
+                        </div>
+                     </div>
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Username
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                                <span class="p-input-icon-right" style="width: 100%;">
+                                    <i class="pi pi-check" *ngIf="isUNameValid"></i>
+                                    <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="userObj.username"
+                                        name="uName" #uName="ngModel" tooltipStyleClass="custom-tooltip"
+                                        pTooltip="Click to enter username" tooltipPosition="bottom" (change)="checkUsername()"
+                                        [ngClass]="{ 'is-invalid':formSubmitted && uName.invalid }" [required]="!readOnly" placeholder="Username"/>
+                                </span>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Password
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                            <p-password [disabled]="readOnly" class="signup-pwd-field" [(ngModel)]="password" #pwd="ngModel" name="pwd" 
+                                [feedback]="false" [required]="!readOnly" placeholder="Password" (change)="comparePassword()"
+                                [ngClass]="{ 'pwd-is-invalid':formSubmitted && pwd.invalid }"></p-password>
+                           </div>
+                        </div>
+                     </div>
+                     <div class="col-lg-6 sm-padding no-padding">
+                        <div class="col-lg-12 sm-padding no-padding" [ngClass]="{'required':!readOnly, 'read-only':readOnly}">
+                           <div class="sm-padding signup-form-field-header no-bottom-padding">
+                              Confirm Password
+                           </div>
+                        </div>
+                        <div class="col-lg-12 xsm-padding">
+                           <div class="xsm-padding">
+                                <span class="p-input-icon-right" style="width: 100%;">
+                                    <i class="pi pi-check" *ngIf="pwdsMatch"></i>
+                                    <input [disabled]="readOnly" type="text" pInputText [(ngModel)]="plainPassword"
+                                        name="ppwd" #ppwd="ngModel" tooltipStyleClass="custom-tooltip"
+                                        pTooltip="Click to enter password" tooltipPosition="bottom" (change)="comparePassword()"
+                                        [ngClass]="{ 'is-invalid':formSubmitted && ppwd.invalid }" [required]="!readOnly" placeholder="Confirm Password"/>
+                                </span>
+                           </div>
+                        </div>
+                     </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-4 xsm-padding"></div>
+                    <div class="col-lg-4 xsm-padding">
+                        <div class="xsm-padding signup-input" style="text-align:center !important;">
+                            <p-button label="Sign Up" tooltipStyleClass="custom-tooltip" pTooltip="Click to sign up"
+                            styleClass="p-button-sm" class="custom-tertiary-login-btn" (click)="signUp()"></p-button>
+                        </div>
+                    </div>
+                   <div class="col-lg-4 xsm-padding"></div>
+                </div>
+            </div>
+            <div class="col-lg-2 sm-padding"></div>
+        </div>
+    </form>
+</div>
+<p-toast position="top-right"></p-toast>

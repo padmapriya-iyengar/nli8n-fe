@@ -30,8 +30,8 @@
         </div>
       </div>
     </div>
-    <div class="modal-content">
-      <p-scrollPanel [style]="{width: '100%'}" [ngStyle]="{'height': isOOOEnabled ? '460px' : '325px' }" class="custom-scroll">
+    <div class="sm-custom-modl-content">
+      <p-scrollPanel [style]="{width: '100%', height: '460px'}" class="custom-scroll">
         <user-profile [userInfo]="userInfo" [modalSubmit]="isReqSubmitted"
           (oooEnable)="onOOOEnable($event)" (reqSubmit)="onRequestSubmit($event)"></user-profile>
       </p-scrollPanel>
@@ -56,7 +56,7 @@
         </div>
       </div>
     </div>
-    <div class="modal-content" style="border: 0px solid transparent !important; box-shadow: 0px 0px 0px 0px !important">
+    <div class="sm-custom-modl-content" style="border: 0px solid transparent !important; box-shadow: 0px 0px 0px 0px !important">
       <div class="xsm-margin">
         <p style="font-weight: bold;">Are you sure, you want to signout?</p>
       </div>
@@ -83,7 +83,7 @@
               </div>
           </div>
       </div>
-      <div class="modal-content" style="border: none !important; box-shadow: none !important;">
+      <div class="sm-custom-modl-content" style="border: none !important; box-shadow: none !important;">
           <p-scrollPanel [style]="{width: '100%', height: '350px'}" class="custom-scroll">
               <notification [allNotifications]="allNotifications"></notification>
           </p-scrollPanel>
@@ -94,3 +94,4 @@
       </div>
   </div>
 </ng-template>
+<p-toast position="top-right"></p-toast>

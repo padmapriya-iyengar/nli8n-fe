@@ -6,7 +6,7 @@
             </div>
             <div class="col-lg-11 no-left-padding no-top-padding">
                 <p class="sm-height" style="font-size: 13px !important;">File {{notf.FileReferenceNo}}; {{notf.Message}}</p>
-                <p class="sm-height" style="font-size: 13px !important;">{{notf.CreatedDate}} at {{notf.CreatedTime}}
+                <p class="sm-height" style="font-size: 13px !important;">{{notf.CreatedDate}} at {{notf.CreatedOn | date:'h:mm'}}
                     <i *ngIf="notf.ShowDelete" class="fa fa-trash pull-right xsm-padding pointer"
                         (click)="actOnNotf('DELETE',notf)" style="font-size: 18px !important;" title="Click to delete notification"></i>
                     <i *ngIf="notf.ShowRead" class="fa fa-check pull-right xsm-padding pointer"
@@ -25,3 +25,4 @@
         </div>
     </div>
 </div>
+<p-toast position="top-right"></p-toast>

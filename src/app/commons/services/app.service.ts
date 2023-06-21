@@ -98,4 +98,13 @@ export class AppService {
     getRequestsForDashboard(){
         return this.http.get(this.apiEndpoint + this.apiURL.dashboard_requests);
     }
+    generateHash(password:string,saltRounds:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.generate_hash+'?password='+password+'&saltRounds='+saltRounds);
+    }
+    login(reqData:any){
+        return this.http.post(this.apiEndpoint + this.apiURL.login, {data: reqData});
+    }
+    createUser(reqData:any){
+        return this.http.post(this.apiEndpoint + this.apiURL.create_user, {data: reqData});
+    }
 }

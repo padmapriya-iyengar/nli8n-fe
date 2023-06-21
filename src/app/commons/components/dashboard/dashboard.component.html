@@ -247,8 +247,8 @@
                 </div>
             </div>
         </div>
-        <div class="modal-content">
-            <p-scrollPanel [style]="{width: '100%', height: '725px'}" class="custom-scroll">
+        <div class="custom-modl-content">
+            <p-scrollPanel [style]="{width: '100%', height: '740px'}" class="custom-scroll">
                 <advisory-file *ngIf="reqIdentifier=='ADV_FILE'" [modalSubmit]="isReqSubmitted"
                     (reqSubmit)="onRequestSubmit($event)"></advisory-file>
                 <advisory-request *ngIf="reqIdentifier=='ADV_REQ'" [modalSubmit]="isReqSubmitted"

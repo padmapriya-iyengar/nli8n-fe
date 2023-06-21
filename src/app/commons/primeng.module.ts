@@ -30,6 +30,8 @@ import { InputSwitchModule } from 'primeng/inputswitch';
 import { DividerModule } from 'primeng/divider';
 import { BreadcrumbModule } from 'primeng/breadcrumb';
 import { PasswordModule } from 'primeng/password';
+import { InputNumberModule } from 'primeng/inputnumber';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @NgModule({
     declarations: [
@@ -67,7 +69,9 @@ import { PasswordModule } from 'primeng/password';
         InputSwitchModule,
         DividerModule,
         BreadcrumbModule,
-        PasswordModule
+        PasswordModule,
+        InputNumberModule,
+        MultiSelectModule
     ],
     providers: [MessageService],
     bootstrap: []

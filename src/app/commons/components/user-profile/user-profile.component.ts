@@ -22,7 +22,7 @@ export class UserProfileComponent implements OnInit, OnChanges{
 
   userHeader!: string;
   formattedUserName!: string;
-  userRoles: any[] = [];
+  userDivisions: any[] = [];
   todaysDate: Date = new Date();
   lastModifiedDate!: string;
   lastModifiedTime!: string;
@@ -43,15 +43,15 @@ export class UserProfileComponent implements OnInit, OnChanges{
     this.userProfile.Email = this.userInfo.Email;
     this.userProfile.ItemID = this.userInfo.ItemID;
     this.userProfile.OutOfOfficeMessage = this.userInfo.OutOfOfficeMessage;
-    this.userProfile.OutOfOffice = this.userInfo.OutOfOffice == 'true' ? true : false;
-    this.userProfile.ReceiveEmailNotifications = this.userInfo.ReceiveEmailNotifications == 'true' ? true : false;
+    this.userProfile.OutOfOffice = this.userInfo.OutOfOffice;
+    this.userProfile.ReceiveEmailNotifications = this.userInfo.ReceiveEmailNotifications;
     if (this.userProfile.OutOfOffice){
       this.isOOOEnabled = true;
     } else{
       this.isOOOEnabled = false;
     }
     this.userInfo.Roles.forEach((role: any) => {
-      this.userRoles.push(role)
+      this.userDivisions.push(role)
     })
     this.oooEnable.emit(this.isOOOEnabled);
     if (!this.utilService.isEmpty(this.userProfile.DateUntil)){
@@ -74,18 +74,17 @@ export class UserProfileComponent implements OnInit, OnChanges{
     }
   }
   onSubmit() {
-    //@ToDo
-    //Service not updating
     this.formSubmitted = true;
     if (this.upForm && !this.upForm.valid) {
       this.reqSubmit.emit({ status: 'FAILURE' });
       this.utilService.alert('error', 'Error', 'Please fill all mandatory details!!', false);
     } else {
       let user_profile: any = _.cloneDeep(this.userProfile);
-      user_profile.DateFrom = user_profile.DateFrom ? this.datePipe.transform(user_profile.DateFrom, "yyyy-MM-dd'T'hh:mm:ss") : null;
-      user_profile.DateUntil = user_profile.DateUntil ? this.datePipe.transform(user_profile.DateUntil, "yyyy-MM-dd'T'hh:mm:ss") : null;
+      user_profile.ooo_date_from = user_profile.DateFrom ? this.datePipe.transform(user_profile.DateFrom, "yyyy-MM-dd'T'hh:mm:ss") : null;
+      user_profile.ooo_date_until = user_profile.DateUntil ? this.datePipe.transform(user_profile.DateUntil, "yyyy-MM-dd'T'hh:mm:ss") : null;
       user_profile.ooo_message = user_profile.OutOfOfficeMessage;
-      user_profile.ooo = user_profile.OutOfOffice;
+      user_profile.ooo = user_profile.OutOfOffice == true ? '1' : '0';
+      user_profile.email_notifications = user_profile.ReceiveEmailNotifications == true ? '1' : '0'
     
       this.appService.updateUserProfile(UtilityService.CURRENT_USER_NAME,user_profile).subscribe({next: (response) => {
         let resp = Object.assign(response)

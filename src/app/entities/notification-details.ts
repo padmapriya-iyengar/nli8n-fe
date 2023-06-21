@@ -22,4 +22,5 @@ export class NOTIFICATION_DETAILS {
     RequestState!: any;
     SourceItemId!: any;
     TaskEntityInstanceID!: any;
+    CreatedOn!: Date;
 }
