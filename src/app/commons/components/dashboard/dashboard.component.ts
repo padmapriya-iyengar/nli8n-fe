@@ -78,7 +78,7 @@ export class DashboardComponent implements OnInit{
   getFileTasksData(){
     this.showSpinner = true;
     this.fileTasks = [];
-      this.appService.getFilesForDashboard().subscribe({next: (response) => {
+      this.appService.getFilesForDashboard(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if (resp){
           if (resp.length > 0){
@@ -107,7 +107,7 @@ export class DashboardComponent implements OnInit{
   getRequestTasksData(){
     this.showSpinner = true;
     this.requestTasks = [];
-      this.appService.getRequestsForDashboard().subscribe({next: (response) => {
+      this.appService.getRequestsForDashboard(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if (resp){
           if (resp.length > 0){

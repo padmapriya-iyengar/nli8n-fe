@@ -92,11 +92,11 @@ export class AppService {
     getRequestsForFile(fileNo:string){
         return this.http.get(this.apiEndpoint + this.apiURL.requests_for_file+'?fileReferenceNo='+fileNo)
     }
-    getFilesForDashboard(){
-        return this.http.get(this.apiEndpoint + this.apiURL.dashboard_files);
+    getFilesForDashboard(username:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.dashboard_files+'?username='+username);
     }
-    getRequestsForDashboard(){
-        return this.http.get(this.apiEndpoint + this.apiURL.dashboard_requests);
+    getRequestsForDashboard(username:string){
+        return this.http.get(this.apiEndpoint + this.apiURL.dashboard_requests+'?username='+username);
     }
     generateHash(password:string,saltRounds:string){
         return this.http.get(this.apiEndpoint + this.apiURL.generate_hash+'?password='+password+'&saltRounds='+saltRounds);
