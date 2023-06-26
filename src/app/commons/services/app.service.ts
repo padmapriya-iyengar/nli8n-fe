@@ -107,4 +107,5 @@ export class AppService {
     createUser(reqData:any){
         return this.http.post(this.apiEndpoint + this.apiURL.create_user, {data: reqData});
     }
+    
 }
