@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UtilityService } from '../../services/utilities.service';
+import { UtilitiesService } from '../../services/utilities.service';
 import * as _ from "lodash";
 import { DatePipe } from '@angular/common';
 
@@ -10,7 +10,7 @@ import { DatePipe } from '@angular/common';
   styleUrls: ['./document-details.component.scss']
 })
 export class DocumentDetailsComponent  implements OnInit, OnChanges {
-  constructor(private utilService: UtilityService,
+  constructor(private utilService: UtilitiesService,
     private datePipe: DatePipe) { }
   @Input() fileDetails!: any[];
   @Input() existingFileDetails!: any[];

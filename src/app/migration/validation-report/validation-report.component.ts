@@ -3,8 +3,8 @@ import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core'
 import * as _ from 'lodash';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { Table } from 'primeng/table';
-import { SIWMigrationService } from '../../commons/services/migration.service';
-import { UtilityService } from '../../commons/services/utilities.service';
+import { MigrationService } from '../../commons/services/migration.service';
+import { UtilitiesService } from '../../commons/services/utilities.service';
 
 @Component({
   selector: 'validation-report',
@@ -12,8 +12,8 @@ import { UtilityService } from '../../commons/services/utilities.service';
   styleUrls: ['./validation-report.component.scss']
 })
 export class ValidationReportComponent implements OnInit {
-  constructor(private utilService: UtilityService, private modalService: BsModalService,
-    private migService: SIWMigrationService, private datePipe: DatePipe) { }
+  constructor(private utilService: UtilitiesService, private modalService: BsModalService,
+    private migService: MigrationService, private datePipe: DatePipe) { }
   valData: any[] = [];
   valDataCols: any[] = [];
   displayFilters: boolean = false;

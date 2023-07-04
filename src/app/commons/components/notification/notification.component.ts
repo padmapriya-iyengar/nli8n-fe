@@ -1,8 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { NOTIFICATION_DETAILS } from '../../../entities/notification-details';
 import * as _ from "lodash";
-import { UtilityService } from '../../services/utilities.service';
-import { AppService } from '../../services/app.service';
+import { UtilitiesService } from '../../services/utilities.service';
+import { AgcService } from '../../services/agc.service';
 
 @Component({
   selector: 'notification',
@@ -10,7 +10,7 @@ import { AppService } from '../../services/app.service';
   styleUrls: ['./notification.component.scss']
 })
 export class NotificationComponent implements OnInit {
-  constructor(private utilService: UtilityService, private appService: AppService) { }
+  constructor(private utilService: UtilitiesService, private agcService: AgcService) { }
   @Input() allNotifications: NOTIFICATION_DETAILS[] = [];
   notifications: NOTIFICATION_DETAILS[] = [];
   ngOnInit(): void {
@@ -22,7 +22,7 @@ export class NotificationComponent implements OnInit {
   actOnNotf(action: string, data: any){
     let index = _.findIndex(this.notifications, function (notf) { return notf.ItemId == data.ItemId; })
     if(index != -1){
-      this.appService.updateUserNotifications(this.notifications[index].ItemId,action).subscribe({next: (response) => {
+      this.agcService.updateUserNotifications(this.notifications[index].ItemId,action).subscribe({next: (response) => {
         if(action === 'READ'){
           this.notifications[index].ShowRead = false
           this.notifications[index].StyleClass = 'notf-row'

@@ -4,9 +4,9 @@ import { Router } from '@angular/router';
 import * as _ from 'lodash';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import { MenuItem } from 'primeng/api';
-import { UtilityService } from './commons/services/utilities.service';
-import { AppService } from './commons/services/app.service';
+import { UtilitiesService } from './commons/services/utilities.service';
 import { NOTIFICATION_DETAILS } from './entities/notification-details';
+import { AgcService } from './commons/services/agc.service';
 
 @Component({
   selector: 'app-root',
@@ -15,7 +15,7 @@ import { NOTIFICATION_DETAILS } from './entities/notification-details';
 })
 export class AppComponent  implements OnInit{
   constructor(private modalService: BsModalService, private router: Router, 
-    private utilService: UtilityService, private datePipe: DatePipe, private appService: AppService) { }
+    private utilService: UtilitiesService, private datePipe: DatePipe, private agcService: AgcService) { }
   modalRef!: BsModalRef;
   userActions!: MenuItem[];
   userManagementInfo: any = {}
@@ -90,7 +90,7 @@ export class AppComponent  implements OnInit{
     this.router.navigate([routeName]);
   }
   getUserInfo(){
-    this.userInfo = UtilityService.CURRENT_USER_INFO
+    this.userInfo = UtilitiesService.CURRENT_USER_INFO
     this.openModal(this.userProfile, 'md-modal');
   }
   openModal(template: TemplateRef<any>, cssClass: string) {
@@ -132,16 +132,16 @@ export class AppComponent  implements OnInit{
     let divisions: any = [];
     let roles: any[] = [];
     let userInfo: any = {}
-    this.appService.getUserInfo(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+    this.agcService.getUserInfo(UtilitiesService.CURRENT_USER_NAME).subscribe({next: (response) => {
       let resp = Object.assign(response)
       divisions = resp[0].agc_user_divisions
       let inboxPref = [];
       if(resp){
-        UtilityService.CURRENT_USER_ITEM_ID = resp[0].username;
-        UtilityService.IS_USER_PROFILE_TRIGGERED = true;
+        UtilitiesService.CURRENT_USER_ITEM_ID = resp[0].username;
+        UtilitiesService.IS_USER_PROFILE_TRIGGERED = true;
         inboxPref = resp[0].agc_user_profile.inbox_preference;
-        UtilityService.CURRENT_USER_INBOX_PREF=inboxPref;
-        UtilityService.CURRENT_USER_DN = resp[0].username
+        UtilitiesService.CURRENT_USER_INBOX_PREF=inboxPref;
+        UtilitiesService.CURRENT_USER_DN = resp[0].username
         userInfo = {
           DisplayName: resp[0].display_name,
           UserDN: resp[0].username,
@@ -166,7 +166,7 @@ export class AppComponent  implements OnInit{
             userInfo.Roles.push({ label: divisions.group_name, divisions: divisions.title })
           }
         }
-        UtilityService.CURRENT_USER_INFO = userInfo;
+        UtilitiesService.CURRENT_USER_INFO = userInfo;
       }
       this.utilService.pushRoute('dashboard');
     },

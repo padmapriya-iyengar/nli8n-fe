@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { Table } from 'primeng/table';
-import { SIWMigrationService } from '../../commons/services/migration.service';
-import { UtilityService } from '../../commons/services/utilities.service';
+import { MigrationService } from '../../commons/services/migration.service';
+import { UtilitiesService } from '../../commons/services/utilities.service';
 
 @Component({
   selector: 'mig-consolidated-report',
@@ -10,7 +10,7 @@ import { UtilityService } from '../../commons/services/utilities.service';
   styleUrls: ['./mig-consolidated-report.component.scss']
 })
 export class MigConsolidatedReportComponent implements OnInit {
-  constructor(private utilService: UtilityService, private migService: SIWMigrationService) { }
+  constructor(private utilService: UtilitiesService, private migService: MigrationService) { }
   migratedData: any[] = [];
   migratedDataCols: any[] = [];
   displayFilters: boolean = false;

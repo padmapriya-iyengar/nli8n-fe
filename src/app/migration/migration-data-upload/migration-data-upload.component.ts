@@ -3,8 +3,8 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import * as _ from 'lodash';
 import { ConfirmationService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { SIWMigrationService } from '../../commons/services/migration.service';
-import { UtilityService } from '../../commons/services/utilities.service';
+import { MigrationService } from '../../commons/services/migration.service';
+import { UtilitiesService } from '../../commons/services/utilities.service';
 
 @Component({
   selector: 'migration-data-upload',
@@ -12,9 +12,9 @@ import { UtilityService } from '../../commons/services/utilities.service';
   styleUrls: ['./migration-data-upload.component.scss']
 })
 export class MigrationDataUploadComponent implements OnInit {
-  constructor(private utilService: UtilityService, private datePipe: DatePipe,
+  constructor(private utilService: UtilitiesService, private datePipe: DatePipe,
     private confirmationService: ConfirmationService,
-    private migService: SIWMigrationService) { }
+    private migService: MigrationService) { }
 
   entityNames: any[] = [];
   dataEntityName: string = "";

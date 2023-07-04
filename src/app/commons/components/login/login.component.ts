@@ -1,10 +1,8 @@
 import { Component,OnInit } from '@angular/core';
-import { UtilityService } from '../../services/utilities.service';
+import { UtilitiesService } from '../../services/utilities.service';
 import { ConfirmationService } from 'primeng/api';
-import { AppService } from '../../services/app.service';
 import { DatePipe } from '@angular/common';
-import { Subject, fromEvent } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { AgcService } from '../../services/agc.service';
 
 @Component({
   selector: 'login',
@@ -12,8 +10,8 @@ import { takeUntil } from 'rxjs/operators';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit{
-  constructor(private utilService: UtilityService, private confirmationService: ConfirmationService,
-    private appService: AppService, private datePipe: DatePipe) { }
+  constructor(private utilService: UtilitiesService, private confirmationService: ConfirmationService,
+    private agcService: AgcService, private datePipe: DatePipe) { }
   userName: string="";
   password: string="";
 
@@ -25,7 +23,7 @@ export class LoginComponent implements OnInit{
       username: this.userName,
       password: this.password
     }
-    this.appService.login(details).subscribe({next: (response) =>{
+    this.agcService.login(details).subscribe({next: (response) =>{
         let resp = Object.assign(response)
         if(resp.status == 'FAIL' || resp.status == 'NO_USER'){
           this.utilService.alert('error',resp.message,resp.details,false)
@@ -46,22 +44,22 @@ export class LoginComponent implements OnInit{
     this.utilService.setUserActions(false);
     this.utilService.saveToStorage("IS_LOGGEDIN",true)
 
-    UtilityService.CURRENT_USER_NAME = this.userName;
-    UtilityService.IS_USER_PROFILE_TRIGGERED = false;
+    UtilitiesService.CURRENT_USER_NAME = this.userName;
+    UtilitiesService.IS_USER_PROFILE_TRIGGERED = false;
 
     let divisions: any = [];
     let roles: any[] = [];
     let userInfo: any = {}
-    this.appService.getUserInfo(this.userName).subscribe({next: (response) => {
+    this.agcService.getUserInfo(this.userName).subscribe({next: (response) => {
       let resp = Object.assign(response)
       divisions = resp[0].agc_user_divisions
       let inboxPref = [];
       if(resp){
-        UtilityService.CURRENT_USER_ITEM_ID = resp[0].username;
-        UtilityService.IS_USER_PROFILE_TRIGGERED = true;
+        UtilitiesService.CURRENT_USER_ITEM_ID = resp[0].username;
+        UtilitiesService.IS_USER_PROFILE_TRIGGERED = true;
         inboxPref = resp[0].agc_user_profile.inbox_preference;
-        UtilityService.CURRENT_USER_INBOX_PREF=inboxPref;
-        UtilityService.CURRENT_USER_DN = resp[0].username
+        UtilitiesService.CURRENT_USER_INBOX_PREF=inboxPref;
+        UtilitiesService.CURRENT_USER_DN = resp[0].username
         userInfo = {
           DisplayName: resp[0].display_name,
           UserDN: resp[0].username,
@@ -86,7 +84,7 @@ export class LoginComponent implements OnInit{
             userInfo.Roles.push({ label: divisions.group_name, divisions: divisions.title })
           }
         }
-        UtilityService.CURRENT_USER_INFO = userInfo;
+        UtilitiesService.CURRENT_USER_INFO = userInfo;
       }
       this.utilService.pushRoute('dashboard');
     },

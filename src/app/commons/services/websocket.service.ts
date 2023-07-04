@@ -1,11 +1,12 @@
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 import * as rx from "rxjs"
 import { AnonymousSubject } from 'rxjs/internal/Subject';
 import { environment } from "src/environments/environment";
 
 @Injectable()
-export class WebSocketService{
-    private subject!: AnonymousSubject<MessageEvent>;
+export class WebsocketService {
+
+  private subject!: AnonymousSubject<MessageEvent>;
     public messages: rx.Subject<any>;
 
     constructor() {

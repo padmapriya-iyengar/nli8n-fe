@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import * as _ from 'lodash';
-import { SIWMigrationService } from '../../commons/services/migration.service';
-import { UtilityService } from '../../commons/services/utilities.service';
+import { MigrationService } from '../../commons/services/migration.service';
+import { UtilitiesService } from '../../commons/services/utilities.service';
 
 @Component({
   selector: 'record-data',
@@ -9,7 +9,7 @@ import { UtilityService } from '../../commons/services/utilities.service';
   styleUrls: ['./record-data.component.scss']
 })
 export class RecordDataComponent implements OnInit {
-  constructor(private utilService: UtilityService, private migService: SIWMigrationService) { }
+  constructor(private utilService: UtilitiesService, private migService: MigrationService) { }
 
   @Input() modalSubmit: boolean = false;
   @Input() fileDetails!: any;

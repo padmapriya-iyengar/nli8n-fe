@@ -1,7 +1,7 @@
 import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
-import { UtilityService } from '../../commons/services/utilities.service';
+import { UtilitiesService } from '../../commons/services/utilities.service';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import * as _ from 'lodash';
@@ -12,7 +12,7 @@ import * as _ from 'lodash';
   styleUrls: ['./migration-dashboard.component.scss']
 })
 export class MigrationDashboardComponent implements OnInit {
-  constructor(private utilService: UtilityService, private modalService: BsModalService,
+  constructor(private utilService: UtilitiesService, private modalService: BsModalService,
     private datePipe: DatePipe, private confirmationService: ConfirmationService) { }
   
   modalRef!: BsModalRef;
@@ -53,13 +53,13 @@ export class MigrationDashboardComponent implements OnInit {
     })
   }
   loadUserProfile() {
-    if (!UtilityService.IS_USER_PROFILE_TRIGGERED) {
+    if (!UtilitiesService.IS_USER_PROFILE_TRIGGERED) {
       //Service Implementation
       let response = {"UserProfile":{"InboxPreference":"[]","ContactNumber":{"@nil":"true"},"DisplayName":"Priya","OutOfOfficeMessage":{"@nil":"true"},"Name":"priya","DateFrom":{"@nil":"true"},"DepartmentName":"IAD","ReceiveEmailNotifications":"false","OutOfOffice":"false","LastUpdatedBy":"priya","LastUpdatedOn":"2022-05-24T17:15:48Z","UserID":"priya","DateUntil":{"@nil":"true"},"Email":{"@nil":"true"},"UserProfile-id":{"Id":"213008","ItemId":"002248573547A1ECA6E5D79B37C2E81A.213008"}},"FunctionalGroup":[{"FunctionalGroup-id":{"Id":"49155","ItemId":"002248573547A1ECA0C26352C534A817.49155"},"GroupName":"IAD","GroupCreatedInOTDS":"Yes","IsDivision":"true","IsChild":"No","GroupDescription":"International Affairs Division","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"IAD"}},{"FunctionalGroup-id":{"Id":"180226","ItemId":"002248573547A1ECA0C26352C534A817.180226"},"GroupName":"Migration Data Admin","GroupCreatedInOTDS":"No","IsDivision":"false","IsChild":"Yes","GroupDescription":"Migration Data Admin","GroupType":"Functional","UserLinkedToGroup":"No","Status":"A","Title":{"Value":"Migration Data Admin"}},{"FunctionalGroup-id":{"Id":"1","ItemId":"002248573547A1ECA0C26352C534A817.1"},"GroupName":"AGC","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"No","GroupDescription":"Attorney General Chambers","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"AGC"}},{"FunctionalGroup-id":{"Id":"49156","ItemId":"002248573547A1ECA0C26352C534A817.49156"},"GroupName":"REGISTRY (IAD)","GroupCreatedInOTDS":"Yes","IsDivision":"false","IsChild":"Yes","GroupDescription":"Registry team of IAD","GroupType":"Functional","UserLinkedToGroup":{"@nil":"true"},"Status":"A","Title":{"Value":"REGISTRY (IAD)"}}]}
       let resp = response.UserProfile;
-      UtilityService.CURRENT_USER_ITEM_ID = resp['UserProfile-id']['ItemId'];
-      UtilityService.CURRENT_USER_INBOX_PREF = {"field":"TASK_ACTION","label":"Action","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_TITLE","label":"Title","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_TITLE","label":"File Title","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_REF_NO","label":"Ref No.","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_ID","label":"Req ID","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"DELIVERY_DATE","label":"Received Date","type":"datetime","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"CIRCULATION_ID","label":"Circulation ID","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_DUE_DATE","label":"Due Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"EXPECTED_RESPONSE_DATE","label":"Expected Response Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"TASK_STATUS","label":"Status","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_FROM","label":"From","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"ACTION_OFFICER","label":"Action Officer","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"ASSIGNEE","label":"Locked By","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"LOCKED_TIME","label":"Locked Time","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"REGISTRATION_NO","label":"Registration Number","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"}
-      UtilityService.IS_USER_PROFILE_TRIGGERED = true;
+      UtilitiesService.CURRENT_USER_ITEM_ID = resp['UserProfile-id']['ItemId'];
+      UtilitiesService.CURRENT_USER_INBOX_PREF = {"field":"TASK_ACTION","label":"Action","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_TITLE","label":"Title","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_TITLE","label":"File Title","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"FILE_REF_NO","label":"Ref No.","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_ID","label":"Req ID","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"DELIVERY_DATE","label":"Received Date","type":"datetime","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"CIRCULATION_ID","label":"Circulation ID","type":"string","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"REQUEST_DUE_DATE","label":"Due Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"EXPECTED_RESPONSE_DATE","label":"Expected Response Date","type":"date","spanWidth":"2","isSelected":true,"display":true,"spanWidthPx":"200"},{"field":"TASK_STATUS","label":"Status","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"TASK_FROM","label":"From","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"ACTION_OFFICER","label":"Action Officer","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"ASSIGNEE","label":"Locked By","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"LOCKED_TIME","label":"Locked Time","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"},{"field":"REGISTRATION_NO","label":"Registration Number","type":"string","spanWidth":"1","isSelected":true,"display":true,"spanWidthPx":"100"}
+      UtilitiesService.IS_USER_PROFILE_TRIGGERED = true;
     }
   }
   getLoggedInUserDetails() {
@@ -67,10 +67,10 @@ export class MigrationDashboardComponent implements OnInit {
     let response = {"tuple":{"old":{"getLoggedInUserDetails":{"getLoggedInUserDetails":{"USER_DETAILS":{"USER_DN":"cn=priya,cn=organizational users,o=AGC,cn=cordys,cn=defaultInst,o=uvpvcnxb1x5erpigljqg102j2g.ix.internal.cloudapp.net","USER_NAME":"priya"}}}}}}
     let resp = response.tuple.old.getLoggedInUserDetails.getLoggedInUserDetails.USER_DETAILS;
     if (resp) {
-      UtilityService.CURRENT_USER_NAME = resp.USER_NAME;
-      UtilityService.CURRENT_USER_DN = resp.USER_DN;
+      UtilitiesService.CURRENT_USER_NAME = resp.USER_NAME;
+      UtilitiesService.CURRENT_USER_DN = resp.USER_DN;
       this.loadUserProfile();
-      this.utilService.cUserName.next({ UserName: UtilityService.CURRENT_USER_NAME, UserDN: UtilityService.CURRENT_USER_DN });
+      this.utilService.cUserName.next({ UserName: UtilitiesService.CURRENT_USER_NAME, UserDN: UtilitiesService.CURRENT_USER_DN });
     }
   }
   getMenuConfig() {

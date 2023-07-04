@@ -2,9 +2,9 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChange
 import { NgForm } from '@angular/forms';
 import * as _ from 'lodash';
 import { MLA_REQUEST } from '../../entities/mla-request';
-import { UtilityService } from '../../commons/services/utilities.service';
+import { UtilitiesService } from '../../commons/services/utilities.service';
 import { DatePipe } from '@angular/common';
-import { AppService } from '../../commons/services/app.service';
+import { AgcService } from 'src/app/commons/services/agc.service';
 
 @Component({
   selector: 'mla-request',
@@ -39,8 +39,8 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   fileReferenceNo: string = '';
   fileReferences:any[] = [];
 
-  constructor(private utilService: UtilityService, private datePipe: DatePipe,
-    private appService: AppService) { }
+  constructor(private utilService: UtilitiesService, private datePipe: DatePipe,
+    private agcService: AgcService) { }
 
   @ViewChild('mlaRequestForm') reqForm!: NgForm;
   @Output() reqSubmit = new EventEmitter<any>();
@@ -69,7 +69,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   }
   setSerialNo(){
     this.showSpinner = true;
-    this.appService.getSequence('MLA Request').subscribe({next: (response) => {
+    this.agcService.getSequence('MLA Request').subscribe({next: (response) => {
       let resp = Object.assign(response)
       let prefix = resp[0].prefix?resp[0].prefix:''
       let count = Number(resp[0].seq_count)+1
@@ -86,7 +86,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getSecurityClassifications() {
     this.secClassification = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -107,7 +107,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getRequestStatus() {
     this.reqStatus = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('REQUEST_STATUS').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('REQUEST_STATUS').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -128,7 +128,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getRequestComplexity() {
     this.reqCmplxts = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('REQUEST_COMPLEXITY').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('REQUEST_COMPLEXITY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -149,7 +149,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getRequestTypes() {
     this.reqType = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('REQUEST_TYPE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('REQUEST_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -169,7 +169,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getRequestModes() {
     this.reqModes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('REQUEST_MODE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('REQUEST_MODE').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -189,7 +189,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getRequestUrgency() {
     this.reqUrgency = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('REQUEST_URGENCY').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('REQUEST_URGENCY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -210,7 +210,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getLocalAgencyTypes() {
     this.reqLocalAgencyTypes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -231,7 +231,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getFileOrigins() {
     this.fileOrigin = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -252,7 +252,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   }
   getAGItemID() {
     this.showSpinner = true;
-    this.appService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         this.getDivisions(resp[0].code)
@@ -268,7 +268,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getDivisions(agItemID: string) {
     this.allDivisions = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -289,7 +289,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getCurrentUserFileDivisions() {
     this.reqDivisions = [];
     this.showSpinner = true;
-    this.appService.getUserDivisions(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+    this.agcService.getUserDivisions(UtilitiesService.CURRENT_USER_NAME).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -337,7 +337,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   getForeignCountries() {
     this.foreignCountries = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -359,7 +359,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
     this.foreignAgencyTypes = [];
     this.foreignAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -380,7 +380,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   onLocalAgencyTypeChange(data: any) {
     this.reqLocalAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -400,7 +400,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   onForeignAgencyTypeChange(data: any) {
     this.foreignAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -419,7 +419,7 @@ export class MlaRequestComponent implements OnInit, OnChanges {
   }
   getFileReferences(){
     this.showSpinner = true;
-    this.appService.getFileByFilter('type','MLA').subscribe({next: (response) => {
+    this.agcService.getFileByFilter('type','MLA').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -447,14 +447,14 @@ export class MlaRequestComponent implements OnInit, OnChanges {
       mla_req.OriginalDueDate = mla_req.RequestDueDate;
       mla_req.ExpResponseDate = mla_req.ExpResponseDate ? this.datePipe.transform(mla_req.ExpResponseDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
       mla_req.Sensitivity = mla_req.Sensitivity == 'Yes' ? true : false
-      mla_req.RequestCreatedBy = UtilityService.CURRENT_USER_NAME;
+      mla_req.RequestCreatedBy = UtilitiesService.CURRENT_USER_NAME;
       mla_req.RequestCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
 
       let descQueryParam = mla_req.RequestType+','+mla_req.RequestStatus+','+mla_req.LocalForeign+','+mla_req.RequestingAgencyType+','+
         mla_req.RequestingAgencyName+','+mla_req.CountryForeignOrg+','+mla_req.ForeignAgencyType+","+mla_req.ForeignAgencyName+','+
         mla_req.SecurityClassification+','+mla_req.RequestReceivedMode+','+mla_req.Complexity+','+mla_req.Urgency;
       
-        this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
+        this.agcService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
           let masterDataMap: Map<string,string> = new Map();
           let resp = Object.assign(response);
           if(resp){
@@ -476,10 +476,10 @@ export class MlaRequestComponent implements OnInit, OnChanges {
             mla_req.ComplexityDesc = masterDataMap.get(mla_req.Complexity)
             mla_req.UrgencyDesc = masterDataMap.get(mla_req.Urgency)
 
-            this.appService.generateSequence('MLA Request').subscribe({next: (response) => {
+            this.agcService.generateSequence('MLA Request').subscribe({next: (response) => {
                 let resp = Object.assign(response)
                 if(resp){
-                    this.appService.createRequest(this.fileReferenceNo,mla_req).subscribe({next: (response) => {
+                    this.agcService.createRequest(this.fileReferenceNo,mla_req).subscribe({next: (response) => {
                       let createResp = Object.assign(response);
                       if(createResp){
                         let reqNo= createResp.RequestNo;

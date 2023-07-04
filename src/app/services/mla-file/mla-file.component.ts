@@ -1,11 +1,11 @@
 import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UtilityService } from 'src/app/commons/services/utilities.service';
+import { UtilitiesService } from 'src/app/commons/services/utilities.service';
 import { MLA_FILE } from 'src/app/entities/mla-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
-import { AppService } from '../../commons/services/app.service';
+import { AgcService } from 'src/app/commons/services/agc.service';
 
 @Component({
   selector: 'mla-file',
@@ -13,8 +13,8 @@ import { AppService } from '../../commons/services/app.service';
   styleUrls: ['./mla-file.component.scss']
 })
 export class MlaFileComponent implements OnInit, OnChanges {
-  constructor(private utilService: UtilityService, private datePipe: DatePipe,
-    private route: ActivatedRoute, private appService: AppService) {  }
+  constructor(private utilService: UtilitiesService, private datePipe: DatePipe,
+    private route: ActivatedRoute, private agcService: AgcService) {  }
 
   readOnly: boolean = false;
   mlaFile!: MLA_FILE;
@@ -76,7 +76,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   }
   setSerialNo(){
     this.showSpinner = true;
-    this.appService.getSequence('MLA File').subscribe({next: (response) => {
+    this.agcService.getSequence('MLA File').subscribe({next: (response) => {
       let resp = Object.assign(response)
       let prefix = resp[0].prefix?resp[0].prefix:''
       let count = Number(resp[0].seq_count)+1
@@ -107,7 +107,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileOrigins() {
     this.fileOrigin = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -131,7 +131,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
     this.caseTypes = [];
     this.mlaFile.MLACaseType = '';
     this.showSpinner = true;
-    this.appService.getMasterDataByType('MLA_CASE_TYPE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('MLA_CASE_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -165,7 +165,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
     this.caseSubTypes = [];
     this.mlaFile.MLASubType='';
     this.showSpinner = true;
-    this.appService.getMasterDataByType('MLA_CASE_SUB_TYPE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('MLA_CASE_SUB_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -189,7 +189,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   }
   getAGItemID(){
     this.showSpinner = true;
-    this.appService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         this.getFileDivisions(resp[0].code)
@@ -205,7 +205,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileDivisions(agItemID: string) {
     this.allFileDivisions = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -227,7 +227,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getCurrentUserFileDivisions(){
     this.fileDivisions = [];
     this.showSpinner = true;
-    this.appService.getUserDivisions(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+    this.agcService.getUserDivisions(UtilitiesService.CURRENT_USER_NAME).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -250,7 +250,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileHeader1(divItemID: string) {
     this.header1 = []
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_HEADER1',divItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_HEADER1',divItemID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -271,7 +271,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileHeader2(header1ItemID: string) {
     this.header2 = []
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_HEADER2',header1ItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_HEADER2',header1ItemID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -292,7 +292,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileYear() {
     this.year = []
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_YEAR').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('FILE_YEAR').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -312,7 +312,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFileComplexity() {
     this.fileCmplxts = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_COMPLEXITY').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('CASE_COMPLEXITY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -332,7 +332,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getSecurityClassifications() {
     this.secClassification = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -353,7 +353,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getFATFPurpose(){
     this.fatfPurposes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_FATF').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('CASE_FATF').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -373,7 +373,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getLocalAgencyTypes() {
     this.lAgencyTypes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -394,7 +394,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getForeignCountries() {
     this.cfList = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -416,7 +416,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
     this.fAgencyTypes = [];
     this.fAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -437,7 +437,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getCaseStatus() {
     this.caseStatus = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_STATUS').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('CASE_STATUS').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -459,7 +459,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   getRequestedUnder(caseTypeRequestUnder: string) {
     this.reqUnder = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('REQUESTED_UNDER',caseTypeRequestUnder).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('REQUESTED_UNDER',caseTypeRequestUnder).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -479,7 +479,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   onLocalAgencyTypeChange(data: any) {
     this.lAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -499,7 +499,7 @@ export class MlaFileComponent implements OnInit, OnChanges {
   onForeignAgencyTypeChange(data: any) {
     this.fAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -567,14 +567,14 @@ export class MlaFileComponent implements OnInit, OnChanges {
       mla_file.MLAOutgoingSentDate = mla_file.MLAOutgoingSentDate ? this.datePipe.transform(mla_file.MLAOutgoingSentDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
       mla_file.MLARequestPerfectedDate = mla_file.MLARequestPerfectedDate ? this.datePipe.transform(mla_file.MLARequestPerfectedDate, "yyyy-MM-dd'T'hh:mm:ss") : null;
       mla_file.Sensitivity = mla_file.Sensitivity == 'Yes' ? true : false
-      mla_file.FileCreatedBy = UtilityService.CURRENT_USER_NAME;
+      mla_file.FileCreatedBy = UtilitiesService.CURRENT_USER_NAME;
       mla_file.FileCreatedDate = this.datePipe.transform(new Date(), "yyyy-MM-dd'T'hh:mm:ss");
       
       let descQueryParam = mla_file.SecurityClassification+','+mla_file.LocalForeign+','+
         mla_file.AgencyType+','+mla_file.AgencyName+','+mla_file.CountryForeignOrg+','+mla_file.ForeignAgencyType+","+
         mla_file.ForeignAgencyName+','+mla_file.FileStatus+','+mla_file.MLACaseStatus+','+mla_file.MLAComplexity+','+
         mla_file.MLAFATFPurpose+','+mla_file.MLARequestedUnder+','+mla_file.MLASubType;
-      this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
+      this.agcService.getMasterDataByCodes(descQueryParam).subscribe({next: (response) => {
         let masterDataMap: Map<string,string> = new Map();
         let resp = Object.assign(response);
         if(resp){
@@ -597,10 +597,10 @@ export class MlaFileComponent implements OnInit, OnChanges {
           mla_file.MLARequestedUnderDesc = masterDataMap.get(mla_file.MLARequestedUnder)
           mla_file.MLASubTypeDesc = masterDataMap.get(mla_file.MLASubType)
 
-          this.appService.generateSequence('MLA File').subscribe({next: (response) => {
+          this.agcService.generateSequence('MLA File').subscribe({next: (response) => {
             let resp = Object.assign(response);
             if(resp){
-              this.appService.createFile(mla_file).subscribe({next: (response) => {
+              this.agcService.createFile(mla_file).subscribe({next: (response) => {
                 let createResp = Object.assign(response);
                 if(createResp){
                   let refNo= createResp.ReferenceNo;

@@ -1,14 +1,13 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import * as _ from "lodash";
-import { UtilityService } from '../../services/utilities.service';
+import { UtilitiesService } from '../../services/utilities.service';
 import { DASHBOARD_TASKS } from '../../../entities/dashboard-tasks';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
-import { Table } from 'primeng/table';
 import { DatePipe } from '@angular/common';
 import { ConfirmationService } from 'primeng/api';
-import { AppService } from '../../services/app.service';
-import { WebSocketService } from '../../services/websocket.service';
+import { WebsocketService } from '../../services/websocket.service';
+import { AgcService } from '../../services/agc.service';
 
 @Component({
   selector: 'dashboard',
@@ -16,9 +15,9 @@ import { WebSocketService } from '../../services/websocket.service';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit{
-  constructor(private utilService: UtilityService, private modalService: BsModalService, 
+  constructor(private utilService: UtilitiesService, private modalService: BsModalService, 
     private datePipe: DatePipe, private confirmationService: ConfirmationService,
-    private appService: AppService, private wsService: WebSocketService) { 
+    private agcService: AgcService, private wsService: WebsocketService) { 
       wsService.messages.subscribe(msg => {
         this.wsReceivedMessages.push(msg);
         let notfData = this.wsReceivedMessages.filter((msg) => msg.identifier == 'NOTIFICATION_INFO');
@@ -73,12 +72,12 @@ export class DashboardComponent implements OnInit{
     ]
   }
   getLoggedInUserDetails(){
-    this.utilService.cUserName.next({UserName: UtilityService.CURRENT_USER_NAME, UserDN: UtilityService.CURRENT_USER_DN});
+    this.utilService.cUserName.next({UserName: UtilitiesService.CURRENT_USER_NAME, UserDN: UtilitiesService.CURRENT_USER_DN});
   }
   getFileTasksData(){
     this.showSpinner = true;
     this.fileTasks = [];
-      this.appService.getFilesForDashboard(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+      this.agcService.getFilesForDashboard(UtilitiesService.CURRENT_USER_NAME).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if (resp){
           if (resp.length > 0){
@@ -86,7 +85,7 @@ export class DashboardComponent implements OnInit{
               task.LOCKED = !this.utilService.isEmpty(task.ASSIGNEE) ? 'Y' : 'N'
               if (task.TARGET_TYPE == 'user') {
                 task.icon = 'fa fa-pencil'
-              } else if (task.ASSIGNEE == UtilityService.CURRENT_USER_NAME) {
+              } else if (task.ASSIGNEE == UtilitiesService.CURRENT_USER_NAME) {
                 task.icon = 'fa fa-user'
               } else {
                 task.icon = 'fa fa-group'
@@ -107,7 +106,7 @@ export class DashboardComponent implements OnInit{
   getRequestTasksData(){
     this.showSpinner = true;
     this.requestTasks = [];
-      this.appService.getRequestsForDashboard(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+      this.agcService.getRequestsForDashboard(UtilitiesService.CURRENT_USER_NAME).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if (resp){
           if (resp.length > 0){
@@ -115,7 +114,7 @@ export class DashboardComponent implements OnInit{
               task.LOCKED = !this.utilService.isEmpty(task.ASSIGNEE) ? 'Y' : 'N'
               if (task.TARGET_TYPE == 'user') {
                 task.icon = 'fa fa-pencil'
-              } else if (task.ASSIGNEE == UtilityService.CURRENT_USER_NAME) {
+              } else if (task.ASSIGNEE == UtilitiesService.CURRENT_USER_NAME) {
                 task.icon = 'fa fa-user'
               } else {
                 task.icon = 'fa fa-group'

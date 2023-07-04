@@ -1,13 +1,13 @@
+import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Injectable } from "@angular/core";
-import { Observable, throwError, from } from 'rxjs';
-import { catchError, retry } from 'rxjs/operators';
 import { api } from "src/config/api-url";
 import { environment } from "src/environments/environment";
+import { from } from 'rxjs';
 
 @Injectable()
-export class AppService {
-    constructor(private http: HttpClient) { }
+export class AgcService {
+
+  constructor(private http: HttpClient) { }
     apiURL:any = api;
     apiEndpoint: any = environment.api_endpoint;
 

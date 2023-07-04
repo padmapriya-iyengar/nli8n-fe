@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UtilityService } from '../../services/utilities.service';
-import { AppService } from '../../services/app.service';
+import { UtilitiesService } from '../../services/utilities.service';
 import { Router } from '@angular/router';
+import { AgcService } from '../../services/agc.service';
 
 @Component({
   selector: 'app-sign-up',
@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class SignUpComponent implements OnInit{
 
-  constructor(private utilService: UtilityService, private appService: AppService,private router: Router){}
+  constructor(private utilService: UtilitiesService, private agcService: AgcService,private router: Router){}
 
   @ViewChild('signupForm') signupForm!: NgForm;
   showSpinner: boolean = false;
@@ -32,7 +32,7 @@ export class SignUpComponent implements OnInit{
   loadDivisions(){
     this.divisions=[];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_DIVISION').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('FILE_DIVISION').subscribe({next: (response) => {
         let resp = Object.assign(response)
         if(resp){
           if(resp.length){
@@ -52,7 +52,7 @@ export class SignUpComponent implements OnInit{
   loadDepartments(){
     this.departments = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('DEPARTMENT').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('DEPARTMENT').subscribe({next: (response) => {
         let resp = Object.assign(response)
         if(resp){
           if(resp.length){
@@ -81,7 +81,7 @@ export class SignUpComponent implements OnInit{
   }
   checkUsername(){
     this.showSpinner = true;
-      this.appService.getUserInfo(this.userObj.username).subscribe({next: (response) => {
+      this.agcService.getUserInfo(this.userObj.username).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if(resp){
           if(resp.length > 0){
@@ -109,11 +109,11 @@ export class SignUpComponent implements OnInit{
       this.utilService.alert('error','Password Mismatch','Please confirm the right password!',false)
     } else{
       this.showSpinner = true
-        this.appService.generateHash(this.plainPassword, '10').subscribe({next: (response) => {
+        this.agcService.generateHash(this.plainPassword, '10').subscribe({next: (response) => {
           let resp = Object.assign(response)
           if(resp){
             this.userObj.password = resp.valueOf();
-              this.appService.createUser(this.userObj).subscribe({next: (createUserResponse) => {
+              this.agcService.createUser(this.userObj).subscribe({next: (createUserResponse) => {
                 let createUserResp = Object.assign(createUserResponse)
                 if(createUserResp){
                   this.utilService.alert('success','Success',createUserResp.message, false)

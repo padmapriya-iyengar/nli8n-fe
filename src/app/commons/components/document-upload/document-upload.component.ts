@@ -3,7 +3,7 @@ import { REQUEST_DOCS } from '../../../entities/document-details';
 import { ConfirmationService, TreeNode } from 'primeng/api';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
 import * as _ from "lodash";
-import { UtilityService } from '../../services/utilities.service';
+import { UtilitiesService } from '../../services/utilities.service';
 import { DatePipe } from '@angular/common';
 import { Table } from 'primeng/table';
 declare var jQuery: any;
@@ -14,7 +14,7 @@ declare var jQuery: any;
   styleUrls: ['./document-upload.component.scss']
 })
 export class DocumentUploadComponent  implements OnInit {
-  constructor(private modalService: BsModalService, private utilService: UtilityService,
+  constructor(private modalService: BsModalService, private utilService: UtilitiesService,
      private datePipe: DatePipe, private confirmationService: ConfirmationService) { }
   docTree!: TreeNode[];
   checkedCount = 0;
@@ -89,7 +89,7 @@ export class DocumentUploadComponent  implements OnInit {
     this.checkIfUserIsLO();
   }
   getLoggedInUserDetails() {
-    this.currentUserName = UtilityService.CURRENT_USER_NAME;
+    this.currentUserName = UtilitiesService.CURRENT_USER_NAME;
   }
   getItemDetails(type: string, itemID: string) {
     //Service Integration

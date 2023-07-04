@@ -2,9 +2,9 @@ import { DatePipe } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import * as _ from "lodash";
-import { UtilityService } from '../../services/utilities.service';
+import { UtilitiesService } from '../../services/utilities.service';
 import { USER_PROFILE } from '../../../entities/user-profile';
-import { AppService } from '../../services/app.service';
+import { AgcService } from '../../services/agc.service';
 
 @Component({
   selector: 'user-profile',
@@ -18,7 +18,7 @@ export class UserProfileComponent implements OnInit, OnChanges{
   @Input() modalSubmit!: boolean;
   @ViewChild('upForm') upForm!: NgForm;
 
-  constructor(private utilService: UtilityService, private datePipe: DatePipe, private appService: AppService) { }
+  constructor(private utilService: UtilitiesService, private datePipe: DatePipe, private agcService: AgcService) { }
 
   userHeader!: string;
   formattedUserName!: string;
@@ -86,7 +86,7 @@ export class UserProfileComponent implements OnInit, OnChanges{
       user_profile.ooo = user_profile.OutOfOffice == true ? '1' : '0';
       user_profile.email_notifications = user_profile.ReceiveEmailNotifications == true ? '1' : '0'
     
-      this.appService.updateUserProfile(UtilityService.CURRENT_USER_NAME,user_profile).subscribe({next: (response) => {
+      this.agcService.updateUserProfile(UtilitiesService.CURRENT_USER_NAME,user_profile).subscribe({next: (response) => {
         let resp = Object.assign(response)
         if(resp){
           this.reqSubmit.emit({status:'SUCCESS'})

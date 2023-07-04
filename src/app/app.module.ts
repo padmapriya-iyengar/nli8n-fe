@@ -14,7 +14,7 @@ import { NotificationComponent } from './commons/components/notification/notific
 import { UserProfileComponent } from './commons/components/user-profile/user-profile.component';
 
 import { PrimeNGModule } from './commons/primeng.module'
-import { UtilityService } from './commons/services/utilities.service';
+import { UtilitiesService } from './commons/services/utilities.service';
 import { CommonModule, DatePipe, HashLocationStrategy, LocationStrategy } from '@angular/common';
 import { BsModalService } from 'ngx-bootstrap/modal';
 import { FormsModule } from '@angular/forms';
@@ -24,12 +24,11 @@ import { LoginComponent } from './commons/components/login/login.component';
 import { DocumentUploadComponent } from './commons/components/document-upload/document-upload.component';
 import { DocumentDetailsComponent } from './commons/components/document-details/document-details.component';
 import { DocumentVersionsComponent } from './commons/components/document-versions/document-versions.component';
-import { AppService } from './commons/services/app.service';
 import { FileTitleDirective } from './commons/directives/file-title.directive';
-import { MigrationDashboardComponent } from './migration/migration-dashboard/migration-dashboard.component';
-import { WebSocketService } from './commons/services/websocket.service';
+import { WebsocketService } from './commons/services/websocket.service';
 import { BackButtonDisableModule } from 'angular-disable-browser-back-button';
 import { SignUpComponent } from './commons/components/sign-up/sign-up.component';
+import { AgcService } from './commons/services/agc.service';
 
 @NgModule({
   declarations: [
@@ -61,7 +60,7 @@ import { SignUpComponent } from './commons/components/sign-up/sign-up.component'
       preserveScroll: true
     })
   ],
-  providers: [UtilityService, DatePipe, BsModalService, ConfirmationService, MessageService, AppService, WebSocketService, 
+  providers: [UtilitiesService, DatePipe, BsModalService, ConfirmationService, MessageService, AgcService, WebsocketService, 
     { provide: LocationStrategy, useClass: HashLocationStrategy }],
   bootstrap: [AppComponent]
 })

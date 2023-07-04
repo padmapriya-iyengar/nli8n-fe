@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import * as _ from "lodash";
 import { Table } from 'primeng/table';
-import { UtilityService } from '../../services/utilities.service';
+import { UtilitiesService } from '../../services/utilities.service';
 declare var jQuery: any;
 
 @Component({
@@ -10,7 +10,7 @@ declare var jQuery: any;
   styleUrls: ['./document-versions.component.scss']
 })
 export class DocumentVersionsComponent implements OnInit {
-  constructor(private utilService: UtilityService) { }
+  constructor(private utilService: UtilitiesService) { }
 
   @Input() docDetails!: any;
   @Input() reqType!: string;

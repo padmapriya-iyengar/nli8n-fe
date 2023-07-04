@@ -1,11 +1,11 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { UtilityService } from 'src/app/commons/services/utilities.service';
+import { UtilitiesService } from 'src/app/commons/services/utilities.service';
 import { ADVISORY_FILE } from 'src/app/entities/advisory-file';
 import * as _ from "lodash";
 import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
-import { AppService } from '../../commons/services/app.service';
+import { AgcService } from 'src/app/commons/services/agc.service';
 
 @Component({
   selector: 'advisory-file',
@@ -13,9 +13,9 @@ import { AppService } from '../../commons/services/app.service';
   styleUrls: ['./advisory-file.component.scss']
 })
 export class AdvisoryFileComponent implements OnInit, OnChanges{
-  constructor(private utilService: UtilityService, 
+  constructor(private utilService: UtilitiesService, 
     private route: ActivatedRoute, private datePipe: DatePipe,
-    private appService: AppService) { }
+    private agcService: AgcService) { }
 
   fileDetails: any[] = [];
   advisoryFile!: ADVISORY_FILE;
@@ -73,7 +73,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   }
   setSerialNo(){
     this.showSpinner = true;
-    this.appService.getSequence('Advisory File').subscribe({next: (response) => {
+    this.agcService.getSequence('Advisory File').subscribe({next: (response) => {
       let resp = Object.assign(response)
       let prefix = resp[0].prefix?resp[0].prefix:''
       let count = Number(resp[0].seq_count)+1
@@ -88,7 +88,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileOrigins() {
     this.fileOrigin = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('FILE_ORIGIN').subscribe({next: (response) => {
         let resp = Object.assign(response)
         if(resp){
           if(resp.length){
@@ -111,7 +111,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getSecurityClassifications(){
     this.secClassification = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('SECURITY_CLASSIFICATION').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -132,7 +132,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getCaseStatus() {
     this.caseStatus = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('CASE_STATUS').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('CASE_STATUS').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -152,7 +152,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   }
   getAGItemID() {
     this.showSpinner = true;
-    this.appService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('ROOT_CODE').subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         this.getFileDivisions(resp[0].code)
@@ -168,7 +168,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileDivisions(agItemID: string) {
     this.allFileDivisions = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_DIVISION', agItemID).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -190,7 +190,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getCurrentUserFileDivisions() {
     this.fileDivisions = [];
     this.showSpinner = true;
-    this.appService.getUserDivisions(UtilityService.CURRENT_USER_NAME).subscribe({next: (response) => {
+    this.agcService.getUserDivisions(UtilitiesService.CURRENT_USER_NAME).subscribe({next: (response) => {
       let resp = Object.assign(response)
       if(resp){
         if(resp.length){
@@ -213,7 +213,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileHeader1(divItemID: string) {
     this.header1 = []
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_HEADER1',divItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_HEADER1',divItemID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -234,7 +234,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileHeader2(header1ItemID: string) {
     this.header2 = []
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('FILE_HEADER2',header1ItemID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('FILE_HEADER2',header1ItemID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -255,7 +255,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileYear() {
     this.year = []
     this.showSpinner = true;
-    this.appService.getMasterDataByType('FILE_YEAR').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('FILE_YEAR').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -275,7 +275,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getLocalAgencyTypes() {
     this.localAgencyTypes = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('EXTERNAL_AGENCY_TYPE').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -296,7 +296,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileOwners() {
     this.fileOwners = [];
     this.showSpinner = true;
-    this.appService.getUsers().subscribe({next: (response) => {
+    this.agcService.getUsers().subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -316,7 +316,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getForeignCountries() {
     this.foreignCountries = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('COUNTRY').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -338,7 +338,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
     this.foreignAgencyTypes = [];
     this.foreignAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
+    this.agcService.getMasterDataByTypeAndParent('AGENCY_TYPE_FOREIGN',countryCodeID).subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -374,7 +374,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   onLocalAgencyTypeChange(data: any){
     this.localAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('EXTERNAL_AGENCY_NAME').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -394,7 +394,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   onForeignAgencyTypeChange(data: any){
     this.foreignAgencyNames = [];
     this.showSpinner = true;
-    this.appService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
+    this.agcService.getMasterDataByType('AGENCY_NAME_FOREIGN').subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){
@@ -441,13 +441,13 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
     } else {
       let reqDetails:any = _.cloneDeep(this.advisoryFile)
       reqDetails.Sensitivity = reqDetails.Sensitivity == 'Yes'? true: false
-      reqDetails.FileCreatedBy = UtilityService.CURRENT_USER_NAME;
+      reqDetails.FileCreatedBy = UtilitiesService.CURRENT_USER_NAME;
       reqDetails.FileCreatedDate = new Date(); 
 
       let descQueryParam = reqDetails.SecurityClassification+','+reqDetails.LocalForeign+','+
         reqDetails.AgencyType+','+reqDetails.AgencyName+','+reqDetails.CountryForeignOrg+','+reqDetails.ForeignAgencyType+","+
         reqDetails.ForeignAgencyName+','+reqDetails.FileStatus;
-      this.appService.getMasterDataByCodes(descQueryParam).subscribe({next: (response)=>{
+      this.agcService.getMasterDataByCodes(descQueryParam).subscribe({next: (response)=>{
         let masterDataMap: Map<string,string> = new Map();
         let resp = Object.assign(response);
         if(resp){
@@ -465,10 +465,10 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
           reqDetails.ForeignAgencyNameDesc = masterDataMap.get(reqDetails.ForeignAgencyName)
           reqDetails.FileStatusDesc = masterDataMap.get(reqDetails.FileStatus)
 
-          this.appService.generateSequence('Advisory File').subscribe({next: (response) => {
+          this.agcService.generateSequence('Advisory File').subscribe({next: (response) => {
             let resp = Object.assign(response);
             if(resp){
-              this.appService.createFile(reqDetails).subscribe({next: (response) => {
+              this.agcService.createFile(reqDetails).subscribe({next: (response) => {
                 let createResp = Object.assign(response);
                 if(createResp){
                   let refNo= createResp.ReferenceNo;
