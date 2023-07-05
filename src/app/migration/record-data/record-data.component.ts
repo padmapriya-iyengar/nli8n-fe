@@ -48,7 +48,7 @@ export class RecordDataComponent implements OnInit {
         prms.entityNames.push({ label: ent.entityDescription, value: _.toUpper(ent.entityName) })
       })
     }
-    prms.dataEntityName = _.toUpper(prms.fileDetails.fileData.ENTITY);
+    prms.dataEntityName = _.toUpper(prms.fileDetails?.fileData?.ENTITY);
     prms.loadFieldInfo();
   }
   loadUsersList() {
@@ -64,13 +64,13 @@ export class RecordDataComponent implements OnInit {
           prms.usersList.push({ label: user.USER_NAME, value: user.USER_ID })
         })
       }
-      prms.uploadedBy = prms.fileDetails.fileData.UPLOADED_BY
+      prms.uploadedBy = prms.fileDetails?.fileData?.UPLOADED_BY
     }
   }
   loadFieldInfo() {
     let req = {
       entityName: this.dataEntityName,
-      primaryKey: this.rowDetails.rowData['TableId']
+      primaryKey: this.rowDetails?.rowData['TableId']
     }
     this.migService.readMigrationDataObject(req, this.readMigrationDataObjectSuccessHandler, this.errorHandler, this);
   }

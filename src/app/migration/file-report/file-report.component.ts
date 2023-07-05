@@ -113,7 +113,7 @@ export class FileReportComponent implements OnInit {
           prms.usersList.push({ label: user.USER_NAME, value: user.USER_ID })
         })
       }
-      prms.uploadedBy = prms.fileDetails.fileData.UPLOADED_BY
+      prms.uploadedBy = prms.fileDetails?.fileData.UPLOADED_BY
     }
   }
   filterReport(type: string, domId: string){
@@ -155,7 +155,7 @@ export class FileReportComponent implements OnInit {
     let req = {
       cursor: {},
       entityName: this.dataEntityName,
-      jobFileId: this.fileDetails.fileData.JOB_FILES_ID,
+      jobFileId: this.fileDetails?.fileData.JOB_FILES_ID,
       dmStatus: filter == 'UPLOAD_SUCCESS' ? 'Ingested' : filter == 'VALIDATE_SUCCESS' ? 'Validated' : 
         filter == 'VALIDATE_FAILURE' ? 'Validation Failed' : filter == 'MIGRATE_SUCCESS' ? 'Migrated' : 
           filter == 'MIGRATE_FAILURE' ? 'Migration Failed' : ''
@@ -433,7 +433,7 @@ export class FileReportComponent implements OnInit {
     }
     this.setTableInfo();
     this.refreshData(0, this.filterType);
-    domObj?.classList.remove('custom-report-tag')
-    domObj?.classList.add("custom-report-tag-selected");
+    domObj?.classList?.remove('custom-report-tag')
+    domObj?.classList?.add("custom-report-tag-selected");
   }
 }

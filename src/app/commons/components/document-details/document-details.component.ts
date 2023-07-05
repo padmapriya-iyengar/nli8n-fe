@@ -36,7 +36,7 @@ export class DocumentDetailsComponent  implements OnInit, OnChanges {
     this.getSecurityClassifications();
     this.getDocumentTypes();
     this.loadDocumentDetails();
-    this.existingFileDetails.forEach(eFile => {
+    this.existingFileDetails?.forEach(eFile => {
       this.allFileNames.push(eFile.FileName);
     })
     if(this.serviceType == 'Circulation')
@@ -48,7 +48,7 @@ export class DocumentDetailsComponent  implements OnInit, OnChanges {
     }
   }
   loadDocumentDetails(){
-    this.fileDetails.forEach(fDet =>{
+    this.fileDetails?.forEach(fDet =>{
       let detObj: any = {};
         detObj.fileName = fDet.name;
         detObj.mimeType = fDet.type;
@@ -101,7 +101,7 @@ export class DocumentDetailsComponent  implements OnInit, OnChanges {
           response.CodeTables.forEach((data: any) => {
             this.secClassification.push({ label: data.Name, value: data.Code })
           })
-          this.documentDetails.securityClassification = 'SCLASS_S'
+          this.documentDetails? this.documentDetails.securityClassification = 'SCLASS_S' : ''
         }
       } else if(!response.CodeTables.length){
         let data = response.CodeTables;
