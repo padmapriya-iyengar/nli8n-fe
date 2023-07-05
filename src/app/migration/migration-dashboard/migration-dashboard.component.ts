@@ -2,7 +2,6 @@ import { DatePipe } from '@angular/common';
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { ConfirmationService, MenuItem } from 'primeng/api';
 import { UtilitiesService } from '../../commons/services/utilities.service';
-import { BsModalService } from 'ngx-bootstrap/modal';
 import { BsModalRef } from 'ngx-bootstrap/modal/bs-modal-ref.service';
 import * as _ from 'lodash';
 
@@ -12,7 +11,7 @@ import * as _ from 'lodash';
   styleUrls: ['./migration-dashboard.component.scss']
 })
 export class MigrationDashboardComponent implements OnInit {
-  constructor(private utilService: UtilitiesService, private modalService: BsModalService,
+  constructor(private utilService: UtilitiesService,
     private datePipe: DatePipe, private confirmationService: ConfirmationService) { }
   
   modalRef!: BsModalRef;
