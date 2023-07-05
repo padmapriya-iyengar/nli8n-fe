@@ -37,6 +37,8 @@ export class AppComponent  implements OnInit{
   allNotifications: NOTIFICATION_DETAILS[] = [];
   notfCount:any = 0;
 
+  title = 'InterviewDemo'
+  
   ngOnInit(): void {   
     this.newTabRoutes.push('migration','docUpload')
     this.initialize();

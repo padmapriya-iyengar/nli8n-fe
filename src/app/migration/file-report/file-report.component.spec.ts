@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FileReportComponent } from './file-report.component';
+import { UtilitiesService } from 'src/app/commons/services/utilities.service';
+import { MessageService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 describe('FileReportComponent', () => {
   let component: FileReportComponent;
@@ -8,7 +11,8 @@ describe('FileReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ FileReportComponent ]
+      declarations: [ FileReportComponent ],
+      providers: [UtilitiesService, MessageService, DatePipe]
     })
     .compileComponents();
 

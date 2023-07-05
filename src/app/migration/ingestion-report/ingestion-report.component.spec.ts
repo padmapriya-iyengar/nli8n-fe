@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { IngestionReportComponent } from './ingestion-report.component';
+import { UtilitiesService } from 'src/app/commons/services/utilities.service';
+import { MessageService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 describe('IngestionReportComponent', () => {
   let component: IngestionReportComponent;
@@ -8,7 +11,8 @@ describe('IngestionReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IngestionReportComponent ]
+      declarations: [ IngestionReportComponent ],
+      providers: [UtilitiesService, MessageService, DatePipe]
     })
     .compileComponents();
 

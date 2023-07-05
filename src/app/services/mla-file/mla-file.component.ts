@@ -4,7 +4,6 @@ import { NgForm } from '@angular/forms';
 import { UtilitiesService } from 'src/app/commons/services/utilities.service';
 import { MLA_FILE } from 'src/app/entities/mla-file';
 import * as _ from "lodash";
-import { ActivatedRoute } from '@angular/router';
 import { AgcService } from 'src/app/commons/services/agc.service';
 
 @Component({
@@ -14,7 +13,7 @@ import { AgcService } from 'src/app/commons/services/agc.service';
 })
 export class MlaFileComponent implements OnInit, OnChanges {
   constructor(private utilService: UtilitiesService, private datePipe: DatePipe,
-    private route: ActivatedRoute, private agcService: AgcService) {  }
+    private agcService: AgcService) {  }
 
   readOnly: boolean = false;
   mlaFile!: MLA_FILE;

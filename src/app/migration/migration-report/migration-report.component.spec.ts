@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MigrationReportComponent } from './migration-report.component';
+import { UtilitiesService } from 'src/app/commons/services/utilities.service';
+import { MessageService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 describe('MigrationReportComponent', () => {
   let component: MigrationReportComponent;
@@ -8,7 +11,8 @@ describe('MigrationReportComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MigrationReportComponent ]
+      declarations: [ MigrationReportComponent ],
+      providers: [UtilitiesService, MessageService, DatePipe]
     })
     .compileComponents();
 

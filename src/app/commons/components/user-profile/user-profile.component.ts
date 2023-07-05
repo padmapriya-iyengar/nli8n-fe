@@ -32,25 +32,25 @@ export class UserProfileComponent implements OnInit, OnChanges{
 
   ngOnInit(): void {
     this.userProfile = new USER_PROFILE();
-    this.userHeader = _.upperCase(this.userInfo.DisplayName.substring(0,1));
-    this.formattedUserName = _.capitalize(this.userInfo.DisplayName);
+    this.userHeader = _.upperCase(this.userInfo?.DisplayName?.substring(0,1));
+    this.formattedUserName = _.capitalize(this.userInfo?.DisplayName);
     this.loadUserDetails();
   }
   loadUserDetails(){
-    this.userProfile.DateFrom = this.userInfo.DateFrom ? new Date(this.userInfo.DateFrom) : null;
-    this.userProfile.DateUntil = this.userInfo.DateUntil ? new Date(this.userInfo.DateUntil) : null;
-    this.userProfile.DepartmentName = this.userInfo.DepartmentName;
-    this.userProfile.Email = this.userInfo.Email;
-    this.userProfile.ItemID = this.userInfo.ItemID;
-    this.userProfile.OutOfOfficeMessage = this.userInfo.OutOfOfficeMessage;
-    this.userProfile.OutOfOffice = this.userInfo.OutOfOffice;
-    this.userProfile.ReceiveEmailNotifications = this.userInfo.ReceiveEmailNotifications;
-    if (this.userProfile.OutOfOffice){
+    this.userProfile.DateFrom = this.userInfo?.DateFrom ? new Date(this.userInfo?.DateFrom) : null;
+    this.userProfile.DateUntil = this.userInfo?.DateUntil ? new Date(this.userInfo?.DateUntil) : null;
+    this.userProfile.DepartmentName = this.userInfo?.DepartmentName;
+    this.userProfile.Email = this.userInfo?.Email;
+    this.userProfile.ItemID = this.userInfo?.ItemID;
+    this.userProfile.OutOfOfficeMessage = this.userInfo?.OutOfOfficeMessage;
+    this.userProfile.OutOfOffice = this.userInfo?.OutOfOffice;
+    this.userProfile.ReceiveEmailNotifications = this.userInfo?.ReceiveEmailNotifications;
+    if (this.userProfile?.OutOfOffice){
       this.isOOOEnabled = true;
     } else{
       this.isOOOEnabled = false;
     }
-    this.userInfo.Roles.forEach((role: any) => {
+    this.userInfo?.Roles.forEach((role: any) => {
       this.userDivisions.push(role)
     })
     this.oooEnable.emit(this.isOOOEnabled);

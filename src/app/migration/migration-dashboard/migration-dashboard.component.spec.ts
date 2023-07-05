@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MigrationDashboardComponent } from './migration-dashboard.component';
+import { UtilitiesService } from 'src/app/commons/services/utilities.service';
+import { MessageService } from 'primeng/api';
+import { DatePipe } from '@angular/common';
 
 describe('MigrationDashboardComponent', () => {
   let component: MigrationDashboardComponent;
@@ -8,7 +11,8 @@ describe('MigrationDashboardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ MigrationDashboardComponent ]
+      declarations: [ MigrationDashboardComponent ],
+      providers: [UtilitiesService, MessageService, DatePipe]
     })
     .compileComponents();
 

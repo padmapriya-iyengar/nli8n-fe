@@ -3,7 +3,6 @@ import { NgForm } from '@angular/forms';
 import { UtilitiesService } from 'src/app/commons/services/utilities.service';
 import { ADVISORY_FILE } from 'src/app/entities/advisory-file';
 import * as _ from "lodash";
-import { ActivatedRoute } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { AgcService } from 'src/app/commons/services/agc.service';
 
@@ -14,7 +13,7 @@ import { AgcService } from 'src/app/commons/services/agc.service';
 })
 export class AdvisoryFileComponent implements OnInit, OnChanges{
   constructor(private utilService: UtilitiesService, 
-    private route: ActivatedRoute, private datePipe: DatePipe,
+    private datePipe: DatePipe,
     private agcService: AgcService) { }
 
   fileDetails: any[] = [];
