@@ -295,7 +295,7 @@ export class AdvisoryFileComponent implements OnInit, OnChanges{
   getFileOwners() {
     this.fileOwners = [];
     this.showSpinner = true;
-    this.agcService.getUsers().subscribe({next: (response) => {
+    this.agcService.getActiveUsers().subscribe({next: (response) => {
       let resp = Object.assign(response);
       if(resp){
         if(resp.length){

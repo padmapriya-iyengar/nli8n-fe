@@ -35,6 +35,9 @@ export class AgcService {
     getUserDivisions(username:string){
         return this.http.get(this.apiEndpoint + this.apiURL.user_divisions+'?username='+username);
     }
+    getActiveUsers(){
+        return this.http.get(this.apiEndpoint + this.apiURL.active_users);
+    }
     getUsers(){
         return this.http.get(this.apiEndpoint + this.apiURL.users);
     }

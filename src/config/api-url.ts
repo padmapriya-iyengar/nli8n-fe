@@ -3,6 +3,7 @@ export const api = {
     user_notifications: '/notifications',
     user_divisions: '/user-divisions',
     users: '/users',
+    active_users: '/active-users',
     user_profile: '/user-profile',
     user_details: '/user-details',
     sequence: '/sequence',

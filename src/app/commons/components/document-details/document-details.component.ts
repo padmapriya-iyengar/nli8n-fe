@@ -12,8 +12,8 @@ import { DatePipe } from '@angular/common';
 export class DocumentDetailsComponent  implements OnInit, OnChanges {
   constructor(private utilService: UtilitiesService,
     private datePipe: DatePipe) { }
-  @Input() fileDetails!: any[];
-  @Input() existingFileDetails!: any[];
+  @Input() fileDetails : any[] = [];
+  @Input() existingFileDetails: any[] = [];
   @ViewChild('docDetails') reqForm!: NgForm;
   formSubmitted: boolean = false;
   documentDetails!: any;

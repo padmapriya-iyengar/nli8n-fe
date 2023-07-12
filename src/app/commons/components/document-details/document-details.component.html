@@ -53,7 +53,7 @@
                     </div>
                 </div>
                 <div class="row sm-padding">
-                    <div class="col-lg-12 no-top-padding" *ngIf="fileDetails?.length > 1">
+                    <div class="col-lg-12 no-top-padding" *ngIf="fileDetails.length > 1">
                         <div class="row no-top-padding" style="height: 45px; padding-top: 10px;">
                             <div class="col-lg-1" style="margin-right: 15px;">
                                 <p-inputSwitch class='custom-switch' [disabled]="isDuplicateExists" [(ngModel)]="copyToAll" name="copySwitch" #copySwitch="ngModel"

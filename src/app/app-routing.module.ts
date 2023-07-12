@@ -3,7 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './commons/components/dashboard/dashboard.component';
 import { DocumentUploadComponent } from './commons/components/document-upload/document-upload.component';
 import { LoginComponent } from './commons/components/login/login.component';
-import { MigrationDashboardComponent } from './migration/migration-dashboard/migration-dashboard.component';
 import { SignUpComponent } from './commons/components/sign-up/sign-up.component';
 
 const routes: Routes = [
