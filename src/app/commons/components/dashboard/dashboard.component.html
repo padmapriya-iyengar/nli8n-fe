@@ -87,13 +87,13 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="padding-left: 12px !important; height: 735px !important;">
+            <div class="row" style="padding-left: 12px !important; height: 825px !important;">
                 <div class="xsm-padding xsm-pm-border lg-card-height pm-lt-bk" style="width: 99.5%;">
                     <p-progressSpinner class="dashboard-spinner" *ngIf="showSpinner" strokeWidth="7"></p-progressSpinner>
                     <p-tabView class="dashboard-tab">
                         <p-tabPanel header="Files">
                             <p-table *ngIf="!showSpinner" class="custom-dashboard-table" #fileTasksDT [value]="fileTasks" 
-                            [columns]="fileTaskCols" [filterDelay]="5" [scrollable]="true" scrollHeight="630px" 
+                            [columns]="fileTaskCols" [filterDelay]="5" [scrollable]="true" scrollHeight="710px" 
                             scrollDirection="both" (onRowSelect)="onFileTaskSelected($event)"
                             (onRowUnselect)="onFileTaskUnselected($event)" sortField="DELIVERY_DATE" [sortOrder]="-1"
                             [globalFilterFields]="['FILE_REF_NO','TASK_TITLE','FILE_TITLE','TASK_STATUS','TASK_FROM','FILE_TYPE']">
@@ -162,7 +162,7 @@
                         </p-tabPanel>
                         <p-tabPanel header="Requests">
                             <p-table *ngIf="!showSpinner" class="custom-dashboard-table" #reqTasksDT [value]="requestTasks" 
-                            [columns]="requestTaskCols" [filterDelay]="5" [scrollable]="true" scrollHeight="630px" 
+                            [columns]="requestTaskCols" [filterDelay]="5" [scrollable]="true" scrollHeight="710px" 
                             scrollDirection="both" (onRowSelect)="onRequestTaskSelected($event)"
                             (onRowUnselect)="onRequestTaskUnselected($event)" sortField="DELIVERY_DATE" [sortOrder]="-1"
                             [globalFilterFields]="['FILE_REF_NO','TASK_TITLE','FILE_TITLE','TASK_STATUS','TASK_FROM','FILE_TYPE']">
